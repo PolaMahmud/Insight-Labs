@@ -267,6 +267,7 @@ body.has-full .mode-toggle{display:none;}
 .sheet td.num{text-align:right;}
 .data-note{font-size:.72rem;color:var(--txt3);padding:.5rem .7rem;border-bottom:1px solid var(--brd);background:var(--bg-hov);position:sticky;top:0;z-index:1;}
 .term .err{color:#FF7B72;}
+.term .hint-line{display:block;color:#E0B44C;font-style:normal;margin-bottom:.4rem;padding-left:.1rem;}
 /* ═══════ MASTER VIZ STUDIO controls + warning ═══════ */
 .viz-only{display:none;}
 .sandbox.viz .viz-only{display:flex;}
@@ -1046,6 +1047,23 @@ function setProgress(v){
   localStorage.setItem(progressStoreKey(), JSON.stringify(progress));
 }
 function tierProgress(t){ return progress[pKey(state.week,state.lesson,t)] || 0; }
+
+/* ── student code persistence (per user · week · lesson · tier) ── */
+let codeStore = {};
+function codeStoreKey(){ return "datalab-code::" + userKey(); }
+function loadCode(){ try{ codeStore = JSON.parse(localStorage.getItem(codeStoreKey()) || "{}"); }catch(e){ codeStore = {}; } }
+function savedCode(){ return codeStore[pKey(state.week,state.lesson,state.tier)]; }
+function persistCode(){
+  const box=document.getElementById("code-box"); if(!box) return;
+  codeStore[pKey(state.week,state.lesson,state.tier)] = box.value;
+  try{ localStorage.setItem(codeStoreKey(), JSON.stringify(codeStore)); }catch(e){}
+}
+function clearSavedCode(){
+  delete codeStore[pKey(state.week,state.lesson,state.tier)];
+  try{ localStorage.setItem(codeStoreKey(), JSON.stringify(codeStore)); }catch(e){}
+}
+loadCode();
+
 // a tier unlocks once the previous tier in the same lesson reaches PASS
 function tierUnlocked(t){ return t === 0 || tierProgress(t-1) >= PASS; }
 
@@ -1588,7 +1606,8 @@ function render(){
   document.getElementById("de-meta").textContent=ds.f;
   document.getElementById("data-engine").innerHTML=makeSheet(ds);
   starterCode = topic.code(ds)[tierKey];
-  document.getElementById("code-box").value = starterCode;
+  const _saved = savedCode();
+  document.getElementById("code-box").value = (_saved != null && _saved !== "") ? _saved : starterCode;
   if(typeof syncHL==="function") syncHL();
   liveVals = null;
   // reset auto-grader state for the newly selected lesson/tier
@@ -2024,6 +2043,8 @@ function syncHL(){
   codeHL.scrollLeft=codeBox.scrollLeft;
 }
 codeBox.addEventListener("input",syncHL);
+let _saveT=null;
+codeBox.addEventListener("input",()=>{ clearTimeout(_saveT); _saveT=setTimeout(persistCode,400); });
 codeBox.addEventListener("scroll",()=>{ codeHL.scrollTop=codeBox.scrollTop; codeHL.scrollLeft=codeBox.scrollLeft; });
 const runStatus=document.getElementById("run-status");
 const terminalEl=document.getElementById("terminal");
@@ -2044,7 +2065,7 @@ codeBox.addEventListener("keydown",e=>{
   }
   if((e.ctrlKey||e.metaKey)&&e.key==="Enter"){ e.preventDefault(); runCode(); }
 });
-document.getElementById("reset-code").onclick=()=>{ codeBox.value=starterCode; syncHL(); codeBox.focus(); };
+document.getElementById("reset-code").onclick=()=>{ clearSavedCode(); codeBox.value=starterCode; syncHL(); persistCode(); codeBox.focus(); };
 runBtn.onclick=runCode;
 
 async function initPy(){
@@ -2210,6 +2231,7 @@ window.__termAsk=function(bufferText){
 
 async function runCode(){
   if(!pyReady){ setStatus("still loading…"); return; }
+  persistCode();   // save the student's work before running
   // input(...) -> await __ainput(...) so reads happen inline in the terminal
   const code=codeBox.value.replace(/(?<![\w.])input\s*\(/g,"await __ainput(");
   const file=currentDatasetName();
@@ -2239,15 +2261,41 @@ async function runCode(){
   }catch(e){
     // make sure stdout is restored even if the preamble/postamble failed
     try{ await pyodide.runPythonAsync("sys.stdout, sys.stderr = _old"); }catch(_){}
-    terminalEl.innerHTML='<span class="err">'+escapeHtml(String(e.message||e))+'</span>';
+    const eMsg=String(e.message||e);
+    const friendly=humanizePyError(eMsg);
+    terminalEl.innerHTML=(friendly?'<span class="hint-line">💡 '+escapeHtml(friendly)+'</span>':'')+'<span class="err">'+escapeHtml(eMsg)+'</span>';
     setStatus("error");
   }finally{ runBtn.disabled=false; }
 }
 
+// Turn a raw Python traceback into one plain-English sentence for students.
+function humanizePyError(err){
+  if(!err) return "";
+  const last=(String(err).trim().split("\n").pop()||"").trim();
+  const rules=[
+    [/NameError: name '([^']+)'/i, m=>"“"+m[1]+"” hasn’t been defined yet — check for a typo or a missing assignment."],
+    [/IndentationError/i, ()=>"The indentation is off — Python needs consistent spaces at the start of a line."],
+    [/SyntaxError/i, ()=>"There’s a syntax error — look for a missing bracket, quote or colon."],
+    [/KeyError:\s*'?([^'\)\n]+)'?/i, m=>"There’s no column called “"+String(m[1]).trim()+"” — check the spelling against the Data Engine headers."],
+    [/AttributeError: .*has no attribute '([^']+)'/i, m=>"That value has no “"+m[1]+"” — check the method name, or that the variable is really a DataFrame."],
+    [/ValueError: could not convert string to float: '?([^'\n]*)'?/i, m=>"Couldn’t turn “"+String(m[1]).trim()+"” into a number — there’s still some text in that column to clean."],
+    [/ValueError/i, ()=>"A ValueError means a value was the right type but not an allowed value — often a failed number conversion."],
+    [/TypeError/i, ()=>"A TypeError means a value isn’t the type the code expected (for example, text where a number is needed)."],
+    [/ZeroDivisionError/i, ()=>"Something divided by zero — check the denominator before dividing."],
+    [/ModuleNotFoundError|ImportError/i, ()=>"That module isn’t available here — only pandas, numpy and matplotlib are pre-loaded."]
+  ];
+  for(const [re,fn] of rules){ const m=String(err).match(re); if(m) return fn(m); }
+  return last ? ("Python stopped with: "+last) : "";
+}
 function renderTerminal(out, err){
   let html="";
   if(out && out.trim()){ html+=dim(escapeHtml(out.replace(/\n+$/,""))); }
-  if(err && err.trim()){ html+=(html?"\n":"")+'<span class="err">'+escapeHtml(err.replace(/\n+$/,""))+'</span>'; }
+  if(err && err.trim()){
+    const friendly=humanizePyError(err);
+    if(html) html+="\n";
+    if(friendly) html+='<span class="hint-line">💡 '+escapeHtml(friendly)+'</span>';
+    html+='<span class="err">'+escapeHtml(err.replace(/\n+$/,""))+'</span>';
+  }
   if(!html){ html=ok("# ran with no printed output"); }
   terminalEl.innerHTML=html;
 }
@@ -2336,6 +2384,7 @@ function setUser(u){
   localStorage.setItem("datalab-session", JSON.stringify(u));
   if(u.role!=="guest") localStorage.setItem("datalab-name", u.name);
   loadProgress();
+  loadCode();
   closeLogin();
   updateUserChip();
   render();
