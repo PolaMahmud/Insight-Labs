@@ -1,0 +1,67 @@
+================================================================
+ WEEK 1 · LESSON 1 · CRAFTSMAN — "The Sanitiser"
+ Goal: 16/20 (80%) automatic checks to unlock Master
+================================================================
+
+WHAT TO DO
+----------
+Paste the code below into the Code Box and press ▶ Run.
+No grid clicking is required for this tier — it is graded
+entirely from your code and its results.
+
+KEY GOTCHA
+----------
+The column is named EXACTLY  "100m Sprint Time (seconds)"
+(with the "(seconds)" suffix). Using "100m Sprint Time" will
+raise KeyError. Tip: print(df.columns.tolist()) to see names.
+
+CODE (paste into the Code Box)
+------------------------------
+import pandas as pd
+
+df = pd.read_csv("sports_day.csv")
+col = "100m Sprint Time (seconds)"
+
+# Step 1: strip the lowercase "s" off the sprint times
+df[col] = df[col].str.replace("s", "", regex=False)
+
+# Step 2: cast the cleaned text to float (NOT int — keep decimals)
+df[col] = df[col].astype(float)
+
+# Step 3: verify the maths now works
+print("New data types:")
+print(df.dtypes)
+print(f"Mean: {df[col].mean():.2f}s")
+print(f"Max:  {df[col].max():.2f}s")
+print(f"Min:  {df[col].min():.2f}s")
+
+
+HOW THIS HITS ALL 20 CHECKS
+---------------------------
+Phase 1 — Target Isolation & String Slicing
+  1. references Sprint column .............. df[col]
+  2. string replace called ................ .str.replace(...)
+  3. targets lowercase "s" ................ replace("s", "")
+  4. cleans without deleting numbers ...... column becomes float, no new NaN
+  5. no KeyError ........................... correct full column name
+
+Phase 2 — Type Casting
+  6. .astype() applied ..................... df[col].astype(float)
+  7. cast to float (not int) .............. astype(float)
+  8. saved back to a column ............... df[col] = ...
+  9. terminal confirms float64 ............ printed df.dtypes
+ 10. "s" gone from the grid .............. column dtype is now float
+
+Phase 3 — Mathematical Verification
+ 11. mean of cleaned column .............. df[col].mean()
+ 12. ran without TypeError ............... column is numeric now
+ 13. average is accurate ................. matches the real cleaned mean
+ 14. printed maximum (.max()) ............ df[col].max()
+ 15. printed minimum (.min()) ............ df[col].min()
+
+Phase 4 — Data Engine Integrity
+ 16. still 250 rows ...................... no rows dropped
+ 17. no accidental NaN ................... clean conversion
+ 18. House & Age types unchanged ......... object / int64 preserved
+ 19. final df.dtypes printed ............. shows the clean board
+ 20. no red error logs ................... clean run

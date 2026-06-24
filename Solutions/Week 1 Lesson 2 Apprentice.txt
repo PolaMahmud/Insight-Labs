@@ -1,0 +1,79 @@
+================================================================
+ WEEK 1 · LESSON 2 · APPRENTICE — "The Alphabetical Trap"
+ Dataset: spotify_tracks.csv   ·   Goal: 16/20 (80%)
+================================================================
+
+THE IDEA
+--------
+Total Streams is CARDINAL data (raw magnitudes) — sorting it works
+perfectly. Popularity Tier is ORDINAL data (Bronze < Silver < Gold
+< Platinum). Sorting the *text* only sorts it A→Z, which produces
+the WRONG order: Bronze, Gold, Platinum, Silver (B, G, P, S).
+
+WHAT TO DO
+----------
+1. Paste the code below into the Code Box and press ▶ Run.
+2. In the Data Engine, CLICK the "Popularity Tier" column header
+   once so it is flagged/highlighted (this is check #15).
+   The grader re-runs automatically when you flag the column.
+
+CODE (paste into the Code Box)
+------------------------------
+import pandas as pd
+
+df = pd.read_csv("spotify_tracks.csv")
+
+# --- CARDINAL: Total Streams sorts perfectly by magnitude ---
+df = df.sort_values("Total Streams", ascending=False)
+print("Top by Total Streams (Cardinal):")
+print(df[["Song Title", "Total Streams"]].head())   # avoid tier names here
+
+# --- ORDINAL TRAP: sorting the text tier only sorts A->Z ---
+df = df.sort_values("Popularity Tier", ascending=True)
+print("Popularity Tier sorted alphabetically (top 10):")
+print(df["Popularity Tier"].head(10))
+
+# Prove the alphabetical category order is Bronze, Gold, Platinum, Silver
+print("Alphabetical order:", sorted(df["Popularity Tier"].unique()))
+print("Alphabetical sorting breaks the ranking order!")
+
+# Classify the two scales
+print("Total Streams -> Cardinal")
+print("Popularity Tier -> Ordinal")
+
+
+HOW THIS HITS ALL 20 CHECKS
+---------------------------
+Phase 1 — Syntax & Initialisation
+  1. import pandas .......................... import pandas as pd
+  2. load spotify_tracks.csv ............... pd.read_csv("spotify_tracks.csv")
+  3. assigned to df ........................ df = ...
+  4. no syntax error ....................... clean run
+  5. 300 rows rendered ..................... real file has 300 rows
+
+Phase 2 — Cardinal Sorting Execution
+  6. used .sort_values() .................. df.sort_values(...)
+  7. ascending=False ...................... ascending=False
+  8. top row = max streams ................ head() prints the 6,743,684 max
+  9. references Total Streams ............. "Total Streams"
+ 10. overwrote df with sorted order ....... df = df.sort_values(...)
+
+Phase 3 — The Ordinal Trap
+ 11. sorted Popularity Tier .............. sort_values("Popularity Tier")
+ 12. printed top 10 (.head(10)) .......... .head(10)
+ 13. proves B->G->P->S order ............. sorted(...unique()) output
+ 14. note about alphabetical break ....... "Alphabetical sorting breaks..."
+ 15. flagged the Tier column ............. CLICK its header in the grid
+
+Phase 4 — Data Engine Integrity
+ 16. 300 rows, no deletions .............. unchanged
+ 17. all 8 columns intact ............... unchanged
+ 18. grid shuffled to alphabetical ...... final df sorted by tier (Bronze first)
+ 19. printed "Cardinal" ................. "Total Streams -> Cardinal"
+ 20. printed "Ordinal" .................. "Popularity Tier -> Ordinal"
+
+NOTE
+----
+The final sort is by Popularity Tier ascending, so the Data Engine
+re-renders with every Bronze row at the top — that is the visible
+proof that A→Z order is not the same as rank order.

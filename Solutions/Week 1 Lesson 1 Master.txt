@@ -1,0 +1,76 @@
+================================================================
+ WEEK 1 · LESSON 1 · MASTER — "The Cartographer"
+ Goal: 16/20 (80%) automatic checks to finish + lab report
+================================================================
+
+This tier is graded mostly from the CHART SANDBOX, not the code.
+The checks update LIVE as you click — no need to press Run for
+most of them. Apprentice and Craftsman must already be passed
+(they unlock this tier, and feed check #20).
+
+Make sure the Code Box still holds valid Python (the Craftsman
+solution is fine) so check #17 (no syntax errors) passes — then
+press ▶ Run once.
+
+----------------------------------------------------------------
+STEP-BY-STEP IN THE CHART SANDBOX
+----------------------------------------------------------------
+
+PHASE 1 — The Intentional Error
+  1. Chart dropdown  -> "Histogram"
+  2. X-axis dropdown -> "House"
+        => the red "Type Mismatch" warning appears.   (checks 1,2,3)
+  3. Chart dropdown  -> "Scatter"
+  4. X-axis -> "House",  Y-axis -> "Student ID"
+        => a meaningless grid of dots appears.         (checks 4,5)
+
+PHASE 2 — The Qualitative Correction
+  5. Chart dropdown  -> "Bar"
+  6. X-axis -> "House"
+  7. Y-axis -> "Count"
+        => 4 labelled bars (Red, Blue, Green, Yellow). (checks 6,7,8,9,10)
+
+PHASE 3 — The Quantitative Correction
+  8. Chart dropdown  -> "Histogram"
+  9. X-axis -> "100m Sprint Time (seconds)"
+ 10. Drag the "Bin size" slider off 0.5 (e.g. 0.5 -> 1.0 -> back)
+        => the sprint times bin into a clean distribution.
+                                                        (checks 11,12,13,14,15)
+
+PHASE 4 — UI Polish & Printout
+ 11. Move the "Colour" picker to any new colour
+        => House bars recolour to their names.          (check 16)
+ 12. Make sure the Code Box has no syntax errors, press ▶ Run. (check 17)
+        (Data Engine stays synced with the sandbox.)    (check 18)
+ 13. The mastery bar should now be >= 80%, which enables the
+     "🎓 Submit Project & Print Lab Report" button — click it. (check 19)
+ 14. With Apprentice + Craftsman already passed and the bar +
+     histogram built, full completion registers.        (check 20)
+
+----------------------------------------------------------------
+CODE BOX (keep this so check #17 passes; then press Run)
+----------------------------------------------------------------
+import pandas as pd
+
+df = pd.read_csv("sports_day.csv")
+col = "100m Sprint Time (seconds)"
+df[col] = df[col].str.replace("s", "", regex=False).astype(float)
+
+# Bar = counts per House (qualitative)
+print(df["House"].value_counts())
+
+# Histogram = distribution of the continuous sprint times
+print(df[col].describe())
+
+
+CHECK MAP
+---------
+Phase 1: 1 Histogram chosen · 2 House on X · 3 Type-Mismatch shown
+         4 Scatter chosen · 5 House vs Student ID (meaningless)
+Phase 2: 6 Bar chart · 7 qualitative X · 8 Count on Y
+         9 four House bars · 10 axes labelled
+Phase 3: 11 Histogram again · 12 Sprint on X · 13 floats binned
+         14 bin slider used · 15 no strings in histogram
+Phase 4: 16 colour picker used · 17 code has no syntax errors
+         18 Data Engine synced · 19 Lab Report clicked
+         20 100% across typing + cleaning + visual mapping

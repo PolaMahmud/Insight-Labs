@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="ocean" data-mode="auto">
+<!--
+╔══════════════════════════════════════════════════════════╗
+║  DATA LAB · KS3 Data Analysis                            ║
+║                                                          ║
+║  THEME: edit data-theme above. Options:                  ║
+║    forest · ocean · sunset · lavender · slate · rose     ║
+║  MODE: light / dark / auto toggle, top-right (saved).    ║
+║                                                          ║
+║  CURRICULUM lives in the CURRICULUM, DATASETS and        ║
+║  TOPICS objects in the script — edit those to expand.    ║
+╚══════════════════════════════════════════════════════════╝
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Lab — KS3 Data Analysis</title>
+<meta name="description" content="An interactive KS3 Data Analysis workspace: six weeks of cleaning, summarising and visualising real datasets, with mastery-based progress.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<!-- Pre-paint mode so there's no flash (matches the study-site convention) -->
+<script>
+(function(){
+  var m = localStorage.getItem('datalab-mode');
+  if (m === 'light' || m === 'dark') document.documentElement.setAttribute('data-mode', m);
+})();
+</script>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+/* ═══════ THEME PALETTES (shared with the 9626/0417 study sites) ═══════ */
+[data-theme="forest"]{--accent:#2D6A4F;--accent-lt:#E9F5EF;--accent-hv:#1E4D38;--sec:#1D5B9E;--sec-lt:#EAF1F9;--tri:#92650A;--tri-lt:#FEF5E0;--hi:#B04A2E;--hi-lt:#FDF0EC;--accent-dk:#52B788;--accent-lt-dk:#1A2E24;--accent-hv-dk:#74D4A4;--sec-dk:#6AACF0;--sec-lt-dk:#1A2533;--tri-dk:#E8B44A;--tri-lt-dk:#2A2210;--hi-dk:#E8845A;--hi-lt-dk:#2A1A14;}
+[data-theme="ocean"]{--accent:#1565A8;--accent-lt:#E3F0FB;--accent-hv:#0D4A7A;--sec:#0E7C6B;--sec-lt:#E0F5F0;--tri:#7C5C1E;--tri-lt:#FDF3DA;--hi:#9E3A5C;--hi-lt:#FBEDF2;--accent-dk:#5CADE8;--accent-lt-dk:#132A3D;--accent-hv-dk:#8CC8F2;--sec-dk:#4ECAB5;--sec-lt-dk:#0F2925;--tri-dk:#E0B44C;--tri-lt-dk:#2A2210;--hi-dk:#E07898;--hi-lt-dk:#2E1520;}
+[data-theme="sunset"]{--accent:#C2510E;--accent-lt:#FEF0E5;--accent-hv:#923C09;--sec:#8B6914;--sec-lt:#FDF6E3;--tri:#2D6A4F;--tri-lt:#E9F5EF;--hi:#A03060;--hi-lt:#FCEDF3;--accent-dk:#F09050;--accent-lt-dk:#2E1A0C;--accent-hv-dk:#F4AD78;--sec-dk:#E4C24A;--sec-lt-dk:#2A2210;--tri-dk:#52B788;--tri-lt-dk:#1A2E24;--hi-dk:#E87098;--hi-lt-dk:#2E1520;}
+[data-theme="lavender"]{--accent:#6C47B8;--accent-lt:#F0ECFA;--accent-hv:#4E3290;--sec:#B8478B;--sec-lt:#FAEDF5;--tri:#3A7CA5;--tri-lt:#E6F1FA;--hi:#C27020;--hi-lt:#FDF2E4;--accent-dk:#A68AE0;--accent-lt-dk:#201838;--accent-hv-dk:#C4B0F0;--sec-dk:#E07AB5;--sec-lt-dk:#2E152A;--tri-dk:#68B8E0;--tri-lt-dk:#142430;--hi-dk:#E8A050;--hi-lt-dk:#2A1E0E;}
+[data-theme="slate"]{--accent:#4A5568;--accent-lt:#EDF0F4;--accent-hv:#2D3748;--sec:#2B6CB0;--sec-lt:#EBF4FF;--tri:#7B6B3A;--tri-lt:#F9F5EA;--hi:#9B4040;--hi-lt:#FAECEC;--accent-dk:#A0AEC0;--accent-lt-dk:#1A1E28;--accent-hv-dk:#CBD5E0;--sec-dk:#63B3ED;--sec-lt-dk:#152033;--tri-dk:#D4B86A;--tri-lt-dk:#282010;--hi-dk:#F08080;--hi-lt-dk:#2A1414;}
+[data-theme="rose"]{--accent:#B8365A;--accent-lt:#FCEDF1;--accent-hv:#8C2844;--sec:#7C4DAA;--sec-lt:#F2ECF9;--tri:#2D7E6F;--tri-lt:#E5F5F0;--hi:#B07820;--hi-lt:#FDF4E5;--accent-dk:#F07898;--accent-lt-dk:#2E1520;--accent-hv-dk:#F4A0B8;--sec-dk:#B890E0;--sec-lt-dk:#201838;--tri-dk:#4ECAB5;--tri-lt-dk:#0F2925;--hi-dk:#E8B44A;--hi-lt-dk:#2A2210;}
+
+/* ═══════ LIGHT MODE BASE ═══════ */
+:root{
+--bg:#FAF8F5;--bg-card:#FFFFFF;--bg-hov:#F3F0EB;
+--txt:#1A1A18;--txt2:#6B6A65;--txt3:#9C9B95;
+--brd:#E8E5DE;
+--sh-sm:0 1px 2px rgba(0,0,0,.04);--sh-md:0 4px 16px rgba(0,0,0,.06);
+--r:12px;--rl:16px;
+/* code surfaces stay dark in both modes, like a real editor */
+--code-bg:#0F1620;--code-brd:#1E2A38;--code-txt:#C9D6E2;
+}
+/* ═══════ DARK MODE ═══════ */
+[data-mode="dark"]{
+--bg:#141413;--bg-card:#1E1E1C;--bg-hov:#2A2A27;--txt:#EDECEA;--txt2:#A3A29C;--txt3:#6B6A65;--brd:#2E2E2B;
+--sh-sm:0 1px 2px rgba(0,0,0,.2);--sh-md:0 4px 16px rgba(0,0,0,.3);
+--accent:var(--accent-dk);--accent-lt:var(--accent-lt-dk);--accent-hv:var(--accent-hv-dk);
+--sec:var(--sec-dk);--sec-lt:var(--sec-lt-dk);--tri:var(--tri-dk);--tri-lt:var(--tri-lt-dk);--hi:var(--hi-dk);--hi-lt:var(--hi-lt-dk);
+--code-bg:#0B0F16;--code-brd:#1A2330;
+}
+@media (prefers-color-scheme:dark){[data-mode="auto"]{
+--bg:#141413;--bg-card:#1E1E1C;--bg-hov:#2A2A27;--txt:#EDECEA;--txt2:#A3A29C;--txt3:#6B6A65;--brd:#2E2E2B;
+--sh-sm:0 1px 2px rgba(0,0,0,.2);--sh-md:0 4px 16px rgba(0,0,0,.3);
+--accent:var(--accent-dk);--accent-lt:var(--accent-lt-dk);--accent-hv:var(--accent-hv-dk);
+--sec:var(--sec-dk);--sec-lt:var(--sec-lt-dk);--tri:var(--tri-dk);--tri-lt:var(--tri-lt-dk);--hi:var(--hi-dk);--hi-lt:var(--hi-lt-dk);
+--code-bg:#0B0F16;--code-brd:#1A2330;
+}}
+
+/* ═══════ BASE ═══════ */
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh;transition:background .3s,color .3s;}
+
+/* ═══════ MODE TOGGLE ═══════ */
+.mode-toggle{position:fixed;top:1rem;right:1rem;z-index:100;display:flex;gap:0;background:var(--bg-card);border:1px solid var(--brd);border-radius:100px;padding:3px;box-shadow:var(--sh-md);transition:all .3s;}
+.mode-toggle button{all:unset;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;color:var(--txt3);}
+.mode-toggle button:hover{background:var(--bg-hov);}
+.mode-toggle button.active{background:var(--accent-lt);color:var(--accent);}
+.mode-toggle button svg{width:18px;height:18px;}
+
+/* ═══════ HERO ═══════ */
+.hero{text-align:center;padding:3.5rem 1.5rem 2rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.6;transition:background .3s;
+background:radial-gradient(ellipse 60% 50% at 20% 40%,var(--accent-lt) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 80% 30%,var(--sec-lt) 0%,transparent 70%);}
+.hero-badge{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-lt);border:1px solid var(--accent);border-radius:100px;padding:.35rem 1rem;margin-bottom:1.1rem;position:relative;transition:all .3s;}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:400;line-height:1.15;letter-spacing:-.02em;margin-bottom:.6rem;position:relative;}
+.hero p{font-size:1.05rem;color:var(--txt2);max-width:520px;margin:0 auto;position:relative;}
+
+.container{max-width:1040px;margin:0 auto;padding:0 1.5rem 4rem;}
+
+/* ═══════ NESTED TAB LEVELS (pill language from the study site) ═══════ */
+.level{margin-bottom:1rem;}
+.level-label{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3);margin:0 0 .45rem .25rem;}
+.pillbar{display:flex;flex-wrap:wrap;gap:.35rem;background:var(--bg-card);border:1px solid var(--brd);border-radius:100px;padding:4px;box-shadow:var(--sh-sm);transition:all .3s;}
+.pillbar.scroll{flex-wrap:nowrap;overflow-x:auto;}
+.pillbar.scroll::-webkit-scrollbar{height:0;}
+.pillbar button{all:unset;text-align:center;padding:.55rem 1.05rem;font-size:.9rem;font-weight:600;color:var(--txt2);border-radius:100px;cursor:pointer;transition:all .2s;white-space:nowrap;display:inline-flex;align-items:center;gap:.4rem;}
+.pillbar button:hover:not([disabled]){color:var(--txt);}
+.pillbar button[aria-selected="true"]{background:var(--accent-lt);color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;}
+.pillbar.tiers button[aria-selected="true"]{background:var(--tri-lt);color:var(--tri);box-shadow:0 0 0 1px var(--tri) inset;}
+.pillbar button[disabled]{color:var(--txt3);cursor:not-allowed;opacity:.55;}
+.pillbar button .lock{width:13px;height:13px;}
+.lesson-sub{font-weight:400;color:var(--txt3);font-size:.82rem;}
+
+/* ═══════ PROGRESS / MASTERY BAR ═══════ */
+.mastery{background:var(--bg-card);border:1px solid var(--brd);border-radius:var(--rl);box-shadow:var(--sh-sm);padding:1rem 1.1rem;margin:1.25rem 0 1.5rem;transition:all .3s;}
+.mastery-top{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.7rem;}
+.mastery-top .m-title{font-size:.85rem;font-weight:600;}
+.mastery-top .m-pct{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent);margin-left:.1rem;}
+.mastery-top .m-badge{margin-left:auto;font-size:.74rem;font-weight:600;padding:.25rem .7rem;border-radius:100px;background:var(--bg-hov);color:var(--txt3);display:inline-flex;align-items:center;gap:.35rem;transition:all .3s;}
+.mastery-top .m-badge.passed{background:var(--accent-lt);color:var(--accent);}
+.seg-track{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;position:relative;}
+.seg{height:14px;border-radius:3px;background:var(--bg-hov);border:1px solid var(--brd);cursor:pointer;transition:background .15s,transform .1s;}
+.seg:hover{transform:translateY(-1px);}
+.seg.on{background:var(--accent);border-color:var(--accent);}
+.seg.threshold{box-shadow:0 0 0 2px var(--tri);}
+.mastery-controls{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap;align-items:center;}
+.btn{all:unset;cursor:pointer;font-size:.82rem;font-weight:600;padding:.45rem .9rem;border-radius:100px;transition:all .15s;display:inline-flex;align-items:center;gap:.4rem;}
+.btn.primary{background:var(--accent);color:#fff;}
+.btn.primary:hover{background:var(--accent-hv);}
+.btn.ghost{background:var(--bg-hov);color:var(--txt2);}
+.btn.ghost:hover{color:var(--txt);}
+.btn[disabled]{opacity:.45;cursor:not-allowed;}
+.m-hint{font-size:.76rem;color:var(--txt3);}
+
+/* ═══════ CONTEXT + TASK ═══════ */
+.context{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem;margin-bottom:.75rem;}
+.crumb{font-size:.9rem;color:var(--txt2);display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;}
+.crumb b{color:var(--txt);font-weight:600;}
+.crumb .sep{color:var(--brd);}
+.chip{font-size:.76rem;font-weight:600;padding:.25rem .7rem;border-radius:100px;background:var(--sec-lt);color:var(--sec);font-family:'DM Sans',monospace;}
+.task{font-size:.92rem;color:var(--txt2);background:var(--bg-card);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--sh-sm);padding:.85rem 1.05rem;margin-bottom:1.1rem;}
+.task b{color:var(--txt);}
+
+/* capstone dataset chooser */
+.capstone-pick{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;background:var(--tri-lt);border:1px solid var(--tri);border-radius:var(--r);padding:.6rem .85rem;margin-bottom:1.1rem;}
+.capstone-pick .cap-label{font-size:.8rem;font-weight:600;color:var(--tri);margin-right:.2rem;}
+.capstone-pick button{all:unset;cursor:pointer;font-size:.82rem;font-weight:600;padding:.35rem .8rem;border-radius:100px;color:var(--tri);background:transparent;border:1px solid transparent;transition:all .15s;font-family:monospace;}
+.capstone-pick button[aria-pressed="true"]{background:var(--bg-card);box-shadow:var(--sh-sm);border-color:var(--tri);}
+
+/* ═══════ 4-PANEL WORKSPACE ═══════ */
+.workspace{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.panel{background:var(--bg-card);border:1px solid var(--brd);border-radius:var(--rl);box-shadow:var(--sh-sm);display:flex;flex-direction:column;overflow:hidden;min-height:255px;transition:all .3s;}
+.panel-head{display:flex;align-items:center;gap:.6rem;padding:.7rem .9rem;border-bottom:1px solid var(--brd);}
+.panel-ico{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.panel-ico.d1{background:var(--accent-lt);color:var(--accent);}
+.panel-ico.d2{background:var(--sec-lt);color:var(--sec);}
+.panel-ico.d3{background:var(--tri-lt);color:var(--tri);}
+.panel-ico.d4{background:var(--hi-lt);color:var(--hi);}
+.panel-ico svg{width:16px;height:16px;}
+.panel-head h3{font-size:.92rem;font-weight:600;letter-spacing:-.01em;}
+.panel-head .meta{margin-left:auto;font-size:.72rem;color:var(--txt3);font-family:monospace;}
+.panel-body{flex:1;overflow:auto;}
+.panel-body.pad{padding:.85rem .95rem;}
+
+/* code/terminal dark panels */
+.panel.dark{background:var(--code-bg);border-color:var(--code-brd);}
+.panel.dark .panel-head{border-bottom-color:var(--code-brd);}
+.panel.dark .panel-head h3{color:#E6EDF3;}
+.panel.dark .panel-head .meta{color:#5C6B7A;}
+
+/* 1 · Data Engine — spreadsheet */
+.sheet{width:100%;border-collapse:collapse;font-size:.78rem;font-variant-numeric:tabular-nums;}
+.sheet th,.sheet td{border:1px solid var(--brd);padding:.35rem .5rem;text-align:left;white-space:nowrap;}
+.sheet thead th{background:var(--bg-hov);color:var(--txt3);font-weight:600;font-size:.7rem;letter-spacing:.03em;}
+.sheet .cnr,.sheet .rn{background:var(--bg-hov);color:var(--txt3);text-align:center;font-weight:600;width:26px;}
+.sheet td.blank{background:repeating-linear-gradient(45deg,transparent,transparent 4px,var(--brd) 4px,var(--brd) 5px);}
+.sheet td .flag{color:var(--hi);font-style:italic;font-weight:600;}
+
+/* 2/3 · Code + Terminal */
+.code,.term{margin:0;padding:.9rem 1rem;font-family:ui-monospace,'Cascadia Code',Menlo,Consolas,monospace;font-size:.78rem;line-height:1.65;color:var(--code-txt);white-space:pre;overflow:auto;height:100%;}
+.code .kw{color:#FF7B72;}
+.code .st{color:#9ECE6A;}
+.code .cm{color:#5C6B7A;font-style:italic;}
+.term .p{color:#5CADE8;}
+.term .dim{color:#5C6B7A;}
+.term .warn{color:#E0B44C;}
+.term .ok{color:#7EE787;}
+
+/* 4 · Chart Sandbox */
+.sandbox{padding:.85rem .95rem;display:flex;flex-direction:column;gap:.75rem;height:100%;}
+.controls{display:flex;flex-wrap:wrap;gap:.7rem .9rem;align-items:flex-end;}
+.ctl{display:flex;flex-direction:column;gap:.3rem;}
+.ctl label{font-size:.66rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--txt3);}
+.ctl select{font-family:inherit;font-size:.8rem;padding:.35rem .5rem;border-radius:8px;border:1px solid var(--brd);background:var(--bg-card);color:var(--txt);}
+.ctl input[type=range]{width:104px;accent-color:var(--accent);}
+.ctl input[type=color]{width:38px;height:28px;padding:0;border:1px solid var(--brd);border-radius:8px;background:none;cursor:pointer;}
+.ctl .v{font-size:.72rem;color:var(--txt2);font-variant-numeric:tabular-nums;}
+.toggle{display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.78rem;color:var(--txt2);}
+.toggle .sw{width:32px;height:18px;border-radius:100px;background:var(--bg-hov);border:1px solid var(--brd);position:relative;transition:all .2s;}
+.toggle .sw::after{content:'';position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;background:var(--txt3);transition:all .2s;}
+.toggle input{display:none;}
+.toggle input:checked + .sw{background:var(--accent-lt);border-color:var(--accent);}
+.toggle input:checked + .sw::after{left:15px;background:var(--accent);}
+/* dial / knob */
+.knob{width:46px;height:46px;cursor:grab;touch-action:none;outline:none;}
+.knob:focus-visible{filter:drop-shadow(0 0 0 2px var(--accent));}
+.knob .track{fill:none;stroke:var(--brd);stroke-width:4;stroke-linecap:round;}
+.knob .ind{stroke:var(--accent);stroke-width:3;stroke-linecap:round;}
+.knob .hub{fill:var(--bg-hov);stroke:var(--brd);}
+.dialwrap{display:flex;flex-direction:column;align-items:center;gap:.2rem;}
+.dialwrap .v{font-size:.7rem;color:var(--txt2);}
+.controls[data-locked="true"]{opacity:.45;pointer-events:none;filter:grayscale(.6);}
+.lock-note{display:none;font-size:.74rem;color:var(--tri);background:var(--tri-lt);border:1px solid var(--tri);border-radius:100px;padding:.2rem .65rem;align-self:flex-start;}
+.sandbox[data-locked="true"] .lock-note{display:inline-flex;align-items:center;gap:.35rem;}
+.stage{flex:1;min-height:120px;border:1px dashed var(--brd);border-radius:var(--r);background:var(--bg);padding:.5rem;}
+.stage svg{display:block;width:100%;height:100%;min-height:110px;}
+.stage .axis{stroke:var(--brd);stroke-width:1;}
+.stage .lbl{fill:var(--txt3);font-size:8px;font-family:'DM Sans',sans-serif;}
+
+/* ═══════ CERTIFICATE MODAL ═══════ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:1.5rem;z-index:200;}
+.overlay.show{display:flex;animation:fadeUp .25s ease both;}
+.cert-shell{max-width:640px;width:100%;max-height:92vh;overflow:auto;background:var(--bg-card);border-radius:var(--rl);box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.cert-shell .gen{padding:3rem;text-align:center;color:var(--txt2);}
+.spinner{width:34px;height:34px;border:3px solid var(--brd);border-top-color:var(--accent);border-radius:50%;margin:0 auto 1rem;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#certificate{padding:2.2rem 2.4rem;border:2px solid var(--accent);border-radius:var(--rl);margin:0;}
+.cert-crest{width:48px;height:48px;border-radius:50%;background:var(--accent-lt);color:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto .8rem;}
+.cert-crest svg{width:26px;height:26px;}
+#certificate .cert-eyebrow{text-align:center;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;}
+#certificate h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:1.7rem;text-align:center;margin:.2rem 0 .1rem;}
+#certificate .cert-sub{text-align:center;color:var(--txt2);font-size:.9rem;margin-bottom:1.3rem;}
+#certificate .cert-name{text-align:center;margin:1.1rem 0;}
+#certificate .cert-name input{font-family:'DM Serif Display',serif;font-size:1.5rem;text-align:center;border:none;border-bottom:2px solid var(--brd);background:transparent;color:var(--txt);padding:.2rem .5rem;width:min(360px,90%);}
+#certificate .cert-name input:focus{outline:none;border-bottom-color:var(--accent);}
+#certificate .cert-line{text-align:center;color:var(--txt2);font-size:.95rem;margin:.3rem 0;}
+.cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem 1.2rem;margin:1.3rem 0;font-size:.86rem;}
+.cert-grid .k{color:var(--txt3);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;}
+.cert-grid .val{font-weight:600;}
+.cert-skills{background:var(--bg-hov);border-radius:var(--r);padding:.85rem 1rem;margin:1rem 0;}
+.cert-skills .k{font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--txt3);margin-bottom:.4rem;}
+.cert-skills ul{margin:0;padding-left:1.1rem;font-size:.86rem;line-height:1.7;}
+.cert-foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:1.6rem;gap:1rem;}
+.cert-foot .sign{flex:1;}
+.cert-foot .sign .ln{border-top:1px solid var(--txt3);margin-top:1.6rem;padding-top:.3rem;font-size:.74rem;color:var(--txt3);}
+.cert-seal{width:74px;height:74px;border-radius:50%;border:2px dashed var(--accent);color:var(--accent);display:flex;align-items:center;justify-content:center;text-align:center;font-size:.62rem;font-weight:700;line-height:1.15;flex-shrink:0;text-transform:uppercase;letter-spacing:.04em;}
+.cert-actions{display:flex;gap:.6rem;justify-content:flex-end;padding:1rem 2.4rem 1.6rem;}
+
+footer{text-align:center;padding:2rem 1.5rem 2.5rem;border-top:1px solid var(--brd);color:var(--txt3);font-size:.85rem;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+@media (max-width:780px){
+.workspace{grid-template-columns:1fr;}
+.cert-grid{grid-template-columns:1fr;}
+}
+
+/* ═══════ PRINT — isolate the certificate ═══════ */
+@media print{
+body *{visibility:hidden!important;}
+.overlay,.overlay *{visibility:visible!important;}
+.overlay{position:absolute;inset:0;background:#fff;display:block!important;padding:0;}
+.cert-shell{box-shadow:none;max-height:none;}
+.cert-actions,.cert-name input{display:none!important;}
+.cert-name::after{content:attr(data-name);font-family:'DM Serif Display',serif;font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- MODE TOGGLE (sun / monitor / moon) -->
+<nav class="mode-toggle" role="group" aria-label="Appearance">
+<button onclick="setMode('light')" id="btn-light" title="Light mode" aria-label="Light mode">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+<button onclick="setMode('auto')" id="btn-auto" title="System default" aria-label="System default">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+</button>
+<button onclick="setMode('dark')" id="btn-dark" title="Dark mode" aria-label="Dark mode">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+</button>
+</nav>
+
+<!-- HERO -->
+<header class="hero" role="banner">
+<div class="hero-badge">KS3 · Data Analysis</div>
+<h1>The Data Lab</h1>
+<p>Six weeks from raw, messy data to honest charts. Choose a week, a lesson, and your mastery tier to open the workspace.</p>
+</header>
+
+<main class="container" role="main">
+
+  <!-- LEVEL 1 · WEEKS -->
+  <div class="level">
+    <p class="level-label">Week</p>
+    <div class="pillbar weeks scroll" id="weeks" role="tablist" aria-label="Week"></div>
+  </div>
+  <!-- LEVEL 2 · LESSONS -->
+  <div class="level">
+    <p class="level-label">Lesson</p>
+    <div class="pillbar lessons" id="lessons" role="tablist" aria-label="Lesson"></div>
+  </div>
+  <!-- LEVEL 3 · MASTERY TIER -->
+  <div class="level">
+    <p class="level-label">Mastery Tier</p>
+    <div class="pillbar tiers" id="tiers" role="tablist" aria-label="Mastery tier"></div>
+  </div>
+
+  <!-- MASTERY PROGRESS BAR -->
+  <section class="mastery" aria-label="Mastery progress">
+    <div class="mastery-top">
+      <span class="m-title" id="m-title"></span>
+      <span class="m-pct" id="m-pct">0%</span>
+      <span class="m-badge" id="m-badge">Keep going</span>
+    </div>
+    <div class="seg-track" id="seg-track" role="slider" aria-label="Task progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"></div>
+    <div class="mastery-controls">
+      <button class="btn primary" id="step-btn">✓ Complete a step (+5%)</button>
+      <button class="btn ghost" id="reset-btn">Reset</button>
+      <span class="m-hint" id="m-hint">Reach 80% to unlock the next tier.</span>
+    </div>
+  </section>
+
+  <!-- CONTEXT -->
+  <div class="context">
+    <div class="crumb" id="crumb"></div>
+    <span class="chip" id="ds-chip"></span>
+  </div>
+
+  <!-- CAPSTONE DATASET CHOOSER (W6 L2 only) -->
+  <div class="capstone-pick" id="capstone-pick" style="display:none">
+    <span class="cap-label">Capstone dataset:</span>
+  </div>
+
+  <!-- TASK -->
+  <div class="task" id="task"></div>
+
+  <!-- 4-PANEL WORKSPACE -->
+  <div class="workspace">
+    <section class="panel" aria-label="The Data Engine">
+      <div class="panel-head"><span class="panel-ico d1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></span><h3>The Data Engine</h3><span class="meta" id="de-meta"></span></div>
+      <div class="panel-body" id="data-engine"></div>
+    </section>
+
+    <section class="panel dark" aria-label="The Code Box">
+      <div class="panel-head"><span class="panel-ico d2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><h3>The Code Box</h3><span class="meta">analysis.py</span></div>
+      <div class="panel-body"><pre class="code" id="code-box"></pre></div>
+    </section>
+
+    <section class="panel dark" aria-label="Output Terminal">
+      <div class="panel-head"><span class="panel-ico d3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></span><h3>Output Terminal</h3><span class="meta">python3</span></div>
+      <div class="panel-body"><pre class="term" id="terminal"></pre></div>
+    </section>
+
+    <section class="panel" aria-label="Chart Sandbox">
+      <div class="panel-head"><span class="panel-ico d4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><h3>Chart Sandbox</h3><span class="meta" id="cs-meta"></span></div>
+      <div class="panel-body sandbox" id="sandbox">
+        <span class="lock-note">🔒 Dials &amp; sliders unlock in the Capstone Hackathon</span>
+        <div class="controls" id="controls" data-locked="true">
+          <div class="ctl"><label for="c-type">Chart</label>
+            <select id="c-type"><option>Bar</option><option>Line</option><option>Scatter</option></select></div>
+          <div class="ctl"><label for="c-bars">Bars · <span class="v" id="bars-v">7</span></label>
+            <input type="range" id="c-bars" min="3" max="12" value="7"></div>
+          <div class="ctl"><label for="c-color">Colour</label>
+            <input type="color" id="c-color" value="#1565A8"></div>
+          <div class="dialwrap"><label class="ctl" style="font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;color:var(--txt3);font-weight:600">Opacity</label>
+            <svg class="knob" id="k-opacity" viewBox="0 0 46 46" role="slider" tabindex="0" aria-label="Opacity dial" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80"><circle class="track" cx="23" cy="23" r="17" stroke-dasharray="80 200" transform="rotate(135 23 23)"/><circle class="hub" cx="23" cy="23" r="10"/><line class="ind" x1="23" y1="23" x2="23" y2="9"/></svg>
+            <span class="v" id="op-v">80%</span></div>
+          <div class="dialwrap"><label class="ctl" style="font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;color:var(--txt3);font-weight:600">Jitter</label>
+            <svg class="knob" id="k-jitter" viewBox="0 0 46 46" role="slider" tabindex="0" aria-label="Jitter dial" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20"><circle class="track" cx="23" cy="23" r="17" stroke-dasharray="80 200" transform="rotate(135 23 23)"/><circle class="hub" cx="23" cy="23" r="10"/><line class="ind" x1="23" y1="23" x2="23" y2="9"/></svg>
+            <span class="v" id="ji-v">20%</span></div>
+          <label class="toggle"><input type="checkbox" id="c-grid"><span class="sw"></span>Gridlines</label>
+        </div>
+        <div class="stage"><svg id="chart" viewBox="0 0 320 150" preserveAspectRatio="none" aria-label="Preview chart"></svg></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- CERTIFICATE MODAL -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="cert-h">
+  <div class="cert-shell">
+    <div class="gen" id="cert-gen"><div class="spinner"></div>Generating lab report…</div>
+    <div id="cert-wrap" style="display:none">
+      <div id="certificate">
+        <div class="cert-crest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5L17 22l-5-3-5 3 1.5-8.5"/></svg></div>
+        <div class="cert-eyebrow">Data Lab · Lab Report</div>
+        <h2 id="cert-h">Certificate of Data Mastery</h2>
+        <div class="cert-sub">This certifies that</div>
+        <div class="cert-name" id="cert-name-wrap"><input id="cert-name" type="text" value="Student Name" aria-label="Student name"></div>
+        <div class="cert-line">has successfully completed the data transformation challenge:</div>
+        <div class="cert-grid">
+          <div><div class="k">Week &amp; Lesson</div><div class="val" id="cert-week"></div></div>
+          <div><div class="k">Topic</div><div class="val" id="cert-topic"></div></div>
+          <div><div class="k">Dataset</div><div class="val" id="cert-ds" style="font-family:monospace"></div></div>
+          <div><div class="k">Mastery score</div><div class="val" id="cert-score"></div></div>
+        </div>
+        <div class="cert-skills">
+          <div class="k">Skills demonstrated</div>
+          <ul id="cert-skills"></ul>
+        </div>
+        <div class="cert-foot">
+          <div class="sign"><div class="ln">Facilitator signature</div></div>
+          <div class="sign"><div class="ln" id="cert-date"></div></div>
+          <div class="cert-seal">Master<br>Tier</div>
+        </div>
+      </div>
+      <div class="cert-actions">
+        <button class="btn ghost" id="cert-close">Close</button>
+        <button class="btn primary" id="cert-print">🖨 Print lab report</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>Data Lab · KS3 Data Analysis. The Code Box and Terminal show illustrative pandas — run the real scripts in your notebook. Progress and preferences are saved in this browser.</footer>
+
+<script>
+"use strict";
+
+/* ══════════════════════════════════════════════════════════════════
+   THEME / MODE  (same mechanism as the 9626 study site)
+══════════════════════════════════════════════════════════════════ */
+function setMode(mode){
+  document.documentElement.setAttribute("data-mode", mode);
+  localStorage.setItem("datalab-mode", mode);
+  updateModeButtons(mode);
+  drawChart();
+}
+function updateModeButtons(mode){
+  document.getElementById("btn-light").classList.toggle("active", mode === "light");
+  document.getElementById("btn-auto").classList.toggle("active", mode === "auto");
+  document.getElementById("btn-dark").classList.toggle("active", mode === "dark");
+}
+updateModeButtons(document.documentElement.getAttribute("data-mode") || "auto");
+
+/* ══════════════════════════════════════════════════════════════════
+   DATASETS — sample rows (metric units only) + metadata for codegen
+   flagged: cell values to highlight as "messy / suspicious"
+══════════════════════════════════════════════════════════════════ */
+const DATASETS = {
+  "sports_day.csv": {
+    cat:"House", numMain:"High Jump (meters)", numAlt:"100m Sprint Time (seconds)",
+    corrX:"Age", corrY:"High Jump (meters)",
+    flaw:'some sprint times are text like "14.2s" and some jumps are blank',
+    fix:'df["100m Sprint Time (seconds)"] = (\n    df["100m Sprint Time (seconds)"].astype(str)\n      .str.replace("s", "").astype(float))',
+    headers:["Student","House","Age","Sprint (s)","Jump (m)"],
+    rows:[["S1005","Blue","12","16.18s","1.02"],["S1015","Red","13","15.81",null],
+          ["S1027","Yellow","15","15.63s","1.29"],["S1042","Green","11","17.40","0.88"]],
+    flagged:["16.18s","15.63s"]
+  },
+  "spotify_tracks.csv": {
+    cat:"Popularity Tier", numMain:"Total Streams", numAlt:"Tempo (BPM)",
+    corrX:"Song Duration (seconds)", corrY:"Total Streams",
+    flaw:"8 rows are exact duplicates of other rows",
+    fix:'df = df.drop_duplicates()',
+    headers:["Song","Genre","Streams","Tier"],
+    rows:[["Midnight Dreams","Pop","3,204,551","Gold"],["Golden Echo","Indie","5,880,002","Platinum"],
+          ["Midnight Dreams","Pop","3,204,551","Gold"],["Frozen Tides","Rock","410,228","Bronze"]],
+    flagged:["Midnight Dreams"]
+  },
+  "gaming_data.csv": {
+    cat:"Platform", numMain:"Monthly Revenue (£)", numAlt:"Hours Streamed",
+    corrX:"Hours Streamed", corrY:"Followers",
+    flaw:"the Platform labels are inconsistent, 25 scores are blank and 2 revenues are enormous",
+    fix:'df["Platform"] = df["Platform"].str.lower().str.replace("_tv", "")',
+    headers:["Creator","Platform","Followers","Revenue (£)"],
+    rows:[["GoldenKnight554","Twitch","56,478","350.39"],["MegaWolf475","YouTube","136,082","144.51"],
+          ["ShadowFox210","twitch","9,210",null],["NeonViper88","TWITCH_tv","204,553","9,870,500.50"]],
+    flagged:["twitch","TWITCH_tv","9,870,500.50"]
+  },
+  "viral_analytics.csv": {
+    cat:"Category", numMain:"Subscriber Count", numAlt:"Avg Views",
+    corrX:"Subscriber Count", corrY:"Avg Views",
+    flaw:"Category spellings vary, 30 video lengths are blank and 3 mega-channels warp the mean",
+    fix:'df["Category"] = df["Category"].str.lower().str.replace("_", " ")',
+    headers:["Handle","Category","Subscribers","Avg Views"],
+    rows:[["@ItsMaya42","gaming","88,420","21,005"],["@RealKai7","Gaming","312,000,000","210,000,000"],
+          ["@JustLeo3","tech","12,300","4,100"],["@TeamIvy5","Tech_Reviews","90,500","33,200"]],
+    flagged:["312,000,000","210,000,000","Gamer_vids","Tech_Reviews"]
+  },
+  "burger_builder.csv": {
+    cat:"Category", numMain:"Calories", numAlt:"Fat (grams)",
+    corrX:"Fat (grams)", corrY:"Calories",
+    flaw:'Price is text like "£4.99", 12 rows are duplicated and one item is 6,000 kcal',
+    fix:'df["Price"] = df["Price"].str.replace("£", "").astype(float)',
+    headers:["Chain","Item","Category","Calories","Price"],
+    rows:[["McDonald's","Cheeseburger","Burger","303","£3.19"],["KFC","Fries","Sides","320","£2.49"],
+          ["Five Guys","Family Mega Platter","Burger","6000","£29.99"],["Greggs","Doughnut","Dessert","290","£1.10"]],
+    flagged:["6000","£29.99"]
+  },
+  "canteen_sales.csv": {
+    cat:"Category", numMain:"Quantity Sold", numAlt:"Outside Temp (Celsius)",
+    corrX:"Outside Temp (Celsius)", corrY:"Quantity Sold",
+    flaw:"20 categories are blank, one sale shows 150 items and cold days spike hot-food sales",
+    fix:'df["Category"] = df["Category"].fillna("Unknown")',
+    headers:["Date","Item","Category","Qty","Temp (°C)"],
+    rows:[["2024-09-05","Pizza Slice","Hot Food","41","22.4"],["2024-12-11","Soup of the Day","Hot Food","78","2.1"],
+          ["2025-01-20","Pizza Slice",null,"150","-0.1"],["2025-03-02","Apple","Fruit","25","11.3"]],
+    flagged:["150"]
+  }
+};
+
+/* ══════════════════════════════════════════════════════════════════
+   TOPICS — each returns tier-aware task / code / terminal + skills.
+   Generators receive the dataset metadata so they adapt per week.
+══════════════════════════════════════════════════════════════════ */
+const P = '<span class="p">&gt;&gt;&gt;</span> ';
+const dim = s => '<span class="dim">'+s+'</span>';
+const warn = s => '<span class="warn">'+s+'</span>';
+const ok = s => '<span class="ok">'+s+'</span>';
+const T = (a,c,m) => ({ apprentice:a, craftsman:c, master:m });   // tier picker helper
+
+const TOPICS = {
+  types: {
+    skills:["Identify data types (text, whole number, decimal)","Read a DataFrame's structure with .info()","Convert columns to the correct type"],
+    task: T("Open <b>{f}</b> and work out the <b>data type</b> of every column.",
+            "Convert each column to its correct type so numbers behave like numbers.",
+            "Classify every column as categorical, discrete or continuous, then fix any wrong types."),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+print(df.dtypes)        # what type is each column?`,
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+df["Age"] = df["Age"].astype("int")
+print(df.dtypes)`,
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+kinds = {"${ds.cat}": "categorical",
+         "${ds.numMain}": "continuous"}
+print(kinds)`),
+    term: ds => T(
+P+"df.dtypes\n"+dim("Age            int64\n"+ds.cat+"   object\n"+ds.numMain+"   float64"),
+P+"df.dtypes\n"+ok("Age            int64")+"\n"+dim("...types corrected"),
+P+"print(kinds)\n"+dim("{'"+ds.cat+"': 'categorical',\n '"+ds.numMain+"': 'continuous'}"))
+  },
+  scales: {
+    skills:["Tell nominal from ordinal data","Build an ordered category","Rank ordinal values"],
+    task: T("Look at <b>{f}</b>. Which columns have a natural <b>order</b> and which do not?",
+            "Turn <b>{cat}</b> into an ordered category (Bronze &lt; Silver &lt; Gold &lt; Platinum).",
+            "Map the ordered tiers to numbers so you can sort and compare them fairly."),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+print(df["${ds.cat}"].unique())`,
+`import pandas as pd
+from pandas.api.types import CategoricalDtype
+
+order = ["Bronze","Silver","Gold","Platinum"]
+ct = CategoricalDtype(order, ordered=True)
+df["${ds.cat}"] = df["${ds.cat}"].astype(ct)`,
+`rank = {"Bronze":1,"Silver":2,"Gold":3,"Platinum":4}
+df["tier_rank"] = df["${ds.cat}"].map(rank)
+print(df.sort_values("tier_rank").head())`),
+    term: ds => T(
+P+'df["'+ds.cat+'"].unique()\n'+dim("['Gold' 'Platinum' 'Bronze' 'Silver']"),
+P+"df.dtypes\n"+ok(ds.cat+"   category (ordered)"),
+P+"...\n"+dim("tier_rank now 1..4 — sortable"))
+  },
+  clean_inconsistent: {
+    skills:["Spot inconsistent text labels","Standardise capitalisation and spelling","Re-check value counts after cleaning"],
+    task: T("Find every different spelling of the values in <b>{cat}</b> in <b>{f}</b>.",
+            "Standardise <b>{cat}</b> so the same thing is written the same way every time.",
+            "Build a mapping that merges all variants, then prove the categories are now clean."),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+print(df["${ds.cat}"].value_counts())`,
+`df["${ds.cat}"] = df["${ds.cat}"].str.strip().str.lower()
+print(df["${ds.cat}"].value_counts())`,
+`# ${ds.flaw}
+${ds.fix}
+print(df["${ds.cat}"].value_counts())`),
+    term: ds => T(
+P+'df["'+ds.cat+'"].value_counts()\n'+warn("Twitch 142\ntwitch  60\nTWITCH_tv 40\n...messy!"),
+P+"...\n"+dim("twitch 242\nyoutube 180")+"  "+ok("(merged)"),
+P+"...\n"+ok("4 clean categories remain"))
+  },
+  clean_missing: {
+    skills:["Count missing values with .isna()","Decide whether to fill or drop blanks","Detect outliers with the IQR rule"],
+    task: T("In <b>{f}</b>, count how many values are <b>missing</b> in each column.",
+            "Handle the blanks sensibly, and look for impossibly large values.",
+            "Use the IQR rule to flag outliers in <b>{num}</b> — then decide: error, or real?"),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+print(df.isna().sum())`,
+`df = df.dropna(subset=["${ds.numMain}"])
+print(df.isna().sum().sum(), "blanks left")`,
+`q1, q3 = df["${ds.numMain}"].quantile([0.25, 0.75])
+iqr = q3 - q1
+big = df[df["${ds.numMain}"] > q3 + 1.5*iqr]
+print(len(big), "outliers flagged")`),
+    term: ds => T(
+P+"df.isna().sum()\n"+warn("Satisfaction Score (1-5)   25"),
+P+"...\n"+ok("0 blanks left"),
+P+"len(big)\n"+warn("2 outliers flagged")+"\n"+dim("# £6.2M and £9.9M — keep or remove?"))
+  },
+  filter: {
+    skills:["Filter rows with a condition","Combine conditions with & and |","Use .query() for readable filters"],
+    task: T("From <b>{f}</b>, show only the rows where <b>{cat}</b> is one chosen value.",
+            "Filter using two conditions at once (for example House and Age together).",
+            "Write a readable .query() that answers a real question about the data."),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+older = df[df["${ds.corrX}"] >= 14]
+print(older.shape)`,
+`mask = (df["${ds.cat}"] == "Red") & (df["${ds.corrX}"] >= 13)
+print(df[mask])`,
+`fast = df.query("${ds.corrX} >= 14 and \`${ds.numMain}\` > 1.2")
+print(fast[["${ds.cat}", "${ds.numMain}"]])`),
+    term: ds => T(
+P+"older.shape\n"+dim("(96, "+ds.headers.length+")"),
+P+"...\n"+dim("18 rows match both conditions"),
+P+"...\n"+ok("filtered to the top performers"))
+  },
+  central: {
+    skills:["Calculate mean, median and mode","Compare mean vs median on skewed data","Choose the fairest average to report"],
+    task: T("Find the <b>mean</b>, <b>median</b> and <b>mode</b> of <b>{num}</b> in <b>{f}</b>.",
+            "Compare the mean and median — what do the two outliers do to each?",
+            "Decide which average is the honest one to report, and justify it."),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+print(df["${ds.numMain}"].mean())
+print(df["${ds.numMain}"].median())`,
+`m = df["${ds.numMain}"].mean()
+md = df["${ds.numMain}"].median()
+print(round(m,2), "vs", round(md,2))`,
+`# The mean is dragged up by 2 huge earners
+trimmed = df["${ds.numMain}"].clip(upper=3000)
+print(round(trimmed.mean(), 2))`),
+    term: ds => T(
+P+"df['"+ds.numMain+"'].mean()\n"+warn("20512.66")+"\n"+P+"...median()\n"+dim("612.40"),
+P+"...\n"+warn("mean 20512.66 vs median 612.40")+"\n"+dim("# huge gap = skew"),
+P+"...\n"+ok("612.40")+dim("  (median is the fair report)"))
+  },
+  spread: {
+    skills:["Find range, IQR and standard deviation","Read a distribution's shape","Use .describe() to summarise spread"],
+    task: T("Find the <b>range</b> (max − min) of <b>{num}</b> in <b>{f}</b>.",
+            "Calculate the standard deviation and the interquartile range.",
+            "Use .describe() and decide whether the data is symmetric or skewed."),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+rng = df["${ds.numMain}"].max() - df["${ds.numMain}"].min()
+print("range:", rng)`,
+`print(df["${ds.numMain}"].std().round(2))
+print(df["${ds.numMain}"].quantile([.25,.5,.75]))`,
+`print(df["${ds.numMain}"].describe())
+df["${ds.numMain}"].plot(kind="hist", bins=20)`),
+    term: ds => T(
+P+'print("range:", rng)\n'+dim("range: 5469774"),
+P+"...\n"+dim("std  1.05e6\n25%  410228\n50%  3204551"),
+P+"df.describe()\n"+dim("count 300  mean 2.9e6\nstd 1.0e6  ... right-skew"))
+  },
+  charttypes: {
+    skills:["Match a chart type to a question","Use bar, line and box plots appropriately","Avoid misleading chart choices"],
+    task: T("Make a simple <b>bar chart</b> of counts per <b>{cat}</b> in <b>{f}</b>.",
+            "Pick the right chart for the question — bar, line, scatter or box.",
+            "Build a small multi-chart view and argue which chart tells the truth best."),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+df["${ds.cat}"].value_counts().plot(kind="bar")`,
+`# A box plot compares spread across groups
+df.boxplot(column="${ds.numMain}", by="${ds.cat}")`,
+`fig, ax = plt.subplots(1, 2)
+df["${ds.cat}"].value_counts().plot(kind="bar", ax=ax[0])
+df.plot.scatter(x="${ds.corrX}", y="${ds.corrY}", ax=ax[1])`),
+    term: ds => T(
+P+"...\n"+dim("[bar chart rendered]"),
+P+"...\n"+dim("[box plot by "+ds.cat+"]"),
+P+"...\n"+ok("[2 panels: counts + relationship]"))
+  },
+  chartlies: {
+    skills:["Recognise a truncated y-axis","Fix axes to start at zero","Explain how charts can mislead"],
+    task: T("Plot <b>{num}</b> from <b>{f}</b> with a y-axis that starts high — see the exaggeration.",
+            "Re-draw the same chart with the axis starting at 0 and compare.",
+            "Annotate the misleading version and write the honest caption underneath."),
+    code: ds => T(
+`import matplotlib.pyplot as plt
+
+ax = df["${ds.numMain}"].head(5).plot(kind="bar")
+ax.set_ylim(580, 650)   # zoomed-in = exaggerated!`,
+`ax = df["${ds.numMain}"].head(5).plot(kind="bar")
+ax.set_ylim(0, None)    # honest baseline`,
+`# Same data, two stories. Always check the axis.
+print("Truncated axes exaggerate small gaps.")`),
+    term: ds => T(
+P+"...\n"+warn("[tiny gaps look huge]"),
+P+"...\n"+ok("[gaps now look honest]"),
+P+"...\n"+dim("Truncated axes exaggerate small gaps."))
+  },
+  grouping: {
+    skills:["Group rows with .groupby()","Aggregate with mean and count","Build a pivot table"],
+    task: T("Group <b>{f}</b> by <b>{cat}</b> and count how many rows are in each group.",
+            "For each <b>{cat}</b>, find the average <b>{num}</b> and the group size.",
+            "Build a pivot table summarising <b>{num}</b> across two dimensions."),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+print(df.groupby("${ds.cat}").size())`,
+`g = df.groupby("${ds.cat}")["${ds.numMain}"].agg(["mean","count"])
+print(g.round(2))`,
+`pt = df.pivot_table(values="${ds.numMain}",
+                    index="${ds.cat}", aggfunc="mean")
+print(pt.round(2))`),
+    term: ds => T(
+P+"df.groupby(...).size()\n"+dim(ds.cat+"\nGold 92\nBronze 75\n..."),
+P+"...\n"+dim("           mean   count\nGold  4.1e6     92"),
+P+"...\n"+ok("[pivot table built]"))
+  },
+  correlation: {
+    skills:["Measure correlation with .corr()","Read a scatter plot","Tell correlation from causation"],
+    task: T("In <b>{f}</b>, measure the correlation between <b>{x}</b> and <b>{y}</b>.",
+            "Draw a scatter plot of the two columns and describe the relationship.",
+            "Build the full correlation matrix and spot the hidden <b>confounding</b> variable."),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+print(df["${ds.corrX}"].corr(df["${ds.corrY}"]))`,
+`df.plot.scatter(x="${ds.corrX}", y="${ds.corrY}", alpha=0.4)
+print("strong, positive" )`,
+`print(df.corr(numeric_only=True).round(2))
+# Older students are BOTH faster and jump higher:
+# Age is a confounder — not proof of causation.`),
+    term: ds => T(
+P+"df[...].corr()\n"+ok("0.96")+dim("  (very strong)"),
+P+"...\n"+dim("[scatter: clear upward trend]"),
+P+"df.corr()\n"+dim("Age vs Jump 0.96\nAge vs Sprint -0.89")+"\n"+warn("# confounder: Age"))
+  },
+  capstone: {
+    skills:["Run an end-to-end analysis pipeline","Clean, summarise and visualise independently","Communicate findings with an honest chart"],
+    task: T("<b>Capstone Hackathon.</b> Pick a dataset below, then load and explore it on your own.",
+            "Clean your chosen dataset and summarise one interesting group.",
+            "Full pipeline: clean → analyse → visualise. All sandbox dials are unlocked — make an honest chart that answers your own question."),
+    code: ds => T(
+`import pandas as pd
+
+df = pd.read_csv("${ds.f}")
+print(df.head())
+print(df.isna().sum())`,
+`# Clean, then summarise
+${ds.fix}
+print(df.groupby("${ds.cat}")["${ds.numMain}"].mean())`,
+`# Tell the story
+print(df.corr(numeric_only=True).round(2))
+df.plot.scatter(x="${ds.corrX}", y="${ds.corrY}", alpha=0.4)
+# Your turn: what's the honest headline?`),
+    term: ds => T(
+P+"df.head()\n"+dim("[first rows of "+ds.f+"]"),
+P+"...\n"+ok("[cleaned + grouped]"),
+P+"df.corr()\n"+ok("[relationship found — make your chart!]"))
+  }
+};
+
+/* ══════════════════════════════════════════════════════════════════
+   CURRICULUM MAP — Week -> Lessons -> {topic, dataset}
+══════════════════════════════════════════════════════════════════ */
+const CURRICULUM = [
+  { title:"Foundation & Structure", lessons:[
+      { name:"Data Types",  topic:"types",  ds:"sports_day.csv" },
+      { name:"Data Scales", topic:"scales", ds:"spotify_tracks.csv" } ]},
+  { title:"The Sanitization Lab", lessons:[
+      { name:"Data Cleaning I · Inconsistencies", topic:"clean_inconsistent", ds:"gaming_data.csv" },
+      { name:"Data Cleaning II · Missing & Outliers", topic:"clean_missing", ds:"gaming_data.csv" } ]},
+  { title:"Deep Slicing & Summaries", lessons:[
+      { name:"Filtering Data",    topic:"filter",  ds:"sports_day.csv" },
+      { name:"Central Tendency",  topic:"central", ds:"gaming_data.csv" } ]},
+  { title:"Shape & Visual Rules", lessons:[
+      { name:"Spread & Distribution", topic:"spread",     ds:"spotify_tracks.csv" },
+      { name:"Chart Types & Use-cases", topic:"charttypes", ds:"sports_day.csv" } ]},
+  { title:"Advanced Visuals & Integrity", lessons:[
+      { name:"Chart Lies & Misconceptions", topic:"chartlies", ds:"gaming_data.csv" },
+      { name:"Grouping Data",               topic:"grouping",  ds:"spotify_tracks.csv" } ]},
+  { title:"Connections & Finale", lessons:[
+      { name:"Relationships & Correlations", topic:"correlation", ds:"sports_day.csv" },
+      { name:"Capstone Hackathon", topic:"capstone", ds:"viral_analytics.csv",
+        choices:["viral_analytics.csv","burger_builder.csv","canteen_sales.csv"] } ]}
+];
+const TIERS = [
+  { key:"apprentice", label:"Apprentice" },
+  { key:"craftsman",  label:"Craftsman" },
+  { key:"master",     label:"Master" }
+];
+const PASS = 80;   // mastery threshold (%)
+
+/* ══════════════════════════════════════════════════════════════════
+   STATE  (the nested-tab path) + persisted progress
+══════════════════════════════════════════════════════════════════ */
+const state = { week:0, lesson:0, tier:0, capstone:"viral_analytics.csv" };
+let progress = {};
+try { progress = JSON.parse(localStorage.getItem("datalab-progress") || "{}"); } catch(e){ progress = {}; }
+
+function pKey(w,l,t){ return w+"."+l+"."+TIERS[t].key; }
+function getProgress(){ return progress[pKey(state.week,state.lesson,state.tier)] || 0; }
+function setProgress(v){
+  v = Math.max(0, Math.min(100, Math.round(v/5)*5));   // 5% increments only
+  progress[pKey(state.week,state.lesson,state.tier)] = v;
+  localStorage.setItem("datalab-progress", JSON.stringify(progress));
+}
+function tierProgress(t){ return progress[pKey(state.week,state.lesson,t)] || 0; }
+// a tier unlocks once the previous tier in the same lesson reaches PASS
+function tierUnlocked(t){ return t === 0 || tierProgress(t-1) >= PASS; }
+
+/* ══════════════════════════════════════════════════════════════════
+   MODULAR TAB SETTERS  (changing a level resets the levels below it)
+══════════════════════════════════════════════════════════════════ */
+function setWeek(i){ state.week=i; state.lesson=0; state.tier=0; render(); }
+function setLesson(i){ state.lesson=i; state.tier=0; render(); }
+function setTier(i){ if(!tierUnlocked(i)) return; state.tier=i; render(); }
+
+/* ══════════════════════════════════════════════════════════════════
+   TAB BUILDING + keyboard nav
+══════════════════════════════════════════════════════════════════ */
+const LOCK = '<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>';
+
+function buildPillbar(container, items, getActive, onSelect){
+  container.addEventListener("keydown", (e) => {
+    if(e.key!=="ArrowRight" && e.key!=="ArrowLeft") return;
+    e.preventDefault();
+    const a=getActive(), n=items.length;
+    const nxt = e.key==="ArrowRight" ? (a+1)%n : (a-1+n)%n;
+    onSelect(nxt);
+    const btn=container.children[nxt]; if(btn) btn.focus();
+  });
+}
+const weeksEl=document.getElementById("weeks");
+const lessonsEl=document.getElementById("lessons");
+const tiersEl=document.getElementById("tiers");
+buildPillbar(weeksEl, CURRICULUM, ()=>state.week, setWeek);
+buildPillbar(lessonsEl, [0,1], ()=>state.lesson, setLesson);
+buildPillbar(tiersEl, TIERS, ()=>state.tier, setTier);
+
+function renderTabs(){
+  // Level 1 · weeks
+  weeksEl.innerHTML="";
+  CURRICULUM.forEach((wk,i)=>{
+    const b=document.createElement("button");
+    b.type="button"; b.setAttribute("role","tab");
+    b.textContent="Week "+(i+1);
+    b.setAttribute("aria-selected", String(i===state.week));
+    b.tabIndex = i===state.week?0:-1;
+    b.onclick=()=>setWeek(i);
+    weeksEl.appendChild(b);
+  });
+  // Level 2 · lessons (context-sensitive labels)
+  lessonsEl.innerHTML="";
+  CURRICULUM[state.week].lessons.forEach((ls,i)=>{
+    const b=document.createElement("button");
+    b.type="button"; b.setAttribute("role","tab");
+    b.innerHTML='Lesson '+(i+1)+' <span class="lesson-sub">· '+ls.name+'</span>';
+    b.setAttribute("aria-selected", String(i===state.lesson));
+    b.tabIndex = i===state.lesson?0:-1;
+    b.onclick=()=>setLesson(i);
+    lessonsEl.appendChild(b);
+  });
+  // Level 3 · tiers (locked until previous tier passes)
+  tiersEl.innerHTML="";
+  TIERS.forEach((tr,i)=>{
+    const b=document.createElement("button");
+    b.type="button"; b.setAttribute("role","tab");
+    const unlocked=tierUnlocked(i);
+    b.innerHTML = (unlocked?"":LOCK) + tr.label;
+    b.setAttribute("aria-selected", String(i===state.tier));
+    if(!unlocked){ b.disabled=true; b.title="Reach "+PASS+"% on "+TIERS[i-1].label+" to unlock"; }
+    b.tabIndex = i===state.tier?0:-1;
+    b.onclick=()=>setTier(i);
+    tiersEl.appendChild(b);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CONTENT HELPERS
+══════════════════════════════════════════════════════════════════ */
+function escapeHtml(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function highlightPython(code){
+  const KW=/\b(import|from|as|print|def|return|for|in|if|else|and|or|not|True|False|None)\b/g;
+  return escapeHtml(code).split("\n").map(line=>{
+    let cm=""; const h=line.indexOf("#"); let body=line;
+    if(h>-1){ body=line.slice(0,h); cm='<span class="cm">'+line.slice(h)+"</span>"; }
+    const strs=[];
+    body=body.replace(/(['"])(?:(?!\1).)*\1/g, m=>{ strs.push(m); return "\u0000"+(strs.length-1)+"\u0000"; });
+    body=body.replace(KW,'<span class="kw">$1</span>');
+    body=body.replace(/\u0000(\d+)\u0000/g,(_,i)=>'<span class="st">'+strs[i]+"</span>");
+    return body+cm;
+  }).join("\n");
+}
+// fill {f},{cat},{num},{x},{y} tokens in task text
+function fillTokens(str, ds){
+  return str.replace(/\{f\}/g,ds.f).replace(/\{cat\}/g,ds.cat)
+            .replace(/\{num\}/g,ds.numMain).replace(/\{x\}/g,ds.corrX).replace(/\{y\}/g,ds.corrY);
+}
+function makeSheet(ds){
+  const cols=["A","B","C","D","E","F"].slice(0,ds.headers.length);
+  let h='<table class="sheet"><thead><tr><th class="cnr"></th>';
+  cols.forEach(c=>h+="<th>"+c+"</th>");
+  h+='</tr><tr><th class="rn"></th>';
+  ds.headers.forEach(x=>h+="<th>"+escapeHtml(x)+"</th>");
+  h+="</tr></thead><tbody>";
+  ds.rows.forEach((row,r)=>{
+    h+='<tr><td class="rn">'+(r+1)+"</td>";
+    row.forEach(cell=>{
+      if(cell===null){ h+='<td class="blank"></td>'; return; }
+      const flagged=(ds.flagged||[]).includes(cell);
+      h+="<td>"+(flagged?'<span class="flag">'+escapeHtml(cell)+"</span>":escapeHtml(cell))+"</td>";
+    });
+    h+="</tr>";
+  });
+  return h+"</tbody></table>";
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CHART SANDBOX  (knobs + sliders -> live SVG preview)
+══════════════════════════════════════════════════════════════════ */
+const els = {
+  type:document.getElementById("c-type"), bars:document.getElementById("c-bars"),
+  color:document.getElementById("c-color"), grid:document.getElementById("c-grid"),
+  barsV:document.getElementById("bars-v"), opV:document.getElementById("op-v"), jiV:document.getElementById("ji-v"),
+  chart:document.getElementById("chart"), controls:document.getElementById("controls"), sandbox:document.getElementById("sandbox")
+};
+let dialValues = { opacity:80, jitter:20 };
+
+// pure mapping helpers (unit-tested in the build harness)
+function pointerToValue(dx,dy){
+  const ang = Math.atan2(dx, -dy) * 180/Math.PI;      // 0 = up, +90 = right
+  return Math.max(0, Math.min(100, (ang+135)/270*100));
+}
+function valueToAngle(v){ return -135 + (v/100)*270; } // 0 -> lower-left, 50 -> up, 100 -> lower-right
+
+function makeKnob(svgId, key, valSpan){
+  const el=document.getElementById(svgId);
+  const ind=el.querySelector(".ind");
+  function paint(){
+    const v=dialValues[key];
+    ind.setAttribute("transform","rotate("+valueToAngle(v)+" 23 23)");
+    el.setAttribute("aria-valuenow", v);
+    valSpan.textContent=v+"%";
+  }
+  function setV(v){ dialValues[key]=Math.max(0,Math.min(100,Math.round(v/5)*5)); paint(); drawChart(); }
+  let dragging=false;
+  function fromEvent(e){
+    const r=el.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    const pt = e.touches? e.touches[0] : e;
+    setV(pointerToValue(pt.clientX-cx, pt.clientY-cy));
+  }
+  el.addEventListener("pointerdown",e=>{ if(el.dataset.disabled==="true")return; dragging=true; el.setPointerCapture(e.pointerId); fromEvent(e); });
+  el.addEventListener("pointermove",e=>{ if(dragging) fromEvent(e); });
+  el.addEventListener("pointerup",()=>{ dragging=false; });
+  el.addEventListener("keydown",e=>{
+    if(el.dataset.disabled==="true")return;
+    if(e.key==="ArrowUp"||e.key==="ArrowRight"){ e.preventDefault(); setV(dialValues[key]+5); }
+    if(e.key==="ArrowDown"||e.key==="ArrowLeft"){ e.preventDefault(); setV(dialValues[key]-5); }
+  });
+  paint();
+  return { paint };
+}
+const opacityKnob = makeKnob("k-opacity","opacity",els.opV);
+const jitterKnob  = makeKnob("k-jitter","jitter",els.jiV);
+
+function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+function drawChart(){
+  if(!els.chart) return;
+  const ds = currentDataset();
+  const isCap = isCapstone();
+  const n=parseInt(els.bars.value,10);
+  els.barsV.textContent=n;
+  const color = isCap ? els.color.value : cssVar("--accent") || "#1565A8";
+  const op = isCap ? dialValues.opacity/100 : 0.9;
+  const jit = isCap ? dialValues.jitter/100 : 0;
+  const type = isCap ? els.type.value : "Bar";
+  const W=320,H=150,pad=14,base=H-pad;
+  const seed=(state.week+1)*7+state.lesson*3+state.tier;
+  const vals=Array.from({length:n},(_,i)=>{
+    const j = jit ? (Math.sin(seed*3+i*5.1)*jit*30) : 0;
+    return Math.max(8, Math.min(base-12, 22 + Math.abs(Math.sin(seed+i*1.3))*(base-40) + j));
+  });
+  let parts=[];
+  if(isCap && els.grid.checked){
+    for(let g=1;g<4;g++){ const y=pad+(base-pad)*g/4; parts.push('<line class="axis" x1="'+pad+'" y1="'+y.toFixed(1)+'" x2="'+(W-pad)+'" y2="'+y.toFixed(1)+'" stroke-opacity="0.4"/>'); }
+  }
+  parts.push('<line class="axis" x1="'+pad+'" y1="'+base+'" x2="'+(W-pad)+'" y2="'+base+'"/>');
+  if(type==="Bar"){
+    const gap=(W-pad*2)/n, bw=gap*0.64;
+    vals.forEach((v,i)=>{ const x=pad+i*gap+(gap-bw)/2;
+      parts.push('<rect x="'+x.toFixed(1)+'" y="'+(base-v).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+v.toFixed(1)+'" rx="2" fill="'+color+'" fill-opacity="'+op+'"/>'); });
+  } else if(type==="Line"){
+    const gap=(W-pad*2)/(n-1);
+    const pts=vals.map((v,i)=>(pad+i*gap).toFixed(1)+","+(base-v).toFixed(1)).join(" ");
+    parts.push('<polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2.5" stroke-opacity="'+op+'" stroke-linejoin="round"/>');
+    vals.forEach((v,i)=>parts.push('<circle cx="'+(pad+i*gap).toFixed(1)+'" cy="'+(base-v).toFixed(1)+'" r="3" fill="'+color+'"/>'));
+  } else {
+    const gap=(W-pad*2)/n;
+    vals.forEach((v,i)=>{ const x=pad+i*gap+gap/2;
+      parts.push('<circle cx="'+x.toFixed(1)+'" cy="'+(base-v).toFixed(1)+'" r="4.5" fill="'+color+'" fill-opacity="'+op+'"/>'); });
+  }
+  parts.push('<text class="lbl" x="'+pad+'" y="'+(H-3)+'">'+escapeHtml(isCap?ds.corrX:"preview")+"</text>");
+  els.chart.innerHTML=parts.join("");
+}
+["change","input"].forEach(ev=>{
+  els.type.addEventListener(ev,drawChart); els.bars.addEventListener(ev,drawChart);
+  els.color.addEventListener(ev,drawChart); els.grid.addEventListener(ev,drawChart);
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   CURRENT-LESSON RESOLUTION
+══════════════════════════════════════════════════════════════════ */
+function currentLesson(){ return CURRICULUM[state.week].lessons[state.lesson]; }
+function isCapstone(){ return !!currentLesson().choices; }
+function currentDatasetName(){ return isCapstone() ? state.capstone : currentLesson().ds; }
+function currentDataset(){
+  const name=currentDatasetName();
+  return Object.assign({ f:name }, DATASETS[name]);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MASTERY BAR RENDER
+══════════════════════════════════════════════════════════════════ */
+const segTrack=document.getElementById("seg-track");
+const mPct=document.getElementById("m-pct");
+const mBadge=document.getElementById("m-badge");
+const mTitle=document.getElementById("m-title");
+const mHint=document.getElementById("m-hint");
+
+// build 20 segment cells once
+for(let i=0;i<20;i++){
+  const s=document.createElement("div");
+  s.className="seg"; s.dataset.idx=i;
+  s.onclick=()=>{ setProgress((i+1)*5); render(); };
+  segTrack.appendChild(s);
+}
+document.getElementById("step-btn").onclick=()=>{ setProgress(getProgress()+5); render(); };
+document.getElementById("reset-btn").onclick=()=>{ setProgress(0); render(); };
+segTrack.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight"){ e.preventDefault(); setProgress(getProgress()+5); render(); }
+  if(e.key==="ArrowLeft"){ e.preventDefault(); setProgress(getProgress()-5); render(); }
+});
+
+function renderMastery(){
+  const v=getProgress();
+  mPct.textContent=v+"%";
+  segTrack.setAttribute("aria-valuenow",v);
+  [...segTrack.children].forEach((s,i)=>{
+    s.classList.toggle("on",(i+1)*5<=v);
+    s.classList.toggle("threshold",(i+1)*5===PASS);
+  });
+  mTitle.textContent = TIERS[state.tier].label+" task";
+  const passed = v>=PASS;
+  mBadge.classList.toggle("passed",passed);
+  if(passed){
+    mBadge.textContent = state.tier<2 ? "✓ Passed — next tier unlocked" : "✓ Mastered";
+    mHint.textContent = state.tier<2 ? "Great — the "+TIERS[state.tier+1].label+" tier is now open." : "You can submit your project for a lab report.";
+  } else {
+    mBadge.textContent="In progress";
+    mHint.textContent="Reach "+PASS+"% to "+(state.tier<2?"unlock the "+TIERS[state.tier+1].label+" tier.":"submit your project.");
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   MASTER RENDER
+══════════════════════════════════════════════════════════════════ */
+function render(){
+  const lesson=currentLesson();
+  const topic=TOPICS[lesson.topic];
+  const ds=currentDataset();
+  const tierKey=TIERS[state.tier].key;
+
+  renderTabs();
+  renderMastery();
+
+  // breadcrumb + dataset chip
+  document.getElementById("crumb").innerHTML =
+    "<b>Week "+(state.week+1)+"</b> "+escapeHtml(CURRICULUM[state.week].title)+
+    "<span class='sep'>/</span><b>Lesson "+(state.lesson+1)+"</b> "+escapeHtml(lesson.name)+
+    "<span class='sep'>/</span><b>"+TIERS[state.tier].label+"</b>";
+  document.getElementById("ds-chip").textContent=ds.f;
+
+  // capstone dataset chooser
+  const capPick=document.getElementById("capstone-pick");
+  if(isCapstone()){
+    capPick.style.display="flex";
+    capPick.querySelectorAll("button").forEach(b=>b.remove());
+    lesson.choices.forEach(name=>{
+      const b=document.createElement("button");
+      b.type="button"; b.textContent=name;
+      b.setAttribute("aria-pressed", String(name===state.capstone));
+      b.onclick=()=>{ state.capstone=name; render(); };
+      capPick.appendChild(b);
+    });
+  } else { capPick.style.display="none"; }
+
+  // task text
+  document.getElementById("task").innerHTML =
+    "<b>Your task:</b> "+fillTokens(topic.task[tierKey], ds);
+
+  // panels
+  document.getElementById("de-meta").textContent=ds.f;
+  document.getElementById("data-engine").innerHTML=makeSheet(ds);
+  document.getElementById("code-box").innerHTML=highlightPython(topic.code(ds)[tierKey]);
+  document.getElementById("terminal").innerHTML=topic.term(ds)[tierKey];
+  document.getElementById("cs-meta").textContent = isCapstone()? "all dials unlocked" : ds.corrY+" vs "+ds.corrX;
+
+  // sandbox lock state (unlocked only in the capstone)
+  const cap=isCapstone();
+  els.controls.dataset.locked=String(!cap);
+  els.sandbox.dataset.locked=String(!cap);
+  [els.type,els.bars,els.color,els.grid].forEach(c=>c.disabled=!cap);
+  document.getElementById("k-opacity").dataset.disabled=String(!cap);
+  document.getElementById("k-jitter").dataset.disabled=String(!cap);
+
+  drawChart();
+  maybeShowCertButton();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CERTIFICATE  (Master tier · "Submit Project & Print Lab Report")
+══════════════════════════════════════════════════════════════════ */
+let certBtn=null;
+function maybeShowCertButton(){
+  // The button lives in the mastery controls and only appears on the Master tier
+  if(certBtn){ certBtn.remove(); certBtn=null; }
+  if(TIERS[state.tier].key!=="master") return;
+  certBtn=document.createElement("button");
+  certBtn.className="btn primary";
+  certBtn.id="submit-btn";
+  certBtn.textContent="🎓 Submit Project & Print Lab Report";
+  const passed=getProgress()>=PASS;
+  certBtn.disabled=!passed;
+  certBtn.title = passed ? "Generate a parent-facing lab report" : "Reach "+PASS+"% first";
+  certBtn.onclick=openCertificate;
+  document.querySelector(".mastery-controls").appendChild(certBtn);
+}
+
+const overlay=document.getElementById("overlay");
+function openCertificate(){
+  const lesson=currentLesson(), topic=TOPICS[lesson.topic], ds=currentDataset();
+  // populate
+  document.getElementById("cert-week").textContent="Week "+(state.week+1)+" · Lesson "+(state.lesson+1);
+  document.getElementById("cert-topic").textContent=lesson.name;
+  document.getElementById("cert-ds").textContent=ds.f;
+  document.getElementById("cert-score").textContent=getProgress()+"% · Master tier";
+  document.getElementById("cert-date").textContent=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  const ul=document.getElementById("cert-skills"); ul.innerHTML="";
+  topic.skills.forEach(s=>{ const li=document.createElement("li"); li.textContent=s; ul.appendChild(li); });
+  const nameInput=document.getElementById("cert-name");
+  nameInput.value=localStorage.getItem("datalab-name")||"Student Name";
+  document.getElementById("cert-name-wrap").setAttribute("data-name", nameInput.value);
+  nameInput.oninput=()=>{ localStorage.setItem("datalab-name",nameInput.value); document.getElementById("cert-name-wrap").setAttribute("data-name",nameInput.value); };
+
+  // show overlay with a brief "generating" simulation
+  overlay.classList.add("show");
+  document.getElementById("cert-gen").style.display="block";
+  document.getElementById("cert-wrap").style.display="none";
+  setTimeout(()=>{
+    document.getElementById("cert-gen").style.display="none";
+    document.getElementById("cert-wrap").style.display="block";
+  }, 700);
+}
+document.getElementById("cert-close").onclick=()=>overlay.classList.remove("show");
+document.getElementById("cert-print").onclick=()=>window.print();
+overlay.addEventListener("click",e=>{ if(e.target===overlay) overlay.classList.remove("show"); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") overlay.classList.remove("show"); });
+
+/* ══════════════════════════════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════════════════════════════ */
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data Lab — KS3 Data Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+  /* ----------------------------------------------------------------
+     DESIGN TOKENS — theme via CSS variables
+  ---------------------------------------------------------------- */
+  :root {
+    --bg: #FAF9F6;
+    --text: #111827;
+    --text-muted: #6B7280;
+    --text-faint: #9CA3AF;
+    --card-bg: #FFFFFF;
+    --pill-bg: #F3F4F6;
+    --border: #E5E7EB;
+    --border-strong: #D1D5DB;
+    --accent: #3E7C5E;          /* school green */
+    --accent-soft: #E7F0EB;
+    --shadow-tab: 0 1px 3px rgba(0,0,0,0.10);
+    --shadow-card: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04);
+    --grid-line: #ECECEC;
+    --sheet-head: #F8F8F6;
+    /* terminal & editor are intentionally dark in BOTH themes */
+    --code-bg: #0D1117;
+    --code-border: #1F2630;
+    --code-text: #C9D1D9;
+  }
+  html[data-theme="dark"] {
+    --bg: #111827;
+    --text: #F9FAFB;
+    --text-muted: #9CA3AF;
+    --text-faint: #6B7280;
+    --card-bg: #1F2937;
+    --pill-bg: #0F1623;
+    --border: #374151;
+    --border-strong: #4B5563;
+    --accent: #6FB28E;
+    --accent-soft: #1C3026;
+    --shadow-tab: 0 1px 3px rgba(0,0,0,0.45);
+    --shadow-card: 0 1px 2px rgba(0,0,0,0.3), 0 10px 30px rgba(0,0,0,0.35);
+    --grid-line: #2A3340;
+    --sheet-head: #18212F;
+    --code-bg: #0B0F16;
+    --code-border: #1B2330;
+    --code-text: #C9D1D9;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    transition: background-color .25s ease, color .25s ease;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 24px 64px; }
+
+  /* ----------------------------------------------------------------
+     HEADER
+  ---------------------------------------------------------------- */
+  .topbar {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 24px; margin-bottom: 28px;
+  }
+  .brand .eyebrow {
+    font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 6px;
+  }
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 800; font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.04; letter-spacing: -0.01em; margin: 0;
+  }
+  .brand .sub { color: var(--text-muted); font-size: 14px; margin-top: 8px; max-width: 46ch; }
+
+  /* Theme switcher — same pill language as the tabs */
+  .theme-switch {
+    display: inline-flex; gap: 4px; padding: 4px;
+    background: var(--pill-bg); border-radius: 999px; border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .theme-switch button {
+    display: grid; place-items: center; width: 38px; height: 34px;
+    border: 0; background: transparent; border-radius: 999px; cursor: pointer;
+    color: var(--text-muted); transition: all .18s ease;
+  }
+  .theme-switch button:hover { color: var(--text); }
+  .theme-switch button[aria-pressed="true"] {
+    background: var(--card-bg); color: var(--text); box-shadow: var(--shadow-tab);
+  }
+  .theme-switch svg { width: 18px; height: 18px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+  /* ----------------------------------------------------------------
+     TAB LEVELS
+  ---------------------------------------------------------------- */
+  .tablevel { margin-bottom: 14px; }
+  .tablevel .level-label {
+    font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--text-faint); margin: 0 0 8px 4px;
+  }
+  .pill {
+    display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 5px;
+    background: var(--pill-bg); border: 1px solid var(--border); border-radius: 999px;
+    max-width: 100%;
+  }
+  .pill[data-scroll="true"] { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .pill[data-scroll="true"]::-webkit-scrollbar { height: 0; }
+  .pill button {
+    appearance: none; border: 0; cursor: pointer; white-space: nowrap;
+    font-family: inherit; font-size: 14px; font-weight: 500;
+    color: var(--text-muted); background: transparent;
+    padding: 8px 16px; border-radius: 999px; transition: all .18s ease;
+  }
+  .pill button:hover { color: var(--text); }
+  .pill button[aria-selected="true"] {
+    background: var(--card-bg); color: var(--text); font-weight: 600;
+    box-shadow: var(--shadow-tab);
+  }
+  .pill.tier button[aria-selected="true"] { color: var(--accent); }
+
+  /* ----------------------------------------------------------------
+     CONTEXT BAR
+  ---------------------------------------------------------------- */
+  .context {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+    margin: 22px 0 14px;
+  }
+  .breadcrumb { font-size: 14px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .breadcrumb b { color: var(--text); font-weight: 600; }
+  .breadcrumb .sep { color: var(--border-strong); }
+  .chip {
+    font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent); border: 1px solid transparent;
+  }
+  .task-note {
+    font-size: 14px; color: var(--text-muted);
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 18px;
+  }
+  .task-note b { color: var(--text); }
+
+  /* ----------------------------------------------------------------
+     4-PANEL WORKSPACE GRID
+  ---------------------------------------------------------------- */
+  .workspace {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+  }
+  .panel {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 16px; box-shadow: var(--shadow-card);
+    display: flex; flex-direction: column; overflow: hidden; min-height: 250px;
+  }
+  .panel-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 13px 16px; border-bottom: 1px solid var(--border);
+  }
+  .panel-head .num {
+    width: 22px; height: 22px; flex-shrink: 0; border-radius: 6px;
+    display: grid; place-items: center; font-size: 12px; font-weight: 700;
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .panel-head h3 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+  .panel-head .meta { margin-left: auto; font-size: 11.5px; color: var(--text-faint); font-weight: 500; }
+  .panel-body { padding: 14px 16px; flex: 1; overflow: auto; }
+  .panel-body.flush { padding: 0; }
+
+  /* dark panels (code + terminal) keep their own surface */
+  .panel.dark { background: var(--code-bg); border-color: var(--code-border); }
+  .panel.dark .panel-head { border-bottom-color: var(--code-border); }
+  .panel.dark .panel-head h3 { color: #E6EDF3; }
+  .panel.dark .panel-head .meta { color: #6E7B8A; }
+  .panel.dark .panel-head .num { background: #16202C; color: #6FB28E; }
+
+  /* 1 · DATA ENGINE — spreadsheet */
+  .sheet { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  .sheet th, .sheet td { border: 1px solid var(--grid-line); padding: 6px 9px; text-align: left; }
+  .sheet thead th { background: var(--sheet-head); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; }
+  .sheet .rownum, .sheet .corner {
+    background: var(--sheet-head); color: var(--text-faint); text-align: center;
+    font-weight: 600; width: 30px; user-select: none;
+  }
+  .sheet td.blank { background: repeating-linear-gradient(45deg, transparent, transparent 5px, var(--grid-line) 5px, var(--grid-line) 6px); }
+  .sheet td .flag { color: #B45309; font-style: italic; }
+  html[data-theme="dark"] .sheet td .flag { color: #F0B860; }
+
+  /* 2 · CODE BOX & 3 · TERMINAL */
+  .code, .terminal {
+    margin: 0; padding: 16px; font-family: 'SF Mono', ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+    font-size: 12.5px; line-height: 1.7; color: var(--code-text);
+    white-space: pre; overflow: auto; height: 100%;
+  }
+  .code .c-kw  { color: #FF7B72; }
+  .code .c-str { color: #A5D6A7; }
+  .code .c-com { color: #6E7B8A; font-style: italic; }
+  .terminal .t-prompt { color: #6FB28E; }
+  .terminal .t-dim { color: #6E7B8A; }
+  .terminal .t-warn { color: #F0B860; }
+  .terminal .t-ok { color: #7EE787; }
+
+  /* 4 · CHART SANDBOX */
+  .controls { display: flex; flex-wrap: wrap; gap: 14px 18px; margin-bottom: 14px; }
+  .control { display: flex; flex-direction: column; gap: 6px; }
+  .control label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-faint); }
+  .control select, .control input[type="range"], .control input[type="color"] {
+    font-family: inherit; accent-color: var(--accent);
+  }
+  .control select {
+    font-size: 13px; padding: 6px 10px; border-radius: 8px;
+    border: 1px solid var(--border-strong); background: var(--card-bg); color: var(--text);
+  }
+  .control input[type="range"] { width: 130px; }
+  .control input[type="color"] {
+    width: 44px; height: 30px; padding: 0; border: 1px solid var(--border-strong);
+    border-radius: 8px; background: none; cursor: pointer;
+  }
+  .control .val { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .chart-stage {
+    border: 1px dashed var(--border-strong); border-radius: 12px;
+    background: var(--bg); padding: 12px; min-height: 150px;
+  }
+  .chart-stage svg { display: block; width: 100%; height: 160px; }
+  .chart-stage .axis { stroke: var(--border-strong); stroke-width: 1; }
+  .chart-stage .lbl { fill: var(--text-faint); font-size: 9px; font-family: 'Inter', sans-serif; }
+
+  footer {
+    margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--border);
+    font-size: 12.5px; color: var(--text-faint);
+  }
+
+  /* ----------------------------------------------------------------
+     RESPONSIVE
+  ---------------------------------------------------------------- */
+  @media (max-width: 880px) {
+    .workspace { grid-template-columns: 1fr; }
+    .topbar { flex-direction: column; align-items: stretch; }
+    .theme-switch { align-self: flex-end; }
+    .pill { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="eyebrow">KS3 · Data Analysis</div>
+      <h1>Data&nbsp;Lab</h1>
+      <p class="sub">A six-week journey from messy spreadsheets to clean charts. Pick a week, a day, and your mastery tier to open the workspace.</p>
+    </div>
+
+    <div class="theme-switch" role="group" aria-label="Colour theme">
+      <button id="theme-light"  title="Light"  aria-pressed="false" aria-label="Light theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button id="theme-system" title="System" aria-pressed="false" aria-label="System theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+      </button>
+      <button id="theme-dark"   title="Dark"   aria-pressed="false" aria-label="Dark theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- LEVEL 1: WEEKS -->
+  <div class="tablevel">
+    <p class="level-label">Week</p>
+    <div class="pill weeks" data-scroll="true" role="tablist" aria-label="Week"></div>
+  </div>
+
+  <!-- LEVEL 2: DAYS -->
+  <div class="tablevel">
+    <p class="level-label">Day</p>
+    <div class="pill days" role="tablist" aria-label="Day"></div>
+  </div>
+
+  <!-- LEVEL 3: MASTERY TIER -->
+  <div class="tablevel">
+    <p class="level-label">Mastery Tier</p>
+    <div class="pill tier tiers" role="tablist" aria-label="Mastery tier"></div>
+  </div>
+
+  <!-- CONTEXT -->
+  <div class="context">
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <span class="chip" id="dataset-chip"></span>
+  </div>
+  <div class="task-note" id="task-note"></div>
+
+  <!-- WORKSPACE -->
+  <main class="workspace">
+    <section class="panel" aria-label="The Data Engine">
+      <div class="panel-head"><span class="num">1</span><h3>The Data Engine</h3><span class="meta" id="de-meta"></span></div>
+      <div class="panel-body flush" id="data-engine"></div>
+    </section>
+
+    <section class="panel dark" aria-label="The Code Box">
+      <div class="panel-head"><span class="num">2</span><h3>The Code Box</h3><span class="meta">analysis.py</span></div>
+      <div class="panel-body flush"><pre class="code" id="code-box"></pre></div>
+    </section>
+
+    <section class="panel dark" aria-label="Output Terminal">
+      <div class="panel-head"><span class="num">3</span><h3>Output Terminal</h3><span class="meta">python3</span></div>
+      <div class="panel-body flush"><pre class="terminal" id="terminal"></pre></div>
+    </section>
+
+    <section class="panel" aria-label="Chart Sandbox">
+      <div class="panel-head"><span class="num">4</span><h3>Chart Sandbox</h3><span class="meta" id="cs-meta"></span></div>
+      <div class="panel-body">
+        <div class="controls">
+          <div class="control">
+            <label for="chart-type">Chart type</label>
+            <select id="chart-type"><option>Bar</option><option>Line</option><option>Scatter</option></select>
+          </div>
+          <div class="control">
+            <label for="chart-bins">Bars: <span class="val" id="bins-val">7</span></label>
+            <input type="range" id="chart-bins" min="3" max="12" value="7" />
+          </div>
+          <div class="control">
+            <label for="chart-color">Colour</label>
+            <input type="color" id="chart-color" value="#3E7C5E" />
+          </div>
+        </div>
+        <div class="chart-stage"><svg id="chart-svg" viewBox="0 0 320 160" preserveAspectRatio="none" aria-label="Preview chart"></svg></div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+"use strict";
+
+/* ==================================================================
+   1. THEME CONTROLLER
+================================================================== */
+const THEME_KEY = "datalab-theme";
+const mql = window.matchMedia("(prefers-color-scheme: dark)");
+const themeButtons = {
+  light:  document.getElementById("theme-light"),
+  system: document.getElementById("theme-system"),
+  dark:   document.getElementById("theme-dark"),
+};
+
+function getThemePref() {
+  return localStorage.getItem(THEME_KEY) || "system";
+}
+function applyTheme(pref) {
+  const effective = pref === "system" ? (mql.matches ? "dark" : "light") : pref;
+  document.documentElement.setAttribute("data-theme", effective);
+  for (const key in themeButtons) {
+    themeButtons[key].setAttribute("aria-pressed", String(key === pref));
+  }
+  drawChart(); // re-colour default if needed
+}
+function setTheme(pref) {
+  localStorage.setItem(THEME_KEY, pref);
+  applyTheme(pref);
+}
+themeButtons.light.addEventListener("click",  () => setTheme("light"));
+themeButtons.system.addEventListener("click", () => setTheme("system"));
+themeButtons.dark.addEventListener("click",   () => setTheme("dark"));
+// React to OS changes only while in "system" mode
+mql.addEventListener("change", () => { if (getThemePref() === "system") applyTheme("system"); });
+
+/* ==================================================================
+   2. COURSE DATA  (6 weeks -> the 6 KS3 datasets)
+================================================================== */
+const WEEKS = [
+  {
+    file: "gaming_data.csv", title: "The Streamer Matrix",
+    cat: "Platform", numMain: "Monthly Revenue (£)",
+    corrX: "Hours Streamed", corrY: "Followers",
+    flaw: "the Platform labels are written inconsistently and 25 satisfaction scores are blank",
+    fix: 'df["Platform"] = df["Platform"].str.lower().str.replace("_tv", "")',
+    headers: ["Creator", "Platform", "Followers", "Revenue (£)"],
+    rows: [
+      ["GoldenKnight554", "Twitch", "56,478", "350.39"],
+      ["MegaWolf475", "YouTube", "136,082", "144.51"],
+      ["ShadowFox210", "twitch", "9,210", null],
+      ["NeonViper88", "TWITCH_tv", "204,553", "9,870,500.50"],
+    ],
+  },
+  {
+    file: "spotify_tracks.csv", title: "The Music Matrix",
+    cat: "Popularity Tier", numMain: "Total Streams",
+    corrX: "Song Duration (seconds)", corrY: "Total Streams",
+    flaw: "8 rows are exact duplicates of other rows",
+    fix: 'df = df.drop_duplicates()',
+    headers: ["Song", "Genre", "Streams", "Tier"],
+    rows: [
+      ["Midnight Dreams", "Pop", "3,204,551", "Gold"],
+      ["Golden Echo", "Indie", "5,880,002", "Platinum"],
+      ["Midnight Dreams", "Pop", "3,204,551", "Gold"],
+      ["Frozen Tides", "Rock", "410,228", "Bronze"],
+    ],
+  },
+  {
+    file: "sports_day.csv", title: "The Fitness Matrix",
+    cat: "House", numMain: "High Jump (meters)",
+    corrX: "Age", corrY: "High Jump (meters)",
+    flaw: 'some sprint times are stored as text like "14.2s" and some jumps are blank',
+    fix: 'df["100m Sprint Time (seconds)"] = (\n    df["100m Sprint Time (seconds)"].astype(str).str.replace("s", "").astype(float))',
+    headers: ["Student", "House", "Age", "Sprint", "Jump (m)"],
+    rows: [
+      ["S1005", "Blue", "12", "16.18s", "1.02"],
+      ["S1015", "Red", "13", "15.81", null],
+      ["S1027", "Yellow", "15", "15.63s", "1.29"],
+      ["S1042", "Green", "11", "17.40", "0.88"],
+    ],
+  },
+  {
+    file: "viral_analytics.csv", title: "Capstone A · Creators",
+    cat: "Category", numMain: "Subscriber Count",
+    corrX: "Subscriber Count", corrY: "Avg Views",
+    flaw: "Category spellings vary, 30 video lengths are blank, and 3 mega-channels warp the mean",
+    fix: 'df["Category"] = df["Category"].str.lower().str.replace("_", " ")',
+    headers: ["Handle", "Category", "Subscribers", "Avg Views"],
+    rows: [
+      ["@ItsMaya42", "gaming", "88,420", "21,005"],
+      ["@RealKai7", "Gaming", "312,000,000", "210,000,000"],
+      ["@JustLeo3", "tech", "12,300", "4,100"],
+      ["@TeamIvy5", "Tech_Reviews", "90,500", "33,200"],
+    ],
+  },
+  {
+    file: "burger_builder.csv", title: "Capstone B · Fast Food",
+    cat: "Category", numMain: "Calories",
+    corrX: "Fat (grams)", corrY: "Calories",
+    flaw: 'Price is text like "£4.99", 12 rows are duplicated, and one item has 6,000 kcal',
+    fix: 'df["Price"] = df["Price"].str.replace("£", "").astype(float)',
+    headers: ["Chain", "Item", "Category", "Calories", "Price"],
+    rows: [
+      ["McDonald's", "Cheeseburger", "Burger", "303", "£3.19"],
+      ["KFC", "Fries", "Sides", "320", "£2.49"],
+      ["Five Guys", "Family Mega Platter", "Burger", "6000", "£29.99"],
+      ["Greggs", "Doughnut", "Dessert", "290", "£1.10"],
+    ],
+  },
+  {
+    file: "canteen_sales.csv", title: "Capstone C · Canteen",
+    cat: "Category", numMain: "Quantity Sold",
+    corrX: "Outside Temp (Celsius)", corrY: "Quantity Sold",
+    flaw: "20 categories are blank, one sale shows 150 items, and cold days spike hot-food sales",
+    fix: 'df["Category"] = df["Category"].fillna("Unknown")',
+    headers: ["Date", "Item", "Category", "Qty", "Temp (°C)"],
+    rows: [
+      ["2024-09-05", "Pizza Slice", "Hot Food", "41", "22.4"],
+      ["2024-12-11", "Soup of the Day", "Hot Food", "78", "2.1"],
+      ["2025-01-20", "Pizza Slice", null, "150", "-0.1"],
+      ["2025-03-02", "Apple", "Fruit", "25", "11.3"],
+    ],
+  },
+];
+
+const DAYS = [
+  { key: "clean",   label: "Day 1", title: "Clean & Explore" },
+  { key: "analyse", label: "Day 2", title: "Analyse & Visualise" },
+];
+const TIERS = [
+  { key: "apprentice",   label: "Apprentice" },
+  { key: "craftsperson", label: "Craftsperson" },
+  { key: "master",       label: "Master" },
+];
+
+/* ==================================================================
+   3. APPLICATION STATE  (the nested-tab path)
+================================================================== */
+const state = { week: 0, day: 0, tier: 0 };   // all zero-indexed
+
+// Modular setters: changing a higher level resets the levels below it.
+function setWeek(i) { state.week = i; state.day = 0; state.tier = 0; render(); }
+function setDay(i)  { state.day = i;  state.tier = 0; render(); }
+function setTier(i) { state.tier = i; render(); }
+
+/* ==================================================================
+   4. TAB BUILDING + KEYBOARD NAV
+================================================================== */
+function buildTabs(container, items, getActive, onSelect) {
+  container.innerHTML = "";
+  items.forEach((item, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.setAttribute("role", "tab");
+    btn.textContent = item.label;
+    btn.addEventListener("click", () => onSelect(i));
+    container.appendChild(btn);
+  });
+  // Arrow-key navigation within a tablist
+  container.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    e.preventDefault();
+    const active = getActive();
+    const next = e.key === "ArrowRight"
+      ? (active + 1) % items.length
+      : (active - 1 + items.length) % items.length;
+    onSelect(next);
+    container.children[next].focus();
+  });
+}
+
+const weeksTab = document.querySelector(".weeks");
+const daysTab  = document.querySelector(".days");
+const tiersTab = document.querySelector(".tiers");
+
+buildTabs(weeksTab, WEEKS.map((_, i) => ({ label: "Week " + (i + 1) })), () => state.week, setWeek);
+buildTabs(daysTab,  DAYS,  () => state.day,  setDay);
+buildTabs(tiersTab, TIERS, () => state.tier, setTier);
+
+function paintActive(container, activeIndex) {
+  [...container.children].forEach((btn, i) => {
+    const on = i === activeIndex;
+    btn.setAttribute("aria-selected", String(on));
+    btn.tabIndex = on ? 0 : -1;
+  });
+}
+
+/* ==================================================================
+   5. CONTENT GENERATORS
+================================================================== */
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+// lightweight python highlighter: comments, strings, keywords
+function highlightPython(code) {
+  const KW = /\b(import|from|as|print|def|return|for|in|if|else|True|False|None|and|or|not)\b/g;
+  return escapeHtml(code).split("\n").map((line) => {
+    let comment = "";
+    const h = line.indexOf("#");
+    let body = line;
+    if (h > -1) { body = line.slice(0, h); comment = '<span class="c-com">' + line.slice(h) + "</span>"; }
+    const strs = [];
+    body = body.replace(/(['"])(?:(?!\1).)*\1/g, (m) => { strs.push(m); return "\u0000" + (strs.length - 1) + "\u0000"; });
+    body = body.replace(KW, '<span class="c-kw">$1</span>');
+    body = body.replace(/\u0000(\d+)\u0000/g, (_, i) => '<span class="c-str">' + strs[i] + "</span>");
+    return body + comment;
+  }).join("\n");
+}
+
+function buildCode(w, dayKey, tierKey) {
+  const f = w.file;
+  if (dayKey === "clean") {
+    if (tierKey === "apprentice") return (
+`import pandas as pd
+
+# Load the dataset and take a first look
+df = pd.read_csv("${f}")
+print(df.head())
+print(df.shape)
+
+# Where is data missing?
+print(df.isna().sum())`);
+    if (tierKey === "craftsperson") return (
+`import pandas as pd
+
+df = pd.read_csv("${f}")
+
+# Tidy up inconsistent text labels
+df["${w.cat}"] = df["${w.cat}"].astype(str).str.strip()
+print(df["${w.cat}"].value_counts())`);
+    return ( // master
+`import pandas as pd
+import numpy as np
+
+df = pd.read_csv("${f}")
+
+# This week's trap: ${w.flaw}
+${w.fix}
+
+# Find outliers with the IQR rule
+q1, q3 = df["${w.numMain}"].quantile([0.25, 0.75])
+iqr = q3 - q1
+big = df[df["${w.numMain}"] > q3 + 1.5 * iqr]
+print(len(big), "outliers spotted")`);
+  }
+  // dayKey === "analyse"
+  if (tierKey === "apprentice") return (
+`import pandas as pd
+
+df = pd.read_csv("${f}")
+
+# Count rows in each ${w.cat}
+counts = df["${w.cat}"].value_counts()
+print(counts)
+counts.plot(kind="bar")`);
+  if (tierKey === "craftsperson") return (
+`import pandas as pd
+
+df = pd.read_csv("${f}")
+
+# Average ${w.numMain} per ${w.cat}
+summary = (df.groupby("${w.cat}")["${w.numMain}"]
+             .mean().sort_values(ascending=False))
+print(summary.round(2))`);
+  return ( // master
+`import pandas as pd
+
+df = pd.read_csv("${f}")
+
+# Is "${w.corrX}" linked to "${w.corrY}"?
+print(df[["${w.corrX}", "${w.corrY}"]].corr().round(2))
+df.plot.scatter(x="${w.corrX}", y="${w.corrY}", alpha=0.4)
+
+# Remember: correlation is not causation!`);
+}
+
+function buildTerminal(w, dayKey, tierKey) {
+  const P = '<span class="t-prompt">&gt;&gt;&gt;</span> ';
+  const dim = (s) => '<span class="t-dim">' + s + "</span>";
+  if (dayKey === "clean") {
+    if (tierKey === "apprentice") return (
+P + "df.shape\n(" + (250 + w.title.length * 3) + ", " + w.headers.length + ")\n\n" +
+P + "df.isna().sum()\n" +
+dim(w.numMain.padEnd(22)) + ' <span class="t-warn">' + (w.file.includes("gaming") ? 25 : w.file.includes("viral") ? 30 : 18) + " NaN</span>\n" +
+dim("others".padEnd(22)) + " 0 NaN");
+    if (tierKey === "craftsperson") return (
+P + 'df["' + w.cat + '"].value_counts()\n' +
+dim("(cleaned)") + "\n" + w.rows.map((r, i) => (r[1] || "—").padEnd(16) + (40 - i * 7)).join("\n"));
+    return ( // master
+P + "len(big), 'outliers spotted'\n" +
+'<span class="t-warn">' + (w.file.includes("burger") ? 1 : w.file.includes("viral") ? 3 : 2) + " outliers spotted</span>\n\n" +
+dim("# review them before deleting — are they errors or real?"));
+  }
+  if (tierKey === "apprentice") return (
+P + 'df["' + w.cat + '"].value_counts()\n' +
+w.rows.map((r, i) => (String(r[w.headers.indexOf(w.cat.split(" ")[0]) > -1 ? 1 : 1]) || "—")).filter(Boolean).slice(0, 3).map((v, i) => (v).padEnd(16) + (38 - i * 9)).join("\n"));
+  if (tierKey === "craftsperson") return (
+P + "summary.round(2)\n" +
+dim(w.cat) + "\n" +
+"A    " + (Math.round(Math.random()) ? "" : "") + (1200 + w.title.length) + ".50\n" +
+"B    " + (980 + w.headers.length) + ".10\n" +
+"C    " + (640) + ".75\n" +
+dim("Name: " + w.numMain));
+  return ( // master
+P + 'df[["' + w.corrX + '", "' + w.corrY + '"]].corr()\n' +
+dim("                " + "x      y") + "\n" +
+"x            1.00   <span class='t-ok'>" + (w.file.includes("spotify") || w.file.includes("canteen") ? "-0.89" : "0.96") + "</span>\n" +
+"y            " + (w.file.includes("spotify") || w.file.includes("canteen") ? "-0.89" : "0.96") + "   1.00");
+}
+
+function makeSheet(w) {
+  const cols = ["A", "B", "C", "D", "E", "F"].slice(0, w.headers.length);
+  let html = '<table class="sheet"><thead><tr><th class="corner"></th>';
+  cols.forEach((c) => (html += "<th>" + c + "</th>"));
+  html += "</tr><tr><th class='rownum'></th>";
+  w.headers.forEach((h) => (html += "<th>" + escapeHtml(h) + "</th>"));
+  html += "</tr></thead><tbody>";
+  w.rows.forEach((row, r) => {
+    html += '<tr><td class="rownum">' + (r + 1) + "</td>";
+    row.forEach((cell) => {
+      if (cell === null) html += '<td class="blank"></td>';
+      else {
+        const messy = /[a-z]s$|_tv|^twitch$|^Gamer_vids|Tech_Reviews|£|6000|150|9,870/.test(cell);
+        html += "<td>" + (messy ? '<span class="flag">' + escapeHtml(cell) + "</span>" : escapeHtml(cell)) + "</td>";
+      }
+    });
+    html += "</tr>";
+  });
+  html += "</tbody></table>";
+  return html;
+}
+
+/* ==================================================================
+   6. CHART SANDBOX (mock preview that responds to controls)
+================================================================== */
+const chartType = document.getElementById("chart-type");
+const chartBins = document.getElementById("chart-bins");
+const chartColor = document.getElementById("chart-color");
+const binsVal = document.getElementById("bins-val");
+const svg = document.getElementById("chart-svg");
+
+function drawChart() {
+  const n = parseInt(chartBins.value, 10);
+  const color = chartColor.value;
+  const type = chartType.value;
+  binsVal.textContent = n;
+  const W = 320, H = 160, pad = 14, base = H - pad;
+  // deterministic-ish heights from current week so it "feels" tied to data
+  const seed = (state.week + 1) * 7 + state.day * 3 + state.tier;
+  const vals = Array.from({ length: n }, (_, i) =>
+    20 + (Math.abs(Math.sin(seed + i * 1.3)) * (base - 30)));
+  let parts = ['<line class="axis" x1="' + pad + '" y1="' + base + '" x2="' + (W - pad) + '" y2="' + base + '"/>'];
+
+  if (type === "Bar") {
+    const bw = (W - pad * 2) / n * 0.66;
+    const gap = (W - pad * 2) / n;
+    vals.forEach((v, i) => {
+      const x = pad + i * gap + (gap - bw) / 2;
+      parts.push('<rect x="' + x.toFixed(1) + '" y="' + (base - v).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + v.toFixed(1) + '" rx="2" fill="' + color + '"/>');
+    });
+  } else if (type === "Line") {
+    const gap = (W - pad * 2) / (n - 1);
+    const pts = vals.map((v, i) => (pad + i * gap).toFixed(1) + "," + (base - v).toFixed(1)).join(" ");
+    parts.push('<polyline points="' + pts + '" fill="none" stroke="' + color + '" stroke-width="2.5" stroke-linejoin="round"/>');
+    vals.forEach((v, i) => parts.push('<circle cx="' + (pad + i * gap).toFixed(1) + '" cy="' + (base - v).toFixed(1) + '" r="3" fill="' + color + '"/>'));
+  } else { // Scatter
+    const gap = (W - pad * 2) / n;
+    vals.forEach((v, i) => {
+      const x = pad + i * gap + gap / 2;
+      parts.push('<circle cx="' + x.toFixed(1) + '" cy="' + (base - v).toFixed(1) + '" r="4" fill="' + color + '" fill-opacity="0.75"/>');
+    });
+  }
+  parts.push('<text class="lbl" x="' + pad + '" y="' + (H - 2) + '">' + WEEKS[state.week].corrX + "</text>");
+  svg.innerHTML = parts.join("");
+}
+chartType.addEventListener("change", drawChart);
+chartBins.addEventListener("input", drawChart);
+chartColor.addEventListener("input", drawChart);
+
+/* ==================================================================
+   7. MASTER RENDER
+================================================================== */
+function render() {
+  const w = WEEKS[state.week];
+  const day = DAYS[state.day];
+  const tier = TIERS[state.tier];
+
+  paintActive(weeksTab, state.week);
+  paintActive(daysTab, state.day);
+  paintActive(tiersTab, state.tier);
+
+  // breadcrumb + chips
+  document.getElementById("breadcrumb").innerHTML =
+    "<b>Week " + (state.week + 1) + "</b><span class='sep'>/</span>" +
+    "<b>" + day.label + " · " + day.title + "</b><span class='sep'>/</span>" +
+    "<b>" + tier.label + "</b>";
+  document.getElementById("dataset-chip").textContent = w.file;
+
+  // task note
+  const taskByTier = {
+    apprentice:   "Load <b>" + w.file + "</b>, preview the rows, and find where values are missing.",
+    craftsperson: "Tidy the <b>" + w.cat + "</b> column and summarise <b>" + w.numMain + "</b> by group.",
+    master:       "Handle the dataset's trap — " + w.flaw + " — then test the link between <b>" + w.corrX + "</b> and <b>" + w.corrY + "</b>.",
+  };
+  document.getElementById("task-note").innerHTML =
+    "<b>Your task:</b> " + taskByTier[tier.key];
+
+  // panels
+  document.getElementById("de-meta").textContent = w.file;
+  document.getElementById("data-engine").innerHTML = makeSheet(w);
+  document.getElementById("code-box").innerHTML = highlightPython(buildCode(w, day.key, tier.key));
+  document.getElementById("terminal").innerHTML = buildTerminal(w, day.key, tier.key);
+  document.getElementById("cs-meta").textContent = w.corrY + " vs " + w.corrX;
+
+  drawChart();
+}
+
+/* ==================================================================
+   8. BOOT
+================================================================== */
+document.getElementById("footer").innerHTML =
+  "Data Lab · KS3 Data Analysis workspace. The Code Box and Terminal show illustrative pandas — run the real scripts in your notebook. Theme preference is saved to this browser.";
+
+applyTheme(getThemePref());
+render();
+</script>
+</body>
+</html>

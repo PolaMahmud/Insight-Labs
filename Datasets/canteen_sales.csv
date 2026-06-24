@@ -1,0 +1,501 @@
+Date,Day of Week,Item Name,Category,Price (£),Quantity Sold,Outside Temp (Celsius)
+2024-09-02,Monday,Milk,Cold Drink,1.38,40,18.9
+2024-09-02,Monday,Smoothie,Cold Drink,1.16,37,19.9
+2024-09-02,Monday,Pasta Bake,Hot Food,2.28,38,23.9
+2024-09-04,Wednesday,Pretzels,Snack,0.91,10,20.0
+2024-09-06,Friday,Fruit Pot,Fruit,0.77,32,18.9
+2024-09-06,Friday,Cereal Bar,Snack,0.84,21,18.4
+2024-09-07,Saturday,Jacket Potato,Hot Food,4.39,60,15.5
+2024-09-09,Monday,Cereal Bar,Snack,0.71,29,18.8
+2024-09-09,Monday,Soup of the Day,Hot Food,3.2,43,18.9
+2024-09-10,Tuesday,Crisps,Snack,0.93,28,18.8
+2024-09-10,Tuesday,Cookie,Snack,1.39,14,18.8
+2024-09-11,Wednesday,Fruit Pot,Fruit,0.9,19,22.5
+2024-09-12,Thursday,Mac & Cheese,Hot Food,2.8,65,15.2
+2024-09-12,Thursday,Sausage Roll,Hot Food,3.69,46,21.4
+2024-09-12,Thursday,Sausage Roll,Hot Food,2.52,55,17.0
+2024-09-14,Saturday,Pasta Bake,Hot Food,2.33,54,16.3
+2024-09-15,Sunday,Smoothie,Cold Drink,0.84,27,19.6
+2024-09-15,Sunday,Grapes,Fruit,0.8,26,17.9
+2024-09-15,Sunday,Pretzels,Snack,1.4,16,17.0
+2024-09-18,Wednesday,Chicken Curry,Hot Food,2.63,38,16.5
+2024-09-18,Wednesday,Jacket Potato,Hot Food,2.57,60,17.6
+2024-09-18,Wednesday,Iced Tea,Cold Drink,1.0,27,17.2
+2024-09-19,Thursday,Jacket Potato,Hot Food,3.9,45,17.5
+2024-09-19,Thursday,Flapjack,Snack,1.18,15,16.3
+2024-09-19,Thursday,Cereal Bar,Snack,0.8,35,19.7
+2024-09-20,Friday,Cereal Bar,Snack,0.85,16,19.6
+2024-09-20,Friday,Banana,Fruit,0.68,14,17.5
+2024-09-22,Sunday,Apple,Fruit,0.86,6,17.7
+2024-09-23,Monday,Pasta Bake,Hot Food,3.96,45,17.0
+2024-09-23,Monday,Chicken Curry,Hot Food,2.71,58,16.6
+2024-09-25,Wednesday,Iced Tea,Cold Drink,0.98,22,16.8
+2024-09-26,Thursday,Mac & Cheese,Hot Food,3.16,51,16.9
+2024-09-26,Thursday,Orange,Fruit,0.69,4,13.7
+2024-09-27,Friday,Jacket Potato,Hot Food,2.83,49,17.9
+2024-09-27,Friday,Pizza Slice,Hot Food,4.11,54,19.0
+2024-09-27,Friday,Chicken Curry,Hot Food,2.3,49,16.9
+2024-09-27,Friday,Soup of the Day,Hot Food,2.57,58,14.7
+2024-09-28,Saturday,Sausage Roll,Hot Food,2.44,63,14.0
+2024-09-28,Saturday,Mac & Cheese,Hot Food,3.05,53,13.4
+2024-09-28,Saturday,Chicken Curry,Hot Food,3.95,57,16.0
+2024-09-29,Sunday,Smoothie,Cold Drink,1.11,30,16.0
+2024-09-29,Sunday,Jacket Potato,Hot Food,2.91,49,18.1
+2024-09-29,Sunday,Sausage Roll,Hot Food,2.51,37,17.9
+2024-09-30,Monday,Pizza Slice,Hot Food,3.69,150,16.1
+2024-10-01,Tuesday,Crisps,Snack,1.05,20,13.8
+2024-10-02,Wednesday,Pizza Slice,Hot Food,2.49,53,17.2
+2024-10-02,Wednesday,Iced Tea,Cold Drink,1.32,31,16.4
+2024-10-03,Thursday,Chicken Curry,Hot Food,2.64,67,13.8
+2024-10-04,Friday,Grapes,Fruit,0.62,9,14.8
+2024-10-04,Friday,Pasta Bake,Hot Food,2.82,69,14.7
+2024-10-04,Friday,Orange Juice,Cold Drink,1.44,38,15.3
+2024-10-05,Saturday,Banana,Fruit,0.73,19,12.0
+2024-10-05,Saturday,Pizza Slice,Hot Food,2.78,49,16.8
+2024-10-06,Sunday,Water,Cold Drink,1.13,26,14.4
+2024-10-06,Sunday,Iced Tea,Cold Drink,1.69,21,11.8
+2024-10-06,Sunday,Pizza Slice,Hot Food,2.39,64,12.0
+2024-10-06,Sunday,Mac & Cheese,Hot Food,2.7,63,16.1
+2024-10-07,Monday,Cookie,Snack,0.94,28,14.0
+2024-10-07,Monday,Cookie,Snack,0.68,23,16.3
+2024-10-08,Tuesday,Milk,Cold Drink,1.5,34,15.4
+2024-10-08,Tuesday,Cereal Bar,Snack,0.62,13,14.4
+2024-10-08,Tuesday,Mac & Cheese,Hot Food,2.78,55,13.3
+2024-10-08,Tuesday,Milk,Cold Drink,1.6,19,13.1
+2024-10-11,Friday,Iced Tea,Cold Drink,1.66,22,13.4
+2024-10-11,Friday,Apple,Fruit,0.42,17,19.1
+2024-10-11,Friday,Jacket Potato,Hot Food,3.48,53,13.2
+2024-10-11,Friday,Cereal Bar,Snack,0.95,37,11.2
+2024-10-12,Saturday,Iced Tea,Cold Drink,1.59,29,16.2
+2024-10-13,Sunday,Mac & Cheese,Hot Food,3.33,65,15.3
+2024-10-14,Monday,Banana,Fruit,0.81,2,15.3
+2024-10-15,Tuesday,Cereal Bar,Snack,1.04,27,18.1
+2024-10-16,Wednesday,Orange,Fruit,0.59,29,10.5
+2024-10-17,Thursday,Pizza Slice,Hot Food,3.54,70,9.5
+2024-10-17,Thursday,Cereal Bar,Snack,0.89,22,13.7
+2024-10-17,Thursday,Pretzels,Snack,1.37,26,14.9
+2024-10-19,Saturday,Flapjack,Snack,0.77,33,11.1
+2024-10-19,Saturday,Apple,Fruit,0.95,18,14.8
+2024-10-20,Sunday,Cookie,Snack,1.32,18,13.1
+2024-10-20,Sunday,Water,Cold Drink,1.77,22,13.9
+2024-10-21,Monday,Smoothie,Cold Drink,1.18,20,8.8
+2024-10-21,Monday,Pizza Slice,Hot Food,4.04,67,12.1
+2024-10-22,Tuesday,Orange Juice,Cold Drink,0.81,25,13.7
+2024-10-22,Tuesday,Chicken Curry,Hot Food,4.15,55,11.8
+2024-10-22,Tuesday,Water,Cold Drink,0.84,14,9.8
+2024-10-23,Wednesday,Orange Juice,Cold Drink,1.21,20,6.7
+2024-10-23,Wednesday,Milk,Cold Drink,1.26,24,10.9
+2024-10-23,Wednesday,Crisps,Snack,1.41,8,9.4
+2024-10-30,Wednesday,Chicken Curry,,4.39,58,12.8
+2024-10-31,Thursday,Smoothie,Cold Drink,1.28,15,8.9
+2024-10-31,Thursday,Fruit Pot,Fruit,0.94,23,7.2
+2024-10-31,Thursday,Apple,Fruit,0.77,26,12.2
+2024-11-01,Friday,Banana,Fruit,0.45,32,11.5
+2024-11-01,Friday,Sausage Roll,Hot Food,2.45,75,8.0
+2024-11-02,Saturday,Cereal Bar,Snack,1.33,23,8.4
+2024-11-04,Monday,Mac & Cheese,Hot Food,3.93,73,9.7
+2024-11-04,Monday,Mac & Cheese,Hot Food,4.18,83,6.0
+2024-11-04,Monday,Mac & Cheese,Hot Food,2.59,75,6.7
+2024-11-05,Tuesday,Chicken Curry,Hot Food,2.6,65,12.1
+2024-11-06,Wednesday,Smoothie,Cold Drink,1.44,19,8.7
+2024-11-09,Saturday,Mac & Cheese,Hot Food,3.25,86,7.4
+2024-11-10,Sunday,Water,Cold Drink,1.6,22,7.8
+2024-11-11,Monday,Flapjack,Snack,0.76,32,7.6
+2024-11-11,Monday,Orange Juice,Cold Drink,1.54,21,5.9
+2024-11-12,Tuesday,Soup of the Day,Hot Food,4.48,61,8.3
+2024-11-12,Tuesday,Jacket Potato,Hot Food,3.87,66,8.5
+2024-11-12,Tuesday,Pretzels,Snack,1.18,22,10.0
+2024-11-13,Wednesday,Cookie,Snack,0.75,20,8.4
+2024-11-14,Thursday,Grapes,Fruit,0.99,36,7.7
+2024-11-14,Thursday,Jacket Potato,Hot Food,3.26,79,7.0
+2024-11-14,Thursday,Water,Cold Drink,1.56,11,5.7
+2024-11-15,Friday,Pasta Bake,Hot Food,2.26,66,10.0
+2024-11-15,Friday,Water,Cold Drink,1.46,22,9.8
+2024-11-17,Sunday,Pizza Slice,Hot Food,3.57,72,6.5
+2024-11-17,Sunday,Water,Cold Drink,1.59,26,8.0
+2024-11-17,Sunday,Water,Cold Drink,0.86,16,7.2
+2024-11-17,Sunday,Jacket Potato,Hot Food,3.53,70,7.3
+2024-11-17,Sunday,Jacket Potato,Hot Food,3.13,80,6.4
+2024-11-18,Monday,Flapjack,Snack,0.99,9,7.9
+2024-11-18,Monday,Sausage Roll,Hot Food,4.06,67,11.3
+2024-11-18,Monday,Chicken Curry,Hot Food,4.16,84,5.8
+2024-11-19,Tuesday,Soup of the Day,Hot Food,4.21,52,10.2
+2024-11-20,Wednesday,Water,Cold Drink,0.88,16,6.3
+2024-11-20,Wednesday,Sausage Roll,Hot Food,3.59,68,9.6
+2024-11-20,Wednesday,Fruit Pot,Fruit,0.81,25,6.2
+2024-11-21,Thursday,Milk,Cold Drink,1.42,18,8.8
+2024-11-22,Friday,Flapjack,Snack,1.19,24,2.6
+2024-11-22,Friday,Jacket Potato,Hot Food,2.68,88,6.7
+2024-11-22,Friday,Pasta Bake,Hot Food,3.6,77,4.4
+2024-11-23,Saturday,Orange,Fruit,0.77,26,6.9
+2024-11-24,Sunday,Fruit Pot,Fruit,0.8,12,8.5
+2024-11-24,Sunday,Pizza Slice,Hot Food,4.3,90,2.3
+2024-11-25,Monday,Banana,Fruit,0.92,5,5.1
+2024-11-26,Tuesday,Banana,Fruit,0.43,32,5.3
+2024-11-26,Tuesday,Cereal Bar,Snack,1.42,24,8.6
+2024-11-26,Tuesday,Mac & Cheese,Hot Food,2.69,93,1.9
+2024-11-27,Wednesday,Apple,Fruit,0.86,31,6.0
+2024-11-27,Wednesday,Crisps,Snack,1.29,27,5.6
+2024-11-27,Wednesday,Soup of the Day,Hot Food,2.25,91,6.1
+2024-11-28,Thursday,Sausage Roll,Hot Food,3.57,80,3.4
+2024-11-29,Friday,Banana,Fruit,0.71,14,5.9
+2024-11-29,Friday,Soup of the Day,Hot Food,4.22,89,4.1
+2024-11-30,Saturday,Grapes,Fruit,0.84,35,8.3
+2024-12-01,Sunday,Orange,Fruit,0.55,20,1.3
+2024-12-01,Sunday,Banana,Fruit,0.5,19,5.7
+2024-12-01,Sunday,Orange,Fruit,0.48,27,5.1
+2024-12-02,Monday,Sausage Roll,Hot Food,2.69,88,4.2
+2024-12-02,Monday,Jacket Potato,Hot Food,2.5,78,4.0
+2024-12-03,Tuesday,Pretzels,Snack,1.11,31,4.4
+2024-12-03,Tuesday,Banana,Fruit,0.56,29,3.6
+2024-12-05,Thursday,Milk,Cold Drink,1.61,11,2.5
+2024-12-05,Thursday,Jacket Potato,Hot Food,2.38,91,3.9
+2024-12-06,Friday,Jacket Potato,Hot Food,4.49,76,6.7
+2024-12-06,Friday,Soup of the Day,Hot Food,2.52,78,5.3
+2024-12-07,Saturday,Apple,Fruit,0.58,28,5.0
+2024-12-08,Sunday,Flapjack,Snack,1.33,23,4.9
+2024-12-09,Monday,Fruit Pot,Fruit,0.62,21,3.4
+2024-12-10,Tuesday,Iced Tea,Cold Drink,1.75,12,1.2
+2024-12-13,Friday,Mac & Cheese,Hot Food,4.1,88,3.8
+2024-12-14,Saturday,Soup of the Day,Hot Food,3.86,70,7.7
+2024-12-15,Sunday,Sausage Roll,Hot Food,4.41,75,5.5
+2024-12-15,Sunday,Orange,Fruit,0.84,30,4.5
+2024-12-15,Sunday,Pasta Bake,,3.28,84,2.2
+2024-12-16,Monday,Soup of the Day,Hot Food,2.92,82,7.4
+2024-12-16,Monday,Sausage Roll,Hot Food,3.92,76,3.4
+2024-12-16,Monday,Milk,Cold Drink,1.39,6,5.7
+2024-12-16,Monday,Sausage Roll,Hot Food,3.04,93,2.5
+2024-12-17,Tuesday,Jacket Potato,Hot Food,3.47,84,2.5
+2024-12-18,Wednesday,Chicken Curry,Hot Food,2.46,84,4.0
+2024-12-18,Wednesday,Pretzels,Snack,0.95,23,6.1
+2024-12-18,Wednesday,Cereal Bar,Snack,0.98,10,3.2
+2024-12-19,Thursday,Crisps,Snack,1.09,23,3.1
+2024-12-19,Thursday,Soup of the Day,Hot Food,3.8,99,1.8
+2024-12-20,Friday,Smoothie,Cold Drink,1.27,15,4.4
+2024-12-20,Friday,Pasta Bake,Hot Food,2.35,77,4.3
+2024-12-21,Saturday,Cookie,Snack,0.83,21,2.6
+2024-12-21,Saturday,Cookie,,0.69,24,5.5
+2024-12-22,Sunday,Sausage Roll,Hot Food,3.43,95,3.3
+2024-12-23,Monday,Sausage Roll,Hot Food,2.2,78,6.5
+2024-12-23,Monday,Crisps,Snack,0.89,20,3.5
+2024-12-25,Wednesday,Orange,Fruit,0.6,27,-0.1
+2024-12-27,Friday,Crisps,Snack,1.36,21,3.8
+2024-12-27,Friday,Pretzels,Snack,0.61,41,3.0
+2024-12-28,Saturday,Crisps,Snack,0.9,29,2.9
+2024-12-28,Saturday,Pasta Bake,Hot Food,4.45,76,2.1
+2024-12-28,Saturday,Cereal Bar,Snack,0.69,13,3.2
+2024-12-29,Sunday,Pizza Slice,Hot Food,4.1,83,4.9
+2024-12-30,Monday,Grapes,Fruit,0.77,7,3.6
+2024-12-30,Monday,Soup of the Day,Hot Food,4.33,90,3.1
+2024-12-31,Tuesday,Pasta Bake,Hot Food,3.75,86,2.6
+2025-01-02,Thursday,Soup of the Day,,2.35,89,2.5
+2025-01-02,Thursday,Pizza Slice,Hot Food,2.57,89,3.5
+2025-01-04,Saturday,Mac & Cheese,Hot Food,4.39,87,1.5
+2025-01-05,Sunday,Orange,,0.85,8,0.8
+2025-01-05,Sunday,Mac & Cheese,Hot Food,3.69,98,2.3
+2025-01-05,Sunday,Chicken Curry,Hot Food,3.74,75,4.4
+2025-01-07,Tuesday,Mac & Cheese,Hot Food,3.73,98,1.0
+2025-01-07,Tuesday,Sausage Roll,Hot Food,3.67,72,7.0
+2025-01-08,Wednesday,Smoothie,Cold Drink,1.09,2,1.6
+2025-01-08,Wednesday,Apple,Fruit,0.96,22,2.5
+2025-01-08,Wednesday,Sausage Roll,Hot Food,3.01,92,1.6
+2025-01-08,Wednesday,Water,Cold Drink,1.57,19,5.0
+2025-01-12,Sunday,Orange,Fruit,0.81,15,5.4
+2025-01-12,Sunday,Apple,Fruit,1.0,35,3.0
+2025-01-12,Sunday,Grapes,Fruit,0.53,16,2.7
+2025-01-13,Monday,Chicken Curry,Hot Food,2.81,81,4.1
+2025-01-14,Tuesday,Jacket Potato,Hot Food,3.06,96,2.2
+2025-01-15,Wednesday,Flapjack,Snack,1.3,27,2.9
+2025-01-15,Wednesday,Fruit Pot,Fruit,0.98,14,2.6
+2025-01-16,Thursday,Banana,Fruit,0.9,21,3.6
+2025-01-17,Friday,Jacket Potato,Hot Food,3.04,89,2.0
+2025-01-18,Saturday,Water,Cold Drink,0.94,6,2.2
+2025-01-18,Saturday,Water,Cold Drink,1.23,18,6.0
+2025-01-19,Sunday,Flapjack,Snack,1.03,24,1.7
+2025-01-19,Sunday,Jacket Potato,Hot Food,2.36,79,5.1
+2025-01-19,Sunday,Orange,Fruit,0.97,9,1.2
+2025-01-20,Monday,Apple,Fruit,0.44,4,4.1
+2025-01-20,Monday,Pretzels,Snack,0.78,21,3.3
+2025-01-20,Monday,Mac & Cheese,Hot Food,2.83,80,1.4
+2025-01-20,Monday,Soup of the Day,Hot Food,3.58,86,0.7
+2025-01-22,Wednesday,Pizza Slice,Hot Food,2.34,86,5.8
+2025-01-24,Friday,Crisps,Snack,0.71,26,4.8
+2025-01-24,Friday,Mac & Cheese,Hot Food,2.23,77,7.4
+2025-01-25,Saturday,Flapjack,Snack,0.65,20,6.9
+2025-01-26,Sunday,Pasta Bake,Hot Food,3.26,89,6.2
+2025-01-26,Sunday,Water,Cold Drink,1.63,12,3.8
+2025-01-27,Monday,Apple,Fruit,0.56,12,2.7
+2025-01-27,Monday,Pasta Bake,Hot Food,3.62,82,5.2
+2025-01-27,Monday,Pretzels,Snack,1.21,32,5.4
+2025-01-29,Wednesday,Banana,Fruit,0.7,15,5.0
+2025-01-29,Wednesday,Grapes,Fruit,0.64,25,3.5
+2025-01-29,Wednesday,Orange Juice,Cold Drink,1.32,17,6.4
+2025-01-30,Thursday,Jacket Potato,Hot Food,4.5,96,4.7
+2025-01-30,Thursday,Crisps,Snack,1.2,12,0.9
+2025-01-31,Friday,Pizza Slice,Hot Food,2.38,82,5.6
+2025-02-01,Saturday,Water,Cold Drink,1.48,8,1.7
+2025-02-02,Sunday,Fruit Pot,Fruit,0.95,22,4.3
+2025-02-04,Tuesday,Cereal Bar,Snack,1.25,15,1.3
+2025-02-04,Tuesday,Mac & Cheese,Hot Food,4.13,84,2.1
+2025-02-05,Wednesday,Sausage Roll,Hot Food,2.9,90,4.5
+2025-02-05,Wednesday,Pasta Bake,Hot Food,2.27,74,0.4
+2025-02-05,Wednesday,Pretzels,Snack,1.1,23,2.4
+2025-02-06,Thursday,Pasta Bake,Hot Food,4.32,94,1.1
+2025-02-07,Friday,Orange,Fruit,0.42,20,6.5
+2025-02-07,Friday,Jacket Potato,Hot Food,4.19,85,3.1
+2025-02-07,Friday,Chicken Curry,Hot Food,3.64,74,5.8
+2025-02-08,Saturday,Smoothie,Cold Drink,0.9,6,1.4
+2025-02-08,Saturday,Crisps,Snack,0.86,17,4.8
+2025-02-09,Sunday,Water,Cold Drink,1.34,13,6.0
+2025-02-10,Monday,Sausage Roll,Hot Food,2.32,77,6.3
+2025-02-11,Tuesday,Smoothie,Cold Drink,1.8,10,0.3
+2025-02-11,Tuesday,Smoothie,Cold Drink,1.52,9,1.7
+2025-02-12,Wednesday,Soup of the Day,Hot Food,2.5,84,6.6
+2025-02-12,Wednesday,Pretzels,Snack,1.29,28,6.4
+2025-02-13,Thursday,Iced Tea,Cold Drink,1.33,24,7.5
+2025-02-14,Friday,Apple,Fruit,0.41,18,5.9
+2025-02-14,Friday,Apple,Fruit,0.87,24,4.0
+2025-02-15,Saturday,Grapes,Fruit,0.57,19,3.4
+2025-02-16,Sunday,Water,Cold Drink,0.91,17,6.5
+2025-02-16,Sunday,Jacket Potato,Hot Food,4.39,75,6.5
+2025-02-17,Monday,Jacket Potato,Hot Food,2.9,88,4.8
+2025-02-17,Monday,Pasta Bake,Hot Food,4.39,59,9.0
+2025-02-18,Tuesday,Water,Cold Drink,1.61,4,3.9
+2025-02-19,Wednesday,Mac & Cheese,Hot Food,2.36,68,8.8
+2025-02-20,Thursday,Fruit Pot,Fruit,0.86,25,4.6
+2025-02-20,Thursday,Orange,Fruit,0.77,22,7.0
+2025-02-22,Saturday,Flapjack,Snack,1.14,20,6.3
+2025-02-22,Saturday,Orange Juice,Cold Drink,1.25,24,7.4
+2025-02-23,Sunday,Orange Juice,Cold Drink,1.37,22,4.8
+2025-02-23,Sunday,Chicken Curry,Hot Food,2.97,84,8.6
+2025-02-23,Sunday,Grapes,Fruit,0.85,12,7.7
+2025-02-25,Tuesday,Soup of the Day,Hot Food,4.21,87,3.6
+2025-02-25,Tuesday,Smoothie,Cold Drink,1.68,16,9.5
+2025-02-26,Wednesday,Banana,Fruit,0.88,31,6.9
+2025-02-26,Wednesday,Jacket Potato,Hot Food,3.72,84,3.6
+2025-02-27,Thursday,Orange,Fruit,0.91,27,9.2
+2025-02-27,Thursday,Orange Juice,Cold Drink,1.7,23,7.7
+2025-02-28,Friday,Sausage Roll,Hot Food,2.69,86,5.0
+2025-02-28,Friday,Cereal Bar,Snack,0.83,30,3.5
+2025-02-28,Friday,Orange,Fruit,0.91,17,7.7
+2025-03-01,Saturday,Milk,Cold Drink,1.06,24,6.3
+2025-03-01,Saturday,Pretzels,Snack,0.87,23,6.0
+2025-03-01,Saturday,Pizza Slice,Hot Food,4.13,70,8.5
+2025-03-01,Saturday,Orange Juice,Cold Drink,1.43,8,7.5
+2025-03-01,Saturday,Flapjack,Snack,1.39,18,4.5
+2025-03-02,Sunday,Mac & Cheese,,3.75,89,5.5
+2025-03-03,Monday,Flapjack,Snack,0.91,25,2.8
+2025-03-03,Monday,Smoothie,Cold Drink,1.74,14,9.3
+2025-03-04,Tuesday,Milk,Cold Drink,1.04,13,8.0
+2025-03-04,Tuesday,Pizza Slice,Hot Food,3.64,68,13.3
+2025-03-05,Wednesday,Mac & Cheese,Hot Food,3.06,64,9.8
+2025-03-05,Wednesday,Orange Juice,Cold Drink,1.76,23,9.2
+2025-03-05,Wednesday,Iced Tea,Cold Drink,1.1,14,7.8
+2025-03-06,Thursday,Pretzels,Snack,0.87,22,9.2
+2025-03-06,Thursday,Mac & Cheese,Hot Food,2.52,90,5.9
+2025-03-07,Friday,Cookie,Snack,1.02,39,9.6
+2025-03-07,Friday,Orange Juice,Cold Drink,1.64,16,6.0
+2025-03-07,Friday,Cereal Bar,,1.5,10,5.9
+2025-03-08,Saturday,Jacket Potato,Hot Food,3.03,70,12.0
+2025-03-08,Saturday,Apple,Fruit,0.89,15,5.9
+2025-03-10,Monday,Sausage Roll,Hot Food,2.43,76,6.1
+2025-03-11,Tuesday,Jacket Potato,Hot Food,4.0,65,10.6
+2025-03-12,Wednesday,Flapjack,Snack,1.22,34,9.4
+2025-03-13,Thursday,Milk,Cold Drink,1.68,27,11.2
+2025-03-13,Thursday,Cereal Bar,Snack,1.39,20,5.8
+2025-03-15,Saturday,Cereal Bar,Snack,1.33,15,8.4
+2025-03-15,Saturday,Sausage Roll,Hot Food,2.46,63,9.4
+2025-03-15,Saturday,Sausage Roll,Hot Food,2.47,75,7.8
+2025-03-15,Saturday,Jacket Potato,Hot Food,2.28,67,9.7
+2025-03-17,Monday,Grapes,,0.83,30,12.0
+2025-03-17,Monday,Pretzels,Snack,0.91,21,8.1
+2025-03-18,Tuesday,Jacket Potato,Hot Food,3.7,72,8.5
+2025-03-18,Tuesday,Chicken Curry,Hot Food,3.24,70,9.6
+2025-03-19,Wednesday,Soup of the Day,Hot Food,2.82,70,11.2
+2025-03-19,Wednesday,Grapes,Fruit,0.56,31,11.2
+2025-03-20,Thursday,Orange,Fruit,0.67,31,13.0
+2025-03-21,Friday,Pretzels,Snack,0.64,14,8.6
+2025-03-21,Friday,Sausage Roll,Hot Food,4.48,64,9.2
+2025-03-21,Friday,Orange Juice,Cold Drink,1.18,20,12.0
+2025-03-23,Sunday,Pretzels,Snack,1.26,26,11.8
+2025-03-23,Sunday,Pretzels,Snack,1.12,26,13.7
+2025-03-23,Sunday,Jacket Potato,Hot Food,3.88,69,8.9
+2025-03-25,Tuesday,Pasta Bake,Hot Food,2.74,77,6.8
+2025-03-25,Tuesday,Jacket Potato,Hot Food,2.64,69,10.0
+2025-03-25,Tuesday,Cereal Bar,Snack,0.9,5,9.7
+2025-03-25,Tuesday,Fruit Pot,Fruit,0.42,12,12.1
+2025-03-25,Tuesday,Mac & Cheese,Hot Food,3.65,59,10.7
+2025-03-25,Tuesday,Pasta Bake,Hot Food,2.56,54,12.0
+2025-03-26,Wednesday,Iced Tea,Cold Drink,1.71,26,11.0
+2025-03-26,Wednesday,Jacket Potato,Hot Food,3.15,56,13.7
+2025-03-27,Thursday,Pizza Slice,Hot Food,3.38,50,12.0
+2025-03-28,Friday,Jacket Potato,Hot Food,2.32,63,12.0
+2025-03-29,Saturday,Smoothie,Cold Drink,1.23,20,10.5
+2025-03-29,Saturday,Soup of the Day,Hot Food,3.87,63,12.0
+2025-03-30,Sunday,Chicken Curry,Hot Food,4.39,73,11.9
+2025-04-02,Wednesday,Pretzels,Snack,0.97,26,13.6
+2025-04-03,Thursday,Orange,Fruit,0.98,8,10.4
+2025-04-04,Friday,Mac & Cheese,Hot Food,2.76,66,11.1
+2025-04-05,Saturday,Fruit Pot,Fruit,0.63,11,13.1
+2025-04-05,Saturday,Sausage Roll,Hot Food,2.27,56,14.1
+2025-04-05,Saturday,Orange,Fruit,0.66,27,12.3
+2025-04-07,Monday,Chicken Curry,Hot Food,3.42,61,11.2
+2025-04-07,Monday,Cereal Bar,Snack,0.96,29,12.6
+2025-04-08,Tuesday,Cookie,Snack,0.83,23,12.1
+2025-04-09,Wednesday,Cereal Bar,Snack,1.2,26,17.4
+2025-04-09,Wednesday,Chicken Curry,Hot Food,3.77,60,14.4
+2025-04-10,Thursday,Apple,Fruit,0.78,6,16.6
+2025-04-11,Friday,Sausage Roll,Hot Food,3.27,56,15.2
+2025-04-11,Friday,Orange Juice,Cold Drink,1.71,20,13.0
+2025-04-12,Saturday,Grapes,Fruit,0.84,21,13.4
+2025-04-12,Saturday,Apple,Fruit,0.49,28,18.3
+2025-04-12,Saturday,Soup of the Day,Hot Food,2.96,61,12.5
+2025-04-13,Sunday,Crisps,Snack,0.61,23,15.3
+2025-04-13,Sunday,Mac & Cheese,Hot Food,3.31,58,15.1
+2025-04-13,Sunday,Cookie,Snack,0.76,28,14.4
+2025-04-14,Monday,Pretzels,Snack,1.03,24,13.0
+2025-04-14,Monday,Pasta Bake,,3.82,61,12.0
+2025-04-15,Tuesday,Sausage Roll,Hot Food,3.95,39,19.8
+2025-04-16,Wednesday,Jacket Potato,Hot Food,3.35,55,13.8
+2025-04-16,Wednesday,Chicken Curry,Hot Food,3.26,64,14.4
+2025-04-16,Wednesday,Crisps,Snack,1.36,41,14.1
+2025-04-16,Wednesday,Crisps,Snack,0.78,20,15.5
+2025-04-16,Wednesday,Jacket Potato,Hot Food,4.12,53,15.1
+2025-04-16,Wednesday,Grapes,Fruit,0.95,21,17.8
+2025-04-16,Wednesday,Milk,Cold Drink,1.09,28,17.9
+2025-04-16,Wednesday,Chicken Curry,,3.75,56,14.3
+2025-04-16,Wednesday,Crisps,Snack,1.38,10,13.0
+2025-04-17,Thursday,Cereal Bar,Snack,0.91,14,15.7
+2025-04-17,Thursday,Crisps,,0.74,29,16.1
+2025-04-18,Friday,Sausage Roll,Hot Food,2.74,54,13.5
+2025-04-19,Saturday,Jacket Potato,Hot Food,3.9,56,17.8
+2025-04-19,Saturday,Orange,Fruit,0.85,14,14.1
+2025-04-20,Sunday,Jacket Potato,Hot Food,3.87,57,15.8
+2025-04-21,Monday,Orange,Fruit,0.64,16,12.6
+2025-04-21,Monday,Milk,Cold Drink,1.53,28,14.4
+2025-04-21,Monday,Jacket Potato,Hot Food,2.7,56,12.2
+2025-04-22,Tuesday,Pretzels,Snack,0.86,34,16.9
+2025-04-23,Wednesday,Iced Tea,Cold Drink,1.36,29,14.3
+2025-04-25,Friday,Orange,Fruit,0.78,20,17.6
+2025-04-25,Friday,Pasta Bake,Hot Food,3.03,53,12.3
+2025-04-25,Friday,Milk,Cold Drink,0.84,37,19.8
+2025-04-27,Sunday,Grapes,Fruit,0.43,16,11.2
+2025-04-27,Sunday,Milk,Cold Drink,1.16,32,17.5
+2025-04-27,Sunday,Crisps,Snack,0.89,16,18.8
+2025-04-28,Monday,Iced Tea,Cold Drink,1.06,29,17.7
+2025-04-28,Monday,Cereal Bar,Snack,0.61,18,18.5
+2025-04-29,Tuesday,Water,Cold Drink,0.94,39,20.9
+2025-04-29,Tuesday,Orange,Fruit,0.84,31,19.4
+2025-04-29,Tuesday,Water,Cold Drink,1.46,34,20.5
+2025-04-30,Wednesday,Pizza Slice,Hot Food,3.0,39,19.0
+2025-04-30,Wednesday,Grapes,Fruit,0.65,22,15.7
+2025-04-30,Wednesday,Crisps,Snack,1.23,22,15.8
+2025-05-02,Friday,Orange Juice,Cold Drink,0.81,34,19.6
+2025-05-02,Friday,Pasta Bake,Hot Food,3.07,53,13.5
+2025-05-02,Friday,Pretzels,Snack,0.85,38,19.3
+2025-05-02,Friday,Soup of the Day,Hot Food,4.46,49,14.8
+2025-05-04,Sunday,Sausage Roll,Hot Food,2.5,54,19.8
+2025-05-05,Monday,Orange,Fruit,0.95,23,19.0
+2025-05-07,Wednesday,Cereal Bar,Snack,0.69,24,17.1
+2025-05-08,Thursday,Jacket Potato,Hot Food,2.8,43,19.8
+2025-05-08,Thursday,Fruit Pot,Fruit,0.73,10,20.1
+2025-05-09,Friday,Grapes,Fruit,0.82,30,16.2
+2025-05-10,Saturday,Crisps,Snack,0.93,41,18.1
+2025-05-10,Saturday,Pizza Slice,Hot Food,2.53,38,22.1
+2025-05-12,Monday,Milk,Cold Drink,1.79,43,20.3
+2025-05-12,Monday,Flapjack,Snack,1.25,22,18.7
+2025-05-12,Monday,Flapjack,Snack,0.93,26,18.2
+2025-05-13,Tuesday,Apple,Fruit,0.98,31,17.8
+2025-05-15,Thursday,Flapjack,Snack,1.22,27,23.7
+2025-05-16,Friday,Water,Cold Drink,1.65,27,17.4
+2025-05-16,Friday,Smoothie,,1.51,41,21.2
+2025-05-17,Saturday,Soup of the Day,Hot Food,2.58,45,18.0
+2025-05-17,Saturday,Smoothie,Cold Drink,1.71,37,18.0
+2025-05-17,Saturday,Soup of the Day,,2.89,46,20.9
+2025-05-17,Saturday,Pretzels,Snack,0.74,23,22.1
+2025-05-17,Saturday,Apple,,0.47,27,19.7
+2025-05-18,Sunday,Water,Cold Drink,1.11,39,20.4
+2025-05-18,Sunday,Apple,Fruit,0.69,34,25.4
+2025-05-18,Sunday,Cookie,Snack,0.89,19,17.1
+2025-05-20,Tuesday,Grapes,Fruit,0.54,19,21.1
+2025-05-21,Wednesday,Pizza Slice,Hot Food,4.06,37,22.9
+2025-05-22,Thursday,Pasta Bake,Hot Food,4.45,35,20.7
+2025-05-23,Friday,Fruit Pot,,0.67,18,19.6
+2025-05-23,Friday,Jacket Potato,Hot Food,2.81,40,23.8
+2025-05-23,Friday,Flapjack,Snack,0.6,23,18.1
+2025-05-24,Saturday,Pretzels,Snack,0.94,23,19.9
+2025-05-24,Saturday,Flapjack,Snack,0.95,21,26.7
+2025-05-24,Saturday,Jacket Potato,Hot Food,2.92,51,20.4
+2025-05-25,Sunday,Chicken Curry,Hot Food,2.5,23,24.9
+2025-05-25,Sunday,Jacket Potato,Hot Food,3.49,41,22.0
+2025-05-26,Monday,Pretzels,Snack,1.47,21,19.3
+2025-05-26,Monday,Cookie,Snack,1.06,20,23.5
+2025-05-26,Monday,Iced Tea,Cold Drink,1.36,30,20.7
+2025-05-26,Monday,Smoothie,Cold Drink,1.46,40,22.1
+2025-05-27,Tuesday,Banana,Fruit,0.72,25,19.3
+2025-05-27,Tuesday,Cookie,Snack,0.69,22,20.7
+2025-05-28,Wednesday,Chicken Curry,Hot Food,2.35,47,24.0
+2025-05-28,Wednesday,Jacket Potato,Hot Food,3.18,53,21.2
+2025-05-28,Wednesday,Water,Cold Drink,1.23,33,21.8
+2025-05-28,Wednesday,Jacket Potato,Hot Food,4.19,31,22.7
+2025-05-28,Wednesday,Pasta Bake,Hot Food,3.8,46,17.9
+2025-05-29,Thursday,Orange Juice,Cold Drink,1.43,32,21.1
+2025-05-29,Thursday,Orange,Fruit,0.47,20,20.8
+2025-05-29,Thursday,Soup of the Day,Hot Food,4.44,42,19.8
+2025-05-29,Thursday,Soup of the Day,Hot Food,2.68,37,21.1
+2025-05-31,Saturday,Pasta Bake,Hot Food,3.12,32,23.6
+2025-05-31,Saturday,Sausage Roll,Hot Food,3.38,30,23.3
+2025-05-31,Saturday,Crisps,Snack,1.43,12,19.6
+2025-06-01,Sunday,Pizza Slice,Hot Food,3.88,47,19.0
+2025-06-01,Sunday,Sausage Roll,Hot Food,2.25,40,22.8
+2025-06-01,Sunday,Flapjack,Snack,1.36,19,20.7
+2025-06-03,Tuesday,Orange Juice,Cold Drink,1.1,29,21.5
+2025-06-06,Friday,Mac & Cheese,Hot Food,3.57,32,26.2
+2025-06-06,Friday,Smoothie,Cold Drink,1.44,36,21.6
+2025-06-06,Friday,Mac & Cheese,Hot Food,3.85,35,21.8
+2025-06-08,Sunday,Milk,Cold Drink,1.08,31,18.0
+2025-06-08,Sunday,Crisps,Snack,1.29,26,23.7
+2025-06-09,Monday,Jacket Potato,Hot Food,3.22,19,26.9
+2025-06-09,Monday,Jacket Potato,Hot Food,3.18,35,21.0
+2025-06-10,Tuesday,Milk,Cold Drink,1.36,32,23.4
+2025-06-10,Tuesday,Sausage Roll,,2.97,35,20.5
+2025-06-10,Tuesday,Pretzels,Snack,1.3,15,23.0
+2025-06-10,Tuesday,Orange,Fruit,0.58,31,26.0
+2025-06-11,Wednesday,Pizza Slice,Hot Food,2.22,39,24.6
+2025-06-11,Wednesday,Pasta Bake,Hot Food,4.4,27,24.1
+2025-06-12,Thursday,Fruit Pot,Fruit,0.41,12,25.6
+2025-06-13,Friday,Sausage Roll,Hot Food,4.29,35,24.3
+2025-06-13,Friday,Milk,Cold Drink,0.96,33,21.2
+2025-06-14,Saturday,Milk,Cold Drink,0.81,39,22.5
+2025-06-14,Saturday,Pretzels,Snack,1.01,30,26.9
+2025-06-15,Sunday,Cereal Bar,Snack,1.38,14,23.1
+2025-06-15,Sunday,Pretzels,Snack,0.69,17,24.2
+2025-06-15,Sunday,Soup of the Day,Hot Food,3.25,40,21.5
+2025-06-15,Sunday,Pizza Slice,Hot Food,3.99,29,25.3
+2025-06-15,Sunday,Pretzels,Snack,0.9,24,25.8
+2025-06-16,Monday,Milk,Cold Drink,1.54,46,24.5
+2025-06-16,Monday,Milk,Cold Drink,1.42,41,28.3
+2025-06-16,Monday,Mac & Cheese,Hot Food,3.69,23,24.0
+2025-06-16,Monday,Pizza Slice,,4.15,31,23.3
+2025-06-17,Tuesday,Crisps,Snack,1.37,12,24.0
+2025-06-17,Tuesday,Water,Cold Drink,1.22,44,26.9
+2025-06-17,Tuesday,Crisps,Snack,1.01,20,23.3
+2025-06-18,Wednesday,Cereal Bar,,0.63,26,23.7
+2025-06-18,Wednesday,Orange Juice,Cold Drink,1.1,40,25.2
+2025-06-19,Thursday,Sausage Roll,Hot Food,3.6,39,22.1
+2025-06-19,Thursday,Pretzels,Snack,1.29,20,22.7
+2025-06-19,Thursday,Iced Tea,Cold Drink,1.14,50,25.2
+2025-06-20,Friday,Chicken Curry,Hot Food,4.18,32,24.7
+2025-06-20,Friday,Apple,Fruit,0.48,15,23.9
+2025-06-21,Saturday,Fruit Pot,Fruit,0.82,19,26.0
+2025-06-21,Saturday,Cereal Bar,Snack,0.88,7,24.4
+2025-06-22,Sunday,Mac & Cheese,Hot Food,2.72,23,27.1
+2025-06-22,Sunday,Pizza Slice,Hot Food,3.01,52,19.5
+2025-06-23,Monday,Grapes,,0.57,36,27.4
+2025-06-23,Monday,Grapes,Fruit,0.63,22,23.4
+2025-06-24,Tuesday,Pizza Slice,Hot Food,3.98,34,23.0
+2025-06-27,Friday,Flapjack,Snack,1.23,8,24.5
+2025-06-27,Friday,Milk,,0.94,45,28.2
+2025-06-27,Friday,Flapjack,Snack,1.0,6,26.6
+2025-06-28,Saturday,Chicken Curry,Hot Food,3.56,30,23.8
+2025-06-28,Saturday,Flapjack,Snack,1.29,15,26.2

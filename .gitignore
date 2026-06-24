@@ -1,0 +1,5 @@
+# Local Claude Code settings
+.claude/
+
+# Sensitive data — do not commit login credentials
+Student Logins.csv

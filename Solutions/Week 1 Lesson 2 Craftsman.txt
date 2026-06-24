@@ -1,0 +1,76 @@
+================================================================
+ WEEK 1 · LESSON 2 · CRAFTSMAN — "The Rank Mapper"
+ Dataset: spotify_tracks.csv   ·   Goal: 16/20 (80%)
+================================================================
+
+THE IDEA
+--------
+Fix the broken ordinal scale by mapping each tier string to a strict
+number so the computer understands the hierarchy:
+    Bronze = 1, Silver = 2, Gold = 3, Platinum = 4
+Then sorting on the new numeric column gives the honest 4-3-2-1 order.
+
+WHAT TO DO
+----------
+Paste the code below into the Code Box and press ▶ Run.
+No grid clicking is required — this tier is graded from the code
+and its results.
+
+KEY GOTCHA
+----------
+Use the EXACT column name "Popularity Tier". Map onto a NEW column
+called "Tier Rank" (check #19 rewards the rename for mastery).
+
+CODE (paste into the Code Box)
+------------------------------
+import pandas as pd
+
+df = pd.read_csv("spotify_tracks.csv")
+
+# Step 1: a dictionary that encodes the hierarchy
+rank = {"Bronze": 1, "Silver": 2, "Gold": 3, "Platinum": 4}
+
+# Step 2: map the text onto a new numeric column
+df["Tier Rank"] = df["Popularity Tier"].map(rank)
+
+# Step 3: confirm it is now numeric (int64), not object
+print("New dtype:")
+print(df["Tier Rank"].dtype)
+
+# Step 4: sort by the SEMANTIC rank, highest tier first
+df = df.sort_values("Tier Rank", ascending=False)
+print("Top (Platinum = 4):")
+print(df[["Popularity Tier", "Tier Rank"]].head())
+print("Bottom (Bronze = 1):")
+print(df[["Popularity Tier", "Tier Rank"]].tail())
+
+
+HOW THIS HITS ALL 20 CHECKS
+---------------------------
+Phase 1 — Dictionary Logic Formulation
+  1. valid Python dictionary .............. rank = { ... }
+  2. "Bronze": 1 ......................... in the dict
+  3. "Silver": 2 ......................... in the dict
+  4. "Gold": 3 .......................... in the dict
+  5. "Platinum": 4 ...................... in the dict
+
+Phase 2 — Execution & Mapping
+  6. targets Popularity Tier ............. df["Popularity Tier"]
+  7. .map() / .replace() called ......... .map(rank)
+  8. no accidental NaN .................. all 4 values covered -> 0 NaN
+  9. dtype now int64/float64 ........... print(...dtype) shows int64
+ 10. text -> numbers in the grid ....... new Tier Rank column is numeric
+
+Phase 3 — The Semantic Sort Verification
+ 11. re-sorted the mapped ranks ........ sort_values("Tier Rank")
+ 12. ascending=False .................. Platinum (4) on top
+ 13. printed .head() .................. .head()
+ 14. 4s sit above the 3s ............. head is all 4 after desc sort
+ 15. printed .tail() (1s at bottom) .. .tail() ends in Bronze = 1
+
+Phase 4 — Data Engine Integrity
+ 16. still 300 rows .................. unchanged
+ 17. Song Title & Tempo unaffected ... untouched columns
+ 18. spreadsheet shows 4-3-2-1 ....... df re-rendered in rank order
+ 19. renamed to Tier Rank ........... new column name
+ 20. no red error logs .............. clean run

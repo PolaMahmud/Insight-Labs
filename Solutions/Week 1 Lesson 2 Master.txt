@@ -1,0 +1,75 @@
+================================================================
+ WEEK 1 · LESSON 2 · MASTER — "The Scale Visualizer"
+ Dataset: spotify_tracks.csv   ·   Goal: 16/20 (80%) + lab report
+================================================================
+
+This tier is graded mostly from the CHART SANDBOX (the "Scale
+Studio"), not the code. Checks update LIVE as you click — most
+do not need a Run. Apprentice and Craftsman must already be passed
+(they unlock this tier and feed check #20).
+
+Keep the Code Box holding the snippet below so the comment-based
+checks (#5, #10, #15) and the "no syntax errors" check (#17) pass.
+
+----------------------------------------------------------------
+CODE BOX (paste this; the comments satisfy checks 5, 10, 15, 17)
+----------------------------------------------------------------
+import pandas as pd
+
+df = pd.read_csv("spotify_tracks.csv")
+rank = {"Bronze": 1, "Silver": 2, "Gold": 3, "Platinum": 4}
+df["Tier Rank"] = df["Popularity Tier"].map(rank)
+
+# Title: Songs per Popularity Tier
+# The raw alphabetical bar chart is MISLEADING / out of order (B, G, P, S).
+# After mapping it becomes an honest 1-2-3-4 staircase.
+# Scatter shows the INVERSE CORRELATION: shorter songs tend to get more streams.
+print(df.head())
+
+----------------------------------------------------------------
+STEP-BY-STEP IN THE SCALE SANDBOX
+----------------------------------------------------------------
+
+PHASE 1 — The Disorganized Bar Chart
+  1. Chart dropdown -> "Bar"
+  2. X-axis -> "Popularity Tier"
+  3. Y-axis -> "Count"
+        => 4 bars appear in ALPHABETICAL order: Bronze, Gold,
+           Platinum, Silver, with the "misleading" warning. (checks 1-4)
+     (Check 5 is satisfied by the misleading comment in the Code Box.)
+
+PHASE 2 — The Ordinal Correction
+  4. X-axis -> "Tier Rank (mapped)"
+        => the bars snap into a perfect ascending 1, 2, 3, 4
+           staircase with integer tick labels.            (checks 6,7,8,9)
+     (Check 10 is satisfied by the "Title:" comment in the Code Box.)
+
+PHASE 3 — The Cardinal Sandbox
+  5. Chart dropdown -> "Scatter"
+  6. X-axis -> "Song Duration (seconds)"
+  7. Y-axis -> "Total Streams"
+        => a massive point cloud of 300 dots renders.      (checks 11-14)
+     (Check 15 is satisfied by the inverse-correlation comment.)
+
+PHASE 4 — UI Polish & Printout
+  8. Go back to a Bar chart (Tier Rank) and move the "Colour"
+     picker — the tier bars recolour (bronze/silver/gold/neon). (check 16)
+  9. Make sure the Code Box has no syntax errors; press ▶ Run.  (check 17)
+        (Data Engine stays synced with the sandbox.)          (check 18)
+ 10. The mastery bar should now be >= 80%, enabling the
+     "🎓 Submit Project & Print Lab Report" button — click it. (check 19)
+ 11. With Apprentice + Craftsman passed and both the staircase
+     and the scatter cloud built, full completion registers.  (check 20)
+
+
+CHECK MAP
+---------
+Phase 1: 1 Bar chosen · 2 Popularity Tier on X · 3 Count on Y
+         4 four out-of-order bars (B,G,P,S) · 5 "misleading" comment
+Phase 2: 6 Tier Rank on X · 7 ascending staircase · 8 integer ticks
+         9 Bar (not histogram) for ranks · 10 chart title comment
+Phase 3: 11 Scatter chosen · 12 Song Duration on X · 13 Total Streams on Y
+         14 point cloud rendered · 15 inverse-correlation comment
+Phase 4: 16 colour picker used · 17 code has no syntax errors
+         18 Data Engine synced · 19 Lab Report clicked
+         20 100% across scales + rank mapping + chart logic

@@ -1,0 +1,301 @@
+Chain Name,Item Name,Category,Calories,Fat (grams),Sugar (grams),Price
+KFC,Onion Rings,Sides,263,28.9,1.1,£7.66
+McDonald's,Bacon Deluxe,Burger,749,31.0,8.9,£5.94
+Wimpy,Brownie,Dessert,577,14.4,28.1,£4.10
+Burger King,Orange Juice,Drink,153,7.2,39.8,£2.77
+Greggs,Garlic Bread,Sides,200,24.8,1.9,£2.95
+Greggs,Classic Burger,Burger,467,23.0,5.8,£7.47
+Burger King,Apple Pie,Dessert,161,22.9,10.2,£9.28
+Greggs,Quarter Smash,Burger,890,8.6,3.7,£1.44
+McDonald's,Ice Cream Sundae,Dessert,215,23.5,25.3,£3.22
+Wendy's,Brownie,Dessert,370,16.8,33.7,£2.59
+Wimpy,Iced Tea,Drink,48,4.6,2.0,£6.23
+Five Guys,Lemonade,Drink,131,4.1,16.8,£5.57
+Wimpy,Fruit Pot,Dessert,104,16.4,23.2,£5.75
+Wimpy,Water,Drink,276,11.2,38.6,£4.63
+Wimpy,Doughnut,Dessert,458,2.5,50.4,£7.88
+Greggs,Side Salad,Sides,225,19.5,2.9,£3.10
+Greggs,Mozzarella Sticks,Sides,507,24.1,5.8,£5.50
+Wendy's,Brownie,Dessert,370,16.8,33.7,£2.59
+Burger King,Water,Drink,197,7.4,44.8,£9.65
+Wendy's,Halloumi Burger,Burger,472,33.3,3.1,£6.68
+Wimpy,Onion Rings,Sides,394,28.0,2.3,£1.27
+Nando's,Brownie,Dessert,359,27.3,47.9,£2.84
+Wendy's,Veggie Burger,Burger,348,18.8,5.4,£6.58
+Nando's,BBQ Tower,Burger,641,25.2,6.9,£6.40
+Burger King,Curly Fries,Sides,517,7.5,2.8,£8.49
+Leon,Spicy Chicken Burger,Burger,609,38.1,6.7,£9.05
+Leon,Cheesecake Slice,Dessert,113,6.0,42.4,£9.84
+Wimpy,Orange Juice,Drink,6,6.8,23.5,£5.52
+Subway,Fruit Pot,Dessert,498,6.8,48.2,£2.41
+Wimpy,Curly Fries,Sides,379,19.9,1.2,£8.08
+Subway,Double Stack,Burger,417,25.0,9.3,£9.13
+Nando's,Brownie,Dessert,434,5.3,40.7,£9.47
+Burger King,Iced Tea,Drink,418,0.6,23.1,£3.15
+Five Guys,Milkshake,Drink,292,1.6,30.6,£4.37
+Leon,Onion Rings,Sides,413,13.9,2.6,£3.15
+Leon,Fruit Pot,Dessert,531,14.7,25.4,£2.59
+McDonald's,Chicken Nuggets,Sides,233,27.8,2.7,£5.36
+McDonald's,Quarter Smash,Burger,560,35.2,5.6,£3.23
+McDonald's,Spicy Chicken Burger,Burger,362,40.3,8.8,£5.64
+Subway,BBQ Tower,Burger,689,19.6,4.8,£1.23
+KFC,Classic Burger,Burger,831,33.1,8.1,£3.94
+Burger King,BBQ Tower,Burger,702,22.5,9.7,£5.16
+Wendy's,Water,Drink,337,5.8,47.5,£9.80
+KFC,Hot Chocolate,Drink,21,5.1,5.0,£5.48
+Leon,Milkshake,Drink,75,7.2,5.0,£8.29
+Greggs,Water,Drink,396,8.3,42.1,£9.16
+Burger King,Milkshake,Drink,410,10.3,56.9,£4.83
+Wendy's,Garlic Bread,Sides,224,6.6,2.9,£4.91
+Wendy's,Energy Drink,Drink,432,7.9,22.9,£1.27
+Burger King,Energy Drink,Drink,350,8.4,43.9,£7.03
+Nando's,Cheeseburger,Burger,367,34.5,5.8,£5.87
+Five Guys,Curly Fries,Sides,501,28.7,2.4,£2.71
+Leon,Cheesecake Slice,Dessert,90,11.4,14.1,£5.69
+Nando's,Mozzarella Sticks,Sides,262,10.5,3.8,£3.66
+KFC,Spicy Chicken Burger,Burger,770,31.8,9.3,£3.15
+Wendy's,Hot Chocolate,Drink,426,2.4,25.4,£4.51
+Subway,Double Stack,Burger,668,37.6,4.9,£5.64
+Greggs,Cola,Drink,86,9.7,1.5,£5.34
+Five Guys,Fruit Pot,Dessert,275,22.7,12.5,£4.81
+Nando's,Curly Fries,Sides,534,17.8,7.1,£4.86
+Five Guys,Side Salad,Sides,417,23.1,2.1,£1.45
+KFC,Ice Cream Sundae,Dessert,355,14.0,18.9,£5.34
+KFC,Fruit Pot,Dessert,515,22.9,36.5,£3.01
+KFC,Cheeseburger,Burger,303,37.7,9.6,£7.08
+Subway,Iced Tea,Drink,413,5.1,12.1,£5.54
+Leon,Halloumi Burger,Burger,373,20.7,9.3,£2.50
+Subway,Coleslaw,Sides,215,28.9,4.3,£9.78
+Greggs,Chicken Nuggets,Sides,127,9.2,3.3,£8.77
+Greggs,Curly Fries,Sides,473,18.4,6.6,£5.74
+Leon,Curly Fries,Sides,307,6.3,6.7,£8.16
+Greggs,Fries,Sides,379,19.0,2.2,£9.63
+Leon,Brownie,Dessert,145,2.7,54.9,£5.30
+Greggs,Doughnut,Dessert,512,12.3,44.4,£5.29
+Wimpy,Cola,Drink,222,2.0,31.3,£7.23
+KFC,Cookie,Dessert,585,25.1,22.9,£7.95
+Leon,Hot Chocolate,Drink,52,3.7,11.6,£5.36
+Greggs,Cheeseburger,Burger,885,26.3,6.0,£6.75
+Wimpy,Water,Drink,224,10.4,28.4,£3.32
+Wendy's,Garlic Bread,Sides,162,8.7,1.3,£3.55
+KFC,Doughnut,Dessert,371,19.8,18.0,£5.88
+Greggs,Coleslaw,Sides,493,9.1,4.5,£3.20
+KFC,Cheeseburger,Burger,614,19.5,5.9,£3.80
+Burger King,Onion Rings,Sides,134,18.3,2.4,£7.75
+Five Guys,BBQ Tower,Burger,807,21.1,4.8,£9.90
+KFC,Mozzarella Sticks,Sides,312,17.4,6.4,£3.76
+Greggs,Chicken Nuggets,Sides,464,6.7,5.0,£1.03
+Subway,Garlic Bread,Sides,208,29.1,7.2,£2.13
+Greggs,Iced Tea,Drink,212,10.9,30.6,£2.24
+Leon,Veggie Burger,Burger,293,37.6,8.4,£3.92
+Greggs,Cookie,Dessert,390,9.1,33.8,£1.30
+KFC,Cheeseburger,Burger,303,37.7,9.6,£7.08
+Burger King,Hot Chocolate,Drink,449,1.6,3.0,£8.73
+Nando's,Orange Juice,Drink,243,5.7,5.1,£6.74
+Greggs,Onion Rings,Sides,327,18.8,7.0,£4.27
+Wendy's,Curly Fries,Sides,226,23.5,3.2,£4.67
+Wimpy,Cookie,Dessert,309,17.4,16.0,£9.76
+McDonald's,Hot Chocolate,Drink,258,5.0,28.5,£9.53
+Burger King,Brownie,Dessert,253,4.4,30.5,£7.31
+Wendy's,Coleslaw,Sides,230,20.7,5.6,£8.60
+Wendy's,Quarter Smash,Burger,283,34.2,8.2,£2.18
+Nando's,Water,Drink,11,6.3,5.1,£9.84
+Wimpy,Halloumi Burger,Burger,312,9.5,3.2,£8.92
+Subway,Cola,Drink,315,2.2,54.4,£2.01
+McDonald's,Onion Rings,Sides,460,8.0,2.5,£9.52
+McDonald's,Doughnut,Dessert,371,14.6,40.0,£8.50
+Greggs,Fruit Pot,Dessert,289,21.1,22.2,£6.86
+Burger King,Bacon Deluxe,Burger,438,34.0,3.9,£3.51
+Leon,Chicken Nuggets,Sides,485,17.1,6.2,£8.35
+Burger King,Cheesecake Slice,Dessert,368,16.1,12.5,£3.41
+Subway,Hot Chocolate,Drink,330,8.5,55.1,£2.88
+KFC,Halloumi Burger,Burger,279,30.0,6.2,£9.85
+Wendy's,Cheeseburger,Burger,495,9.9,3.5,£3.32
+KFC,Onion Rings,Sides,261,12.4,7.5,£6.82
+Subway,Double Stack,Burger,668,37.6,4.9,£5.64
+Wimpy,Garlic Bread,Sides,431,14.9,5.9,£6.57
+Burger King,Apple Pie,Dessert,556,2.5,11.7,£7.19
+Subway,Side Salad,Sides,407,13.9,7.4,£6.06
+Burger King,Halloumi Burger,Burger,418,9.3,7.7,£9.24
+Leon,Garlic Bread,Sides,216,20.7,5.0,£8.77
+Greggs,Brownie,Dessert,470,4.6,27.1,£1.54
+KFC,Cheeseburger,Burger,677,42.3,10.9,£7.23
+KFC,Halloumi Burger,Burger,517,31.8,11.5,£2.31
+Subway,Halloumi Burger,Burger,825,41.9,10.8,£1.44
+Five Guys,Family Mega Platter,Burger,6000,320.0,95.0,£29.99
+Leon,Cheesecake Slice,Dessert,397,22.3,46.5,£5.11
+Nando's,Cheeseburger,Burger,742,28.7,3.9,£1.17
+Wendy's,Onion Rings,Sides,527,24.6,3.4,£9.87
+Wimpy,Cookie,Dessert,186,2.2,49.4,£5.79
+Nando's,Bacon Deluxe,Burger,349,11.9,3.7,£5.31
+Greggs,Milkshake,Drink,21,9.5,48.7,£7.13
+Burger King,Side Salad,Sides,535,20.1,3.1,£9.45
+Wimpy,Fruit Pot,Dessert,97,19.3,52.4,£4.05
+KFC,Cheesecake Slice,Dessert,101,24.2,41.8,£5.95
+Leon,BBQ Tower,Burger,868,16.0,3.7,£5.62
+Wimpy,Chicken Nuggets,Sides,373,22.6,3.9,£2.66
+Nando's,Iced Tea,Drink,3,10.0,1.3,£9.06
+Wendy's,Cheesecake Slice,Dessert,320,20.1,30.8,£6.16
+Greggs,Energy Drink,Drink,163,4.9,29.7,£1.59
+Burger King,Veggie Burger,Burger,849,27.9,8.3,£8.26
+Wimpy,Doughnut,Dessert,220,18.9,39.0,£5.36
+Subway,Halloumi Burger,Burger,781,32.2,4.1,£9.95
+Wendy's,BBQ Tower,Burger,279,23.9,5.3,£7.60
+Burger King,Garlic Bread,Sides,521,25.3,1.3,£9.95
+Subway,Apple Pie,Dessert,249,19.5,15.5,£8.76
+Wimpy,Double Stack,Burger,422,16.6,10.7,£8.97
+Five Guys,Chicken Nuggets,Sides,294,4.6,5.3,£3.10
+Nando's,Doughnut,Dessert,504,25.4,12.7,£6.62
+Wimpy,Cookie,Dessert,586,25.1,26.4,£1.71
+KFC,Milkshake,Drink,251,7.0,31.1,£1.45
+Five Guys,Spicy Chicken Burger,Burger,578,22.0,3.1,£8.32
+Leon,Ice Cream Sundae,Dessert,95,16.7,14.0,£6.57
+Wimpy,Bacon Deluxe,Burger,647,40.3,7.1,£4.96
+Wendy's,Double Stack,Burger,453,19.1,10.9,£1.29
+McDonald's,Cheeseburger,Burger,815,14.7,6.2,£2.52
+Leon,Halloumi Burger,Burger,617,21.1,7.4,£9.41
+Wimpy,Cola,Drink,222,2.0,31.3,£7.23
+KFC,Quarter Smash,Burger,310,19.4,10.2,£9.95
+Leon,Brownie,Dessert,208,8.6,49.1,£5.22
+Greggs,Quarter Smash,Burger,493,43.2,7.2,£5.19
+KFC,Cookie,Dessert,121,14.0,51.6,£7.43
+Burger King,Curly Fries,Sides,518,9.9,7.5,£9.27
+Greggs,Cola,Drink,319,7.6,38.9,£9.02
+McDonald's,Garlic Bread,Sides,127,19.5,2.8,£9.30
+McDonald's,Veggie Burger,Burger,898,10.0,6.4,£8.64
+Five Guys,Chicken Nuggets,Sides,361,14.5,7.6,£1.42
+Nando's,Mozzarella Sticks,Sides,230,5.7,7.3,£6.13
+Wimpy,Cookie,Dessert,586,25.1,26.4,£1.71
+Wendy's,Fries,Sides,420,12.2,3.5,£1.30
+Subway,Milkshake,Drink,122,5.3,54.3,£3.69
+Burger King,Classic Burger,Burger,511,14.9,6.1,£9.71
+Burger King,BBQ Tower,Burger,761,19.5,9.7,£1.96
+Nando's,Garlic Bread,Sides,272,18.7,6.3,£8.02
+McDonald's,Water,Drink,362,6.2,21.4,£2.20
+Nando's,Coleslaw,Sides,436,17.1,1.2,£4.61
+Nando's,Orange Juice,Drink,258,0.0,28.2,£9.29
+Nando's,Cookie,Dessert,534,25.8,35.0,£7.05
+Nando's,Cheeseburger,Burger,505,40.7,10.4,£1.31
+Leon,Energy Drink,Drink,87,6.4,42.6,£8.32
+Nando's,Fries,Sides,120,15.9,5.1,£2.31
+Nando's,Doughnut,Dessert,223,25.4,46.7,£2.04
+Subway,Quarter Smash,Burger,602,20.7,5.5,£3.25
+Wendy's,Halloumi Burger,Burger,851,12.9,5.6,£9.66
+Wimpy,Onion Rings,Sides,394,28.0,2.3,£1.27
+Five Guys,Hot Chocolate,Drink,152,4.5,10.4,£6.40
+Burger King,Cheesecake Slice,Dessert,251,23.7,18.0,£1.62
+Leon,Coleslaw,Sides,543,23.0,4.3,£6.95
+Five Guys,Cheeseburger,Burger,749,18.3,10.9,£2.91
+Wendy's,Milkshake,Drink,419,11.6,28.7,£1.88
+KFC,Bacon Deluxe,Burger,495,21.8,7.8,£9.76
+Greggs,Cheesecake Slice,Dessert,391,26.0,50.1,£9.61
+Five Guys,Cheesecake Slice,Dessert,240,19.9,28.4,£7.97
+Subway,Onion Rings,Sides,486,24.3,2.7,£8.59
+Wendy's,Fruit Pot,Dessert,168,9.1,41.6,£2.18
+Nando's,Lemonade,Drink,236,11.9,41.4,£5.85
+Leon,Garlic Bread,Sides,542,27.2,1.2,£3.21
+Wendy's,Mozzarella Sticks,Sides,406,19.6,1.3,£3.16
+Subway,Side Salad,Sides,342,10.0,6.3,£2.45
+McDonald's,Side Salad,Sides,149,9.2,5.6,£2.55
+Wendy's,Spicy Chicken Burger,Burger,836,21.1,6.7,£7.89
+Subway,Cheeseburger,Burger,601,15.7,5.6,£6.51
+Nando's,Garlic Bread,Sides,441,21.5,1.8,£8.49
+Wimpy,Spicy Chicken Burger,Burger,293,26.1,6.0,£2.19
+Wendy's,Double Stack,Burger,605,12.7,9.6,£7.22
+Burger King,Quarter Smash,Burger,282,38.5,6.8,£7.42
+Burger King,Energy Drink,Drink,435,9.4,0.4,£6.97
+Wendy's,Brownie,Dessert,502,26.6,39.9,£6.93
+Nando's,Mozzarella Sticks,Sides,262,10.5,3.8,£3.66
+Five Guys,Quarter Smash,Burger,598,21.5,6.8,£7.34
+Nando's,Coleslaw,Sides,411,9.7,7.9,£3.50
+Burger King,BBQ Tower,Burger,582,16.3,10.8,£7.36
+Greggs,Curly Fries,Sides,473,18.4,6.6,£5.74
+McDonald's,Onion Rings,Sides,410,5.0,7.8,£6.40
+Leon,Halloumi Burger,Burger,514,16.0,11.3,£5.57
+KFC,Brownie,Dessert,243,8.7,47.9,£4.83
+Greggs,Quarter Smash,Burger,567,38.0,11.0,£1.97
+KFC,Doughnut,Dessert,360,16.2,48.9,£5.26
+Wimpy,Mozzarella Sticks,Sides,464,11.0,2.9,£1.63
+KFC,Fruit Pot,Dessert,415,6.0,10.4,£6.11
+Greggs,Coleslaw,Sides,154,7.5,7.7,£4.71
+Wendy's,Milkshake,Drink,311,1.7,40.2,£4.33
+McDonald's,Energy Drink,Drink,227,5.3,37.3,£3.15
+Wimpy,Mozzarella Sticks,Sides,283,21.9,4.0,£1.19
+McDonald's,Orange Juice,Drink,137,11.5,17.6,£8.70
+KFC,Brownie,Dessert,107,24.4,16.8,£8.91
+McDonald's,Spicy Chicken Burger,Burger,843,44.2,4.0,£1.71
+Wendy's,Lemonade,Drink,35,6.5,55.5,£7.85
+Leon,Mozzarella Sticks,Sides,416,23.0,5.0,£1.26
+Leon,Cola,Drink,413,4.0,16.4,£3.05
+Greggs,Fruit Pot,Dessert,129,19.4,36.7,£1.88
+Wimpy,Doughnut,Dessert,217,4.3,19.8,£9.16
+Subway,Ice Cream Sundae,Dessert,211,20.3,48.1,£3.35
+Nando's,BBQ Tower,Burger,454,37.6,8.7,£1.39
+KFC,Orange Juice,Drink,247,11.5,12.4,£9.23
+Leon,Bacon Deluxe,Burger,833,13.1,10.6,£9.92
+Greggs,Milkshake,Drink,21,9.5,48.7,£7.13
+Wimpy,Milkshake,Drink,40,3.0,36.0,£4.06
+Subway,Side Salad,Sides,508,9.9,1.8,£2.08
+Burger King,Iced Tea,Drink,100,9.0,15.4,£5.81
+Subway,Apple Pie,Dessert,357,11.4,53.3,£8.05
+Subway,Apple Pie,Dessert,465,20.2,19.0,£7.74
+Subway,Energy Drink,Drink,439,9.3,59.2,£8.30
+Subway,BBQ Tower,Burger,307,33.2,5.1,£1.20
+Wimpy,Cheesecake Slice,Dessert,248,15.3,53.8,£8.54
+Five Guys,Veggie Burger,Burger,669,11.4,7.6,£4.34
+McDonald's,Apple Pie,Dessert,397,10.4,28.3,£8.72
+KFC,Cola,Drink,325,7.8,14.8,£8.32
+Subway,Cheesecake Slice,Dessert,372,12.7,35.5,£3.34
+Five Guys,Fruit Pot,Dessert,477,26.7,54.8,£4.24
+McDonald's,Coleslaw,Sides,465,15.9,5.6,£2.30
+KFC,Cheesecake Slice,Dessert,197,8.7,52.6,£1.33
+McDonald's,Ice Cream Sundae,Dessert,410,12.1,42.3,£6.35
+Wendy's,Quarter Smash,Burger,685,30.9,9.1,£1.43
+Leon,Fruit Pot,Dessert,335,6.8,25.7,£7.10
+Nando's,Coleslaw,Sides,291,13.1,5.4,£4.10
+KFC,Garlic Bread,Sides,123,4.1,2.9,£9.01
+Wimpy,Cheeseburger,Burger,627,15.1,6.6,£1.14
+McDonald's,Fruit Pot,Dessert,351,26.8,34.3,£1.36
+McDonald's,Iced Tea,Drink,282,5.2,45.8,£8.81
+Leon,Halloumi Burger,Burger,373,20.7,9.3,£2.50
+Five Guys,Bacon Deluxe,Burger,749,30.8,10.8,£4.21
+KFC,Lemonade,Drink,113,7.6,7.3,£9.17
+Burger King,Hot Chocolate,Drink,173,4.5,45.3,£7.78
+Burger King,Doughnut,Dessert,312,8.5,35.1,£5.95
+Greggs,Curly Fries,Sides,319,22.9,2.2,£6.71
+Subway,Cheesecake Slice,Dessert,298,24.1,24.7,£7.72
+Nando's,Curly Fries,Sides,201,12.9,3.7,£9.13
+Wimpy,Mozzarella Sticks,Sides,317,5.9,5.3,£6.53
+McDonald's,Fruit Pot,Dessert,382,13.8,16.3,£7.55
+Burger King,Veggie Burger,Burger,727,38.2,6.3,£9.78
+Burger King,Cola,Drink,10,1.0,28.1,£7.95
+Wimpy,Mozzarella Sticks,Sides,464,11.0,2.9,£1.63
+KFC,Onion Rings,Sides,254,10.2,5.2,£4.31
+McDonald's,Curly Fries,Sides,512,5.6,6.5,£2.47
+Greggs,Garlic Bread,Sides,324,7.8,2.8,£1.30
+Wimpy,Mozzarella Sticks,Sides,292,5.5,2.5,£8.30
+McDonald's,Brownie,Dessert,408,26.3,43.3,£7.98
+Leon,Coleslaw,Sides,397,26.5,7.6,£4.84
+Wimpy,Cookie,Dessert,177,18.0,37.9,£9.16
+Wendy's,Ice Cream Sundae,Dessert,96,13.3,20.6,£2.78
+Leon,Iced Tea,Drink,375,1.8,41.0,£4.50
+Subway,Mozzarella Sticks,Sides,239,9.9,4.9,£9.36
+Subway,Lemonade,Drink,393,9.4,53.4,£3.09
+Subway,Cookie,Dessert,162,18.7,14.3,£8.47
+Five Guys,Lemonade,Drink,178,5.5,37.0,£3.29
+Wendy's,Spicy Chicken Burger,Burger,364,32.1,6.5,£5.86
+Wendy's,Orange Juice,Drink,31,10.9,13.8,£2.33
+Wimpy,Ice Cream Sundae,Dessert,312,22.0,43.1,£7.00
+Wimpy,Fries,Sides,536,17.7,3.6,£8.13
+KFC,Halloumi Burger,Burger,636,36.8,9.6,£2.17
+Five Guys,Coleslaw,Sides,330,29.1,7.3,£1.70
+Wendy's,Coleslaw,Sides,391,21.6,7.1,£1.92
+KFC,Coleslaw,Sides,349,11.5,3.6,£5.75
+Greggs,Milkshake,Drink,101,9.1,2.2,£9.28
+KFC,Energy Drink,Drink,413,10.5,1.8,£8.30
+Leon,Onion Rings,Sides,319,23.8,2.4,£1.78
+Burger King,Onion Rings,Sides,395,27.5,4.9,£4.33
+Nando's,BBQ Tower,Burger,454,37.6,8.7,£1.39
+KFC,Chicken Nuggets,Sides,504,18.5,6.9,£8.63
+Wimpy,Fruit Pot,Dessert,477,11.8,51.3,£5.99
+Five Guys,Side Salad,Sides,550,29.7,5.4,£8.12

@@ -1,0 +1,72 @@
+================================================================
+ WEEK 1 · LESSON 1 · APPRENTICE — "The Type Detective"
+ Goal: 16/20 (80%) automatic checks to unlock Craftsman
+================================================================
+
+WHAT TO DO
+----------
+1. Paste the code below into the Code Box and press ▶ Run.
+2. In the Data Engine, CLICK the "100m Sprint Time (seconds)"
+   column header once so it turns RED (this is check #15).
+   The grader re-runs automatically when you flag the column.
+
+CODE (paste into the Code Box)
+------------------------------
+import pandas as pd
+
+df = pd.read_csv("sports_day.csv")
+
+# Inspect the type of every column
+print("Data types:")
+print(df.dtypes)
+
+# Classify the qualitative vs quantitative columns
+print("House: Qualitative")
+print("Age: Quantitative")
+
+# The trap: the sprint column is text because of the injected "s"
+sprint = "100m Sprint Time (seconds)"
+print("Sprint dtype:", df[sprint].dtype)   # -> object
+
+# Prove you cannot average a column of strings
+try:
+    print(df[sprint].mean())
+except TypeError as e:
+    print("TypeError:", e)
+
+
+HOW THIS HITS ALL 20 CHECKS
+---------------------------
+Phase 1 — Syntax & Initialisation
+  1. import pandas .......................... import pandas as pd
+  2. load sports_day.csv .................... pd.read_csv("sports_day.csv")
+  3. assigned to df ......................... df = ...
+  4. no syntax error ....................... clean run
+  5. 250 rows rendered ..................... real file has 250 rows
+
+Phase 2 — Type Extraction
+  6. used .dtypes .......................... print(df.dtypes)
+  7. printed type check .................... output shows int64/object/float64
+  8. House = object ........................ true in the data
+  9. Age = int64 ........................... true in the data
+ 10. High Jump = float64 .................. true (has blanks)
+
+Phase 3 — The Trap
+ 11. checked Sprint type ................... references the sprint column
+ 12. Sprint shows object .................. printed dtype is object
+ 13. maths test on Sprint ................. df[sprint].mean()
+ 14. TypeError raised ..................... caught + printed "TypeError:"
+ 15. flagged Sprint column red ............ CLICK its header in the grid
+
+Phase 4 — Output & Completion
+ 16. grid free of edits ................... df untouched (still 250 x 6)
+ 17. all 6 columns intact ................. true
+ 18. all 250 rows intact .................. true
+ 19. printed "Qualitative" for House ...... print("House: Qualitative")
+ 20. printed "Quantitative" for Age ....... print("Age: Quantitative")
+
+NOTE
+----
+The TypeError is wrapped in try/except so it is reported WITHOUT
+halting the script — that way the "Qualitative"/"Quantitative"
+prints (checks 19 & 20) still run.
