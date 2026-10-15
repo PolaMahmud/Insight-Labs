@@ -20,15 +20,25 @@
 const Lab = (function(){
 
   const SUBJECTS = {
-    physics:   { name:"Physics",   code:"Cambridge IGCSE 0625", theme:"ocean",    blurb:"Electricity, forces and light — measure, plot and find the relationship." },
-    chemistry: { name:"Chemistry", code:"Cambridge IGCSE 0620", theme:"sunset",   blurb:"Titrations, rates and qualitative analysis without the broken glassware." },
-    biology:   { name:"Biology",   code:"Cambridge IGCSE 0610", theme:"forest",   blurb:"Photosynthesis, enzymes and osmosis with living-system variability." },
-    ict:       { name:"ICT & IT",  code:"Cambridge IGCSE 0417", theme:"lavender", blurb:"Spreadsheets, database queries and validation — the practical-paper skills." }
+    physics:   { name:"Physics",   codes:{ igcse:"0625", as:"9702", a:"9702" }, theme:"ocean",    blurb:"Electricity, forces, light and oscillations — measure, plot and find the relationship." },
+    chemistry: { name:"Chemistry", codes:{ igcse:"0620", as:"9701", a:"9701" }, theme:"sunset",   blurb:"Titrations, rates and qualitative analysis without the broken glassware." },
+    biology:   { name:"Biology",   codes:{ igcse:"0610", as:"9700", a:"9700" }, theme:"forest",   blurb:"Photosynthesis, enzymes and osmosis with living-system variability." },
+    ict:       { name:"ICT & IT",  codes:{ igcse:"0417", as:"9626", a:"9626" }, theme:"lavender", blurb:"Spreadsheets, database queries and validation — the practical-paper skills." }
   };
+  /* experiments set level:"igcse" (default), "as" or "a" */
+  const LEVELS = { igcse:"IGCSE", as:"AS Level", a:"A Level" };
+  const LEVEL_ORDER = ["igcse","as","a"];
+  const levelOf = d => d.level || "igcse";
+  function codeLine(s, lv){
+    const c = SUBJECTS[s].codes;
+    if(lv !== "all") return "Cambridge " + LEVELS[lv] + " " + c[lv];
+    return "IGCSE " + c.igcse + " · AS & A Level " + c.as;
+  }
   const ORDER = ["physics","chemistry","biology","ict"];
   const sims = [], byId = {};
   let current = null;
   let filter = "all";
+  let level = "all";
 
   /* ── storage (wrapped: private windows can throw) ── */
   function load(key, fallback){
@@ -94,38 +104,44 @@ const Lab = (function(){
 
   /* ══════════════ HUB ══════════════ */
   function renderHub(){
+    level = load("vlab-level", "all"); if(level !== "all" && !LEVELS[level]) level = "all";
     document.documentElement.setAttribute("data-theme", filter === "all" ? "ocean" : SUBJECTS[filter].theme);
-    document.title = "Virtual Lab — IGCSE Sciences & ICT";
+    document.title = "Virtual Lab — IGCSE, AS & A Level";
     const app = $("#app");
     const pills = [["all","All subjects"]].concat(ORDER.map(s => [s, SUBJECTS[s].name]))
       .map(([k,n]) => `<a class="pill${filter===k?" active":""}" href="#/${k==="all"?"":k}" role="tab" aria-selected="${filter===k}">${esc(n)}</a>`).join("");
+    const lpills = [["all","All levels"]].concat(LEVEL_ORDER.map(l => [l, LEVELS[l]]))
+      .map(([k,n]) => `<button type="button" class="pill${level===k?" active":""}" data-level="${k}" role="tab" aria-selected="${level===k}">${esc(n)}</button>`).join("");
     const sections = ORDER.filter(s => filter === "all" || filter === s).map(s => {
-      const list = sims.filter(d => d.subject === s);
+      const list = sims.filter(d => d.subject === s && (level === "all" || levelOf(d) === level))
+        .sort((a, b) => LEVEL_ORDER.indexOf(levelOf(a)) - LEVEL_ORDER.indexOf(levelOf(b)));
       const cards = list.map(d => {
         const n = load(rowsKey(d.id), []).length;
         return `<a class="card" data-s="${s}" href="#/${s}/${d.id}">
           <span class="ico" aria-hidden="true">${d.icon || "🧪"}</span>
-          <span class="topic">${esc(d.topic)}</span>
+          <span class="topic"><span class="lvl lvl-${levelOf(d)}">${LEVELS[levelOf(d)]}</span>${esc(d.topic)}</span>
           <h3>${esc(d.title)}</h3>
           <p>${esc(d.summary)}</p>
           <span class="done">${n ? n + " result" + (n === 1 ? "" : "s") + " recorded" : "Not started"}</span>
         </a>`;
       }).join("");
       return `<section class="subject" aria-label="${esc(SUBJECTS[s].name)}">
-        <div class="subject-head"><h2>${esc(SUBJECTS[s].name)}</h2><span class="code">${esc(SUBJECTS[s].code)} · ${list.length} experiments</span></div>
-        <div class="cards">${cards}</div>
+        <div class="subject-head"><h2>${esc(SUBJECTS[s].name)}</h2><span class="code">${esc(codeLine(s, level))} · ${list.length} experiment${list.length === 1 ? "" : "s"}</span></div>
+        ${list.length ? `<div class="cards">${cards}</div>` : `<p class="empty" style="text-align:left;padding:.4rem .2rem">${esc(LEVELS[level])} ${esc(SUBJECTS[s].name)} practicals are coming soon.</p>`}
       </section>`;
     }).join("");
     app.innerHTML = `
       <section class="hero">
-        <div class="hero-badge">Cambridge IGCSE · Virtual Practicals</div>
+        <div class="hero-badge">Cambridge IGCSE · AS &amp; A Level · Virtual Practicals</div>
         <h1>The Virtual Lab</h1>
         <p>${filter === "all"
-          ? "Run real IGCSE practicals in your browser. Change one variable, record a results table, plot the graph and draw your conclusion."
+          ? "Run IGCSE, AS and A Level practicals in your browser. Change one variable, record a results table, plot the graph and draw your conclusion."
           : esc(SUBJECTS[filter].blurb)}</p>
       </section>
+      <nav class="pillbar" role="tablist" aria-label="Level" style="margin-bottom:.6rem">${lpills}</nav>
       <nav class="pillbar" role="tablist" aria-label="Subject">${pills}</nav>
       ${sections}`;
+    app.querySelectorAll("[data-level]").forEach(b => b.onclick = () => { save("vlab-level", b.dataset.level); renderHub(); });
   }
 
   /* ══════════════ EXPERIMENT PAGE ══════════════ */
@@ -143,7 +159,7 @@ const Lab = (function(){
     const app = $("#app");
     app.innerHTML = `
       <div class="exp-head">
-        <div class="crumbs"><a href="#/">Virtual Lab</a> / <a href="#/${def.subject}">${esc(subj.name)}</a> / ${esc(def.topic)}</div>
+        <div class="crumbs"><a href="#/">Virtual Lab</a> / <a href="#/${def.subject}">${esc(subj.name)}</a> / ${esc(LEVELS[levelOf(def)])} ${esc(subj.codes[levelOf(def)])} / ${esc(def.topic)}</div>
         <h1>${esc(def.title)}</h1>
         <p class="aim"><b>Aim:</b> ${esc(def.aim)}</p>
         ${varsHtml}
@@ -261,6 +277,7 @@ const Lab = (function(){
           : items.map(([l,v,c]) => `<span class="meter${c ? " " + c : ""}"><b>${esc(l)}</b>${esc(v)}</span>`).join("");
       },
       rows: () => cur.rows.slice(),
+      linFit,
       record(row, quiet){
         cur.rows.push(row); save(rowsKey(def.id), cur.rows); refreshResults(def, cur);
         if(!quiet) toast("Result recorded");
@@ -360,6 +377,16 @@ const Lab = (function(){
     const d = n*sxx - sx*sx; if(Math.abs(d) < 1e-12) return null;
     const m = (n*sxy - sx*sy)/d; return { m, c:(sy - m*sx)/n };
   }
+  /* AS-style worst acceptable line: through the ends of the error bars of the first and last points,
+     choosing whichever (steepest / shallowest) differs most from the best-fit gradient */
+  function worstFit(pts, best){
+    if(pts.length < 2 || !pts.some(p => p[2])) return null;
+    const s = pts.slice().sort((a, b) => a[0] - b[0]), p0 = s[0], p1 = s[s.length - 1];
+    if(p1[0] === p0[0]) return null;
+    const line = (y0, y1) => { const m = (y1 - y0)/(p1[0] - p0[0]); return { m, c: y0 - m*p0[0] }; };
+    const steep = line(p0[1] - p0[2], p1[1] + p1[2]), shallow = line(p0[1] + p0[2], p1[1] - p1[2]);
+    return Math.abs(steep.m - best.m) >= Math.abs(shallow.m - best.m) ? steep : shallow;
+  }
   function polyFit(pts){
     const xs = pts.map(p => p[0]);
     const lo = Math.min(...xs), hi = Math.max(...xs), span = hi - lo || 1;
@@ -392,10 +419,12 @@ const Lab = (function(){
     const txt = cssVar("--txt"), txt2 = cssVar("--txt2"), txt3 = cssVar("--txt3"), brd = cssVar("--brd");
     const colors = seriesColors();
     const series = seriesList(def, rows);
+    const ek = def.graph.yErr && def.graph.yErr[gs.y];          // optional column holding ± uncertainty in y
     const groups = series.map(s => rows.filter(r => !def.series || String(r[def.series]) === s)
-      .map(r => [r[gs.x], r[gs.y]]).filter(([x,y]) => typeof x === "number" && typeof y === "number" && isFinite(x) && isFinite(y)));
+      .map(r => [r[gs.x], r[gs.y], ek && typeof r[ek] === "number" ? Math.abs(r[ek]) : 0])
+      .filter(([x,y]) => typeof x === "number" && typeof y === "number" && isFinite(x) && isFinite(y)));
     const all = [].concat(...groups);
-    const xs = all.map(p => p[0]), ys = all.map(p => p[1]);
+    const xs = all.map(p => p[0]), ys = [].concat(...all.map(p => [p[1] - p[2], p[1] + p[2]]));
     const X = niceAxis(Math.min(0, ...(xs.length ? xs : [0])), Math.max(0, ...(xs.length ? xs : [1])));
     const Y = niceAxis(Math.min(0, ...(ys.length ? ys : [0])), Math.max(0, ...(ys.length ? ys : [1])));
     const L = 62, R = 18, T = 18, B = 46;
@@ -439,6 +468,13 @@ const Lab = (function(){
           c.beginPath(); c.moveTo(px(X.lo), py(f.m*X.lo + f.c)); c.lineTo(px(X.hi), py(f.m*X.hi + f.c)); c.stroke();
           let s = `${esc(name)}gradient = <b>${sig(f.m)}</b>, y-intercept = <b>${sig(f.c)}</b>`;
           if(Math.abs(f.m) > 1e-12) s += `, crosses the x-axis at <b>${sig(-f.c/f.m)}</b>`;
+          const w = worstFit(pts, f);
+          if(w){
+            c.setLineDash([6, 5]); c.lineWidth = 1.4;
+            c.beginPath(); c.moveTo(px(X.lo), py(w.m*X.lo + w.c)); c.lineTo(px(X.hi), py(w.m*X.hi + w.c)); c.stroke(); c.setLineDash([]);
+            s += `<br>worst acceptable line (dashed): gradient = <b>${sig(w.m)}</b> → uncertainty in gradient = <b>± ${sig(Math.abs(f.m - w.m), 2)}</b>`
+              + ` (${sig(Math.abs(f.m - w.m)/Math.abs(f.m)*100, 2)}%), y-intercept = <b>${sig(w.c)}</b>`;
+          }
           info.push(`<span class="swatch" style="background:${col}"></span>${s}`);
         }
       }else if(gs.fit === "curve" && pts.length >= 3){
@@ -451,9 +487,12 @@ const Lab = (function(){
       }
     });
     c.restore();
-    // points as crosses (exam convention)
+    // points as crosses (exam convention), with error bars when the experiment supplies them
     groups.forEach((pts, gi) => {
-      c.strokeStyle = colors[gi % colors.length]; c.lineWidth = 2;
+      c.strokeStyle = colors[gi % colors.length]; c.lineWidth = 1.2;
+      pts.forEach(([x,y,e]) => { if(!e) return; const a = px(x);
+        c.beginPath(); c.moveTo(a, py(y - e)); c.lineTo(a, py(y + e)); c.moveTo(a-4, py(y - e)); c.lineTo(a+4, py(y - e)); c.moveTo(a-4, py(y + e)); c.lineTo(a+4, py(y + e)); c.stroke(); });
+      c.lineWidth = 2;
       pts.forEach(([x,y]) => { const a = px(x), b = py(y), s = 4.5;
         c.beginPath(); c.moveTo(a-s,b-s); c.lineTo(a+s,b+s); c.moveTo(a+s,b-s); c.lineTo(a-s,b+s); c.stroke(); });
     });
@@ -481,5 +520,5 @@ const Lab = (function(){
     route();
   }
 
-  return { register, start, setMode, SUBJECTS };
+  return { register, start, setMode, SUBJECTS, LEVELS, linFit };
 })();

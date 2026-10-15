@@ -212,3 +212,7 @@ table.rt td.x button:hover{color:var(--hi);}
 .stage.plain{display:block;padding:1rem;background:var(--bg-card);overflow:auto;min-height:0;}
 .graph-tools label{font-size:.72rem;color:var(--txt3);display:flex;align-items:center;gap:.25rem;}
 @media (max-width:860px){ .bench.wide{grid-template-columns:1fr;} .bench.wide>.panel:first-child{order:0;} }
+.lvl{display:inline-block;font-size:.62rem;letter-spacing:.06em;padding:.05rem .4rem;border-radius:100px;margin-right:.45rem;border:1px solid currentColor;vertical-align:1px;}
+.lvl-igcse{color:var(--txt2);} .lvl-as{color:#B8365A;} .lvl-a{color:#7C4DAA;}
+[data-mode="dark"] .lvl-as{color:#F07898;} [data-mode="dark"] .lvl-a{color:#B890E0;}
+@media (prefers-color-scheme:dark){[data-mode="auto"] .lvl-as{color:#F07898;}[data-mode="auto"] .lvl-a{color:#B890E0;}}
