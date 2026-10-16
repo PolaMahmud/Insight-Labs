@@ -5,7 +5,7 @@
 
 /* ───────────── RIPPLE TANK ───────────── */
 Lab.register({
-  id:"ripple", subject:"physics", level:["igcse"], topic:"Waves · Water waves", interactive:true,
+  id:"ripple", subject:"physics", level:["igcse","as"], topic:"Waves · Water waves", interactive:true,
   title:"Ripple tank",
   summary:"Make plane waves, freeze them with a strobe, measure the wavelength with a ruler, then explore reflection, refraction and diffraction.",
   aim:"Measure the wavelength and speed of water waves, and observe reflection, refraction and diffraction.",

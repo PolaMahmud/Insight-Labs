@@ -268,7 +268,7 @@ Lab.register({
 
 /* ───────────── LOUDNESS AND PITCH ON AN OSCILLOSCOPE ───────────── */
 Lab.register({
-  id:"oscilloscope", subject:"physics", level:["igcse"], topic:"Waves · Sound", interactive:true,
+  id:"oscilloscope", subject:"physics", level:["igcse","as"], topic:"Waves · Sound", interactive:true,
   title:"Loudness and pitch on an oscilloscope",
   summary:"Connect a signal generator to a loudspeaker, pick the sound up with a microphone and see on an oscilloscope how amplitude and frequency change loudness and pitch.",
   aim:"Investigate how changes in amplitude and frequency affect the loudness and pitch of a sound, and measure the frequency of a sound from an oscilloscope trace.",
