@@ -84,16 +84,20 @@ const Kit = (function(){
   }
 
   /* liquid-in-glass thermometer, scale min..max over length h (bulb at the bottom) */
-  function thermometer(id, x, y, h, min, max, step){
+  function thermometer(id, x, y, h, min, max, step, slim){
     step = step || 10;
+    const cx = slim ? 24 : 6;                       // where the scale starts, relative to the stem
     let ticks = "";
     for(let v = min; v <= max + 1e-9; v += step/5){
       const yy = y + h - (v - min)/(max - min)*h, major = Math.abs(v/step - Math.round(v/step)) < 1e-6;
-      ticks += `<line x1="${x + 6}" y1="${yy}" x2="${x + (major ? 14 : 10)}" y2="${yy}" stroke="#334155" stroke-width="${major ? 1.1 : .6}"/>`;
-      if(major) ticks += `<text x="${x + 17}" y="${yy + 3.5}" style="font:500 9px 'JetBrains Mono',monospace;fill:#334155">${Math.round(v)}</text>`;
+      ticks += `<line x1="${x + cx}" y1="${yy}" x2="${x + cx + (major ? 8 : 4)}" y2="${yy}" stroke="#334155" stroke-width="${major ? 1.1 : .6}"/>`;
+      if(major) ticks += `<text x="${x + cx + 11}" y="${yy + 3.5}" style="font:500 9px 'JetBrains Mono',monospace;fill:#334155">${Math.round(v)}</text>`;
     }
+    const card = slim ? `<rect x="${x + cx - 4}" y="${y - 10}" width="40" height="${h + 20}" rx="7" fill="#F4F6FA" stroke="#9AA3B2"/>
+        <line x1="${x + 3}" y1="${y + h*.5}" x2="${x + cx - 4}" y2="${y + h*.5}" stroke="#9AA3B2" stroke-width="1.5"/>`
+      : `<rect x="${x - 9}" y="${y - 14}" width="50" height="${h + 40}" rx="9" fill="#F4F6FA" stroke="#9AA3B2"/>`;
     return {
-      svg:`<g id="${id}"><rect x="${x - 9}" y="${y - 14}" width="50" height="${h + 40}" rx="9" fill="#F4F6FA" stroke="#9AA3B2"/>
+      svg:`<g id="${id}">${card}
         <rect x="${x - 3}" y="${y - 6}" width="6" height="${h + 10}" rx="3" fill="#fff" stroke="#9AA3B2" stroke-width=".8"/>
         <rect id="${id}-col" x="${x - 1.6}" width="3.2" fill="#E0334A"/><circle cx="${x}" cy="${y + h + 12}" r="7" fill="#E0334A"/>${ticks}</g>`,
       set(root, T){ const c = root.querySelector("#" + id + "-col"), yy = y + h - (Math.max(min, Math.min(max, T)) - min)/(max - min)*h; c.setAttribute("y", yy); c.setAttribute("height", y + h + 8 - yy); }
