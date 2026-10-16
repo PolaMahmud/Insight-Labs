@@ -170,7 +170,7 @@ Lab.register({
 
 /* ───────────── COOLING & INSULATION ───────────── */
 Lab.register({
-  id:"cooling", subject:"physics", level:["igcse"], topic:"Thermal physics · Energy transfer", interactive:true,
+  id:"cooling", subject:"physics", level:["igcse","as"], topic:"Thermal physics · Energy transfer", interactive:true,
   title:"Cooling curves & insulation",
   summary:"Fill two beakers from the kettle, wrap them in different materials or add lids, and compare their cooling curves.",
   aim:"Investigate how insulation, a lid and the colour of a surface affect the rate of cooling of hot water.",
