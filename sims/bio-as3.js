@@ -84,7 +84,7 @@ Lab.register({
 
 /* ───────────── VISKING TUBING ───────────── */
 Lab.register({
-  id:"visking", subject:"biology", level:["as"], topic:"Transport · Diffusion & osmosis", interactive:true,
+  id:"visking", subject:"biology", level:["igcse","as"], topic:"Transport · Diffusion & osmosis", interactive:true,
   title:"Visking tubing: diffusion & osmosis",
   summary:"Fill dialysis tubing with sucrose and watch the level rise in a capillary tube, or fill it with starch and glucose and test the water outside to see which molecules get through.",
   aim:"Use Visking (dialysis) tubing as a model of a partially permeable membrane to investigate osmosis and diffusion.",
@@ -151,7 +151,7 @@ Lab.register({
 
 /* ───────────── PLASMOLYSIS IN ONION CELLS ───────────── */
 Lab.register({
-  id:"plasmolysis", subject:"biology", level:["as"], topic:"Transport · Water potential", interactive:true,
+  id:"plasmolysis", subject:"biology", level:["igcse","as"], topic:"Transport · Water potential", interactive:true,
   title:"Plasmolysis in red onion cells",
   summary:"Mount red onion epidermis in sucrose solutions, click the plasmolysed cells you can see, plot % plasmolysed and estimate the water potential of the cells at incipient plasmolysis.",
   aim:"Estimate the water potential of red onion epidermal cells by finding the sucrose concentration at which 50% of the cells are plasmolysed.",
