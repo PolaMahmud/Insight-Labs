@@ -56,7 +56,7 @@
   const short = k => TM[k].short;
 
   Lab.register({
-    id:"as-titrations", subject:"chemistry", level:["as"], topic:"Titrations · Acid–alkali, redox & back titration", interactive:true,
+    id:"as-titrations", subject:"chemistry", level:["as","a"], topic:"Titrations · Acid–alkali, redox & back titration", interactive:true,
     title:"Redox, weak acid and back titrations",
     summary:"Every Paper 3 titration in the 9701 syllabus: a weak acid with NaOH and a choice of the listed indicators, KMnO₄ with iron(II), hydrogen peroxide or ethanedioate, iodine–thiosulfate with starch, and a back titration. Read the burette yourself.",
     aim:"Carry out a rough and accurate titrations to concordance, calculate a concentration or a percentage purity, and estimate the uncertainty in the titre.",
@@ -295,7 +295,7 @@
   };
 
   Lab.register({
-    id:"as-enthalpy", subject:"chemistry", level:["as"], topic:"Energetics · Thermometry", interactive:true,
+    id:"as-enthalpy", subject:"chemistry", level:["as","a"], topic:"Energetics · Thermometry", interactive:true,
     title:"Enthalpy changes by thermometry",
     summary:"Polystyrene cup, thermometer and stop-clock: neutralisation, a displacement reaction with a cooling-curve extrapolation, a Hess's law pair and a thermometric titration.",
     aim:"Measure temperature changes in a polystyrene cup, use q = mcΔT to find enthalpy changes, and use graphs to correct for heat loss or to find an end point.",
