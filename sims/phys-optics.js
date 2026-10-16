@@ -112,7 +112,7 @@ Lab.register({
 
 /* ───────────── CONVERGING LENS ───────────── */
 Lab.register({
-  id:"lens", subject:"physics", level:["igcse"], topic:"Light · Lenses", interactive:true,
+  id:"lens", subject:"physics", level:["igcse","as"], topic:"Light · Lenses", interactive:true,
   title:"Converging lens on an optical bench",
   summary:"Slide the lens and screen until the image of the illuminated object is sharp. Measure u and v, and find the focal length.",
   aim:"Investigate how the image distance v depends on the object distance u for a converging lens, and determine its focal length.",

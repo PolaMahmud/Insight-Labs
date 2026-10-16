@@ -7,7 +7,7 @@
 
 /* ───────────── I–V CHARACTERISTICS ───────────── */
 Lab.register({
-  id:"iv-characteristics", subject:"physics", level:["igcse"], topic:"Electricity · I–V characteristics", interactive:true,
+  id:"iv-characteristics", subject:"physics", level:["igcse","as"], topic:"Electricity · I–V characteristics", interactive:true,
   title:"I–V characteristics",
   summary:"Clip a resistor, filament lamp, diode or thermistor into the circuit, slide the potential divider and reverse the supply to plot I–V graphs.",
   aim:"Investigate how the current in a fixed resistor, a filament lamp, a diode and a thermistor depends on the potential difference across it.",
@@ -129,7 +129,7 @@ Lab.register({
 
 /* ───────────── HOOKE'S LAW ───────────── */
 Lab.register({
-  id:"hookes-law", subject:"physics", level:["igcse"], topic:"Forces · Springs", interactive:true,
+  id:"hookes-law", subject:"physics", level:["igcse","as"], topic:"Forces · Springs", interactive:true,
   title:"Hooke’s law",
   summary:"Drag slotted masses onto the hanger, read the pointer against the ruler through a magnifier, and compare two springs with a rubber band.",
   aim:"Investigate how the extension of a spring (and a rubber band) depends on the load, and find the limit of proportionality.",
@@ -233,7 +233,7 @@ Lab.register({
 
 /* ───────────── REFRACTION & TIR ───────────── */
 Lab.register({
-  id:"refraction", subject:"physics", level:["igcse"], topic:"Light · Refraction", interactive:true,
+  id:"refraction", subject:"physics", level:["igcse","as"], topic:"Light · Refraction", interactive:true,
   title:"Refraction & total internal reflection",
   summary:"Swing a ray box round a rectangular or semicircular glass block, read the angles on a protractor, and find the refractive index and critical angle.",
   aim:"Investigate refraction through a glass block, determine the refractive index of the glass, and find its critical angle.",
