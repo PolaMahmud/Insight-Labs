@@ -1,7 +1,7 @@
 "use strict";
 /* ══════════════════════════════════════════════════════════════════
-   BIOLOGY (0610) — Photosynthesis (pondweed) · Enzyme activity ·
-                    Osmosis in potato
+   BIOLOGY (0610, and 9700 AS for enzymes & osmosis) — Photosynthesis ·
+                    Enzyme activity · Osmosis in potato
 ══════════════════════════════════════════════════════════════════ */
 
 /* ───────────── PHOTOSYNTHESIS ───────────── */
@@ -112,7 +112,7 @@ Lab.register({
 
 /* ───────────── ENZYME ACTIVITY ───────────── */
 Lab.register({
-  id:"enzymes", subject:"biology", topic:"Enzymes", icon:"🧫",
+  id:"enzymes", subject:"biology", level:["igcse","as"], topic:"Enzymes", icon:"🧫",
   title:"Amylase activity: temperature & pH",
   summary:"Time how long amylase takes to digest starch, sampling with iodine on a spotting tile.",
   aim:"Investigate the effect of temperature and pH on the rate of starch digestion by amylase.",
@@ -131,7 +131,11 @@ Lab.register({
     { q:"Explain why no digestion happens at 60 °C.",
       a:"The enzyme is denatured: the shape of its active site changes permanently, so starch no longer fits (it is no longer complementary) and no enzyme–substrate complexes form." },
     { q:"Sampling every 30 s limits the accuracy. How could the method be improved?",
-      a:"Sample more frequently (e.g. every 10 s), use a colorimeter to measure the colour change, and repeat each temperature three times to calculate a mean." }
+      a:"Sample more frequently (e.g. every 10 s), use a colorimeter to measure the colour change, and repeat each temperature three times to calculate a mean." },
+    { q:"(AS) This method measures the disappearance of substrate. Name an enzyme investigation that measures the appearance of product instead.",
+      a:"Catalase breaking down hydrogen peroxide: the volume of oxygen collected over time (gas syringe or upturned measuring cylinder) measures product formation." },
+    { q:"(AS) Sampling every 30 s, what is the uncertainty in each end-point time, and why does it matter more at high temperatures?",
+      a:"The end point lies somewhere in the 30 s since the last sample, so about ±15 s (half the interval). At the optimum the end point is only 60–90 s, so ±15 s is a large percentage uncertainty; at low rates it is small." }
   ],
   setup(ctx){
     let T = 35, pH = 7, running = false, t = 0, wells = [], doneAt = null;
@@ -213,7 +217,7 @@ Lab.register({
 
 /* ───────────── OSMOSIS ───────────── */
 Lab.register({
-  id:"osmosis", subject:"biology", topic:"Movement into and out of cells", icon:"🥔",
+  id:"osmosis", subject:"biology", level:["igcse","as"], topic:"Movement into and out of cells · Water potential", icon:"🥔",
   title:"Osmosis in potato cylinders",
   summary:"Soak potato in sucrose solutions, measure % change in mass and estimate the concentration of the cell sap.",
   aim:"Investigate the effect of sucrose concentration on the change in mass of potato tissue, and estimate the concentration of potato cell sap.",
@@ -232,7 +236,11 @@ Lab.register({
     { q:"Use your graph to estimate the concentration of the potato cell sap.",
       a:"Read where the line crosses the x-axis (0% change). At that concentration there is no net movement of water, so the solution has the same concentration as the cell sap." },
     { q:"What happens if you forget to blot the cylinders dry?",
-      a:"Surface solution is weighed as well, so final masses are too high — a systematic error that shifts all the results upwards." }
+      a:"Surface solution is weighed as well, so final masses are too high — a systematic error that shifts all the results upwards." },
+    { q:"(AS) Use water potential to explain the result at the x-intercept.",
+      a:"At this concentration the water potential of the solution equals the water potential of the potato tissue, so there is no net movement of water by osmosis and no change in mass. The tissue’s water potential equals the solute potential of that sucrose solution." },
+    { q:"(AS) The balance reads to 0.01 g. What is the percentage uncertainty in a mass change of 0.12 g?",
+      a:"Each mass is ±0.005 g, and the change is a difference of two readings, so ±0.01 g. 0.01 ÷ 0.12 × 100 ≈ ±8%. Using larger cylinders, or more of them per tube, would reduce it." }
   ],
   setup(ctx){
     const ISO = 0.25 + Math.round(Math.random()*10)/100;            // unique cell-sap concentration per visit

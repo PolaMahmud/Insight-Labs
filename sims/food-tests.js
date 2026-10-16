@@ -33,7 +33,7 @@
   const benName = v => v < .15 ? "blue" : v < .4 ? "green" : v < .65 ? "yellow" : v < .85 ? "orange" : "brick-red";
 
   Lab.register({
-    id:"food-tests", subject:"biology", topic:"Biological molecules", interactive:true,
+    id:"food-tests", subject:"biology", level:["igcse","as"], topic:"Biological molecules", interactive:true,
     title:"Food tests bench",
     summary:"Drop iodine, Benedict’s, biuret, ethanol and DCPIP into foods, heat in a water bath, shake for emulsions — then identify a mystery food.",
     aim:"Use food tests to find out which nutrients are present in different foods, and identify the nutrients in an unknown food.",
@@ -60,7 +60,9 @@
       { q:"Why should each test be done on a fresh sample?",
         a:"Reagents from one test could react with or mask the results of another test, giving a false result." },
       { q:"State a safety precaution for the Benedict’s test.",
-        a:"Heat the tubes in a water bath rather than a direct flame, point tubes away from people, and wear eye protection." }
+        a:"Heat the tubes in a water bath rather than a direct flame, point tubes away from people, and wear eye protection." },
+      { q:"(AS) Milk gives a positive Benedict’s test. How would you show that a food also contains a non-reducing sugar such as sucrose?",
+        a:"If a fresh sample gives a negative Benedict’s test, boil another sample with dilute hydrochloric acid, neutralise with sodium hydrogencarbonate and repeat the Benedict’s test. A positive result now shows a non-reducing sugar. (If reducing sugar is already present, compare how much precipitate forms before and after hydrolysis.) Try it on the Semi-quantitative Benedict’s bench." }
     ],
     setup(ctx){
       const mystery = {};
