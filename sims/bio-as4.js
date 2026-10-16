@@ -7,7 +7,7 @@
 
 /* ───────────── MAKING A TEMPORARY SLIDE ───────────── */
 Lab.register({
-  id:"tempslide", subject:"biology", level:["as"], topic:"Cell structure · Microscopy", interactive:true,
+  id:"tempslide", subject:"biology", level:["igcse","as"], topic:"Cell structure · Microscopy", interactive:true,
   title:"Making a temporary slide",
   summary:"Peel onion epidermis, stain it, lower the coverslip, blot, then set up the microscope from low to high power. Mistakes show up in the view: bubbles, overlapping layers or invisible nuclei.",
   aim:"Make a temporary stained preparation of onion epidermis and set up a light microscope to observe the cells at high power.",
@@ -113,7 +113,7 @@ Lab.register({
 
 /* ───────────── SCALE BARS & MICROGRAPHS ───────────── */
 Lab.register({
-  id:"scalebars", subject:"biology", level:["as"], topic:"Cell structure · Magnification", interactive:true,
+  id:"scalebars", subject:"biology", level:["igcse","as"], topic:"Cell structure · Magnification", interactive:true,
   title:"Scale bars & micrographs",
   summary:"Drag a ruler over light and electron micrographs, measure the image and its scale bar, then work out actual sizes in µm or nm and the magnification.",
   aim:"Calculate actual sizes and magnifications from photomicrographs and electron micrographs using scale bars or a stated magnification.",

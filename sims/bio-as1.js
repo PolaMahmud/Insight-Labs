@@ -270,7 +270,7 @@ Lab.register({
   };
 
   Lab.register({
-    id:"planslides", subject:"biology", level:["as"], topic:"Microscopy · Plan diagrams", interactive:true,
+    id:"planslides", subject:"biology", level:["igcse","as"], topic:"Microscopy · Plan diagrams", interactive:true,
     title:"Slides & plan diagrams",
     summary:"Find the tissues in sections of stems, roots, leaves, a xerophyte leaf, xylem and phloem, blood vessels, blood cells, the trachea, bronchus and lung, then check the rules for a Paper 3 plan diagram.",
     aim:"Identify tissues in transverse sections of plant organs, blood vessels and the gas exchange system, as you would before drawing a plan diagram.",

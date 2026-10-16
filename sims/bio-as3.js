@@ -7,7 +7,7 @@
 
 /* ───────────── AGAR CUBES: SURFACE AREA TO VOLUME ───────────── */
 Lab.register({
-  id:"agarcubes", subject:"biology", level:["as"], topic:"Transport · Surface area to volume", interactive:true,
+  id:"agarcubes", subject:"biology", level:["igcse","as"], topic:"Transport · Surface area to volume", interactive:true,
   title:"Diffusion into agar cubes",
   summary:"Cut cubes of blue thymolphthalein agar, drop them into acid and time how long each takes to go colourless. Plot time against surface area : volume ratio.",
   aim:"Investigate the effect of surface area to volume ratio on the time taken for acid to diffuse to the centre of agar cubes.",
@@ -84,7 +84,7 @@ Lab.register({
 
 /* ───────────── VISKING TUBING ───────────── */
 Lab.register({
-  id:"visking", subject:"biology", level:["as"], topic:"Transport · Diffusion & osmosis", interactive:true,
+  id:"visking", subject:"biology", level:["igcse","as"], topic:"Transport · Diffusion & osmosis", interactive:true,
   title:"Visking tubing: diffusion & osmosis",
   summary:"Fill dialysis tubing with sucrose and watch the level rise in a capillary tube, or fill it with starch and glucose and test the water outside to see which molecules get through.",
   aim:"Use Visking (dialysis) tubing as a model of a partially permeable membrane to investigate osmosis and diffusion.",
@@ -151,7 +151,7 @@ Lab.register({
 
 /* ───────────── PLASMOLYSIS IN ONION CELLS ───────────── */
 Lab.register({
-  id:"plasmolysis", subject:"biology", level:["as"], topic:"Transport · Water potential", interactive:true,
+  id:"plasmolysis", subject:"biology", level:["igcse","as"], topic:"Transport · Water potential", interactive:true,
   title:"Plasmolysis in red onion cells",
   summary:"Mount red onion epidermis in sucrose solutions, click the plasmolysed cells you can see, plot % plasmolysed and estimate the water potential of the cells at incipient plasmolysis.",
   aim:"Estimate the water potential of red onion epidermal cells by finding the sucrose concentration at which 50% of the cells are plasmolysed.",
@@ -307,7 +307,7 @@ Lab.register({
 
 /* ───────────── POTOMETER ───────────── */
 Lab.register({
-  id:"potometer", subject:"biology", level:["as"], topic:"Transport in plants · Transpiration", interactive:true,
+  id:"potometer", subject:"biology", level:["igcse","as"], topic:"Transport in plants · Transpiration", interactive:true,
   title:"Potometer: rate of water uptake",
   summary:"Read an air bubble moving along a capillary tube as a leafy shoot takes up water. Change the air movement, humidity, light and temperature and compare rates.",
   aim:"Use a potometer to investigate the effect of environmental factors on the rate of water uptake by a leafy shoot.",
