@@ -38,6 +38,8 @@ Lab.register({
   columns:[{key:"tube",label:"Tube"},{key:"c",label:"Glucose / %",dp:3},{key:"pre",label:"Treatment"},{key:"t",label:"Time to first change / s",dp:1},{key:"rate",label:"1000 ÷ t / s⁻¹",dp:2},{key:"col",label:"Colour after 5 min"}],
   graph:{ x:["c"], y:["t","rate"], fit:"curve" },
   questions:[
+    { q:"Assess the risk of this practical as low, medium or high, and give precautions.",
+      a:"Medium. Benedict’s solution is harmful and hazardous to the environment, and the water bath is hot (≈ 80 °C), with a risk of scalding or the mixture spitting. Wear eye protection, use a test-tube holder, point tubes away from people, and wipe up spills. Hydrochloric acid used for the non-reducing sugar test is an irritant at this concentration." },
     { q:"How do you make a 0.5% solution from 1.0% stock, ending with 10 cm³?",
       a:"5 cm³ of 1.0% stock + 5 cm³ of distilled water. A serial dilution repeats this, each time diluting the previous solution by the same factor (here ×0.5): 1.0, 0.5, 0.25, 0.125…" },
     { q:"Why is time to first colour change better than the final colour for estimating concentration?",
@@ -154,19 +156,22 @@ Lab.register({
   title:"Catalase: rate of reaction",
   summary:"Collect oxygen from hydrogen peroxide in an upturned measuring cylinder. Vary enzyme and substrate concentration, temperature and pH, then use two inhibitors to tell competitive from non-competitive.",
   aim:"Investigate the effects of enzyme concentration, substrate concentration, temperature, pH and inhibitors on the initial rate of the reaction catalysed by catalase.",
-  variables:{ iv:"Choose one: enzyme %, H₂O₂ %, temperature, pH or inhibitor", dv:"Initial rate: volume of oxygen collected in the first 60 s (cm³ min⁻¹)", cv:["Total volume 10 cm³ (5 cm³ H₂O₂ + 5 cm³ enzyme/buffer)","Same source of catalase","Temperature (water bath) and pH (buffer)"] },
+  variables:{ iv:"Choose one: enzyme %, H₂O₂ %, temperature, pH or inhibitor concentration", dv:"Initial rate: volume of oxygen collected in the first 60 s (cm³ min⁻¹)", cv:["Total volume 10 cm³ (5 cm³ H₂O₂ + 5 cm³ enzyme/buffer)","Same source of catalase","Temperature (water bath) and pH (buffer)"] },
   stageTitle:"Gas collection by displacement", controlsTitle:"Conditions",
   thumb:`<svg viewBox="0 0 300 140"><rect x="40" y="50" width="30" height="70" rx="12" fill="none" stroke="#A2ACBD" stroke-width="2"/><rect x="42" y="80" width="26" height="38" rx="10" fill="#E6D7A8"/><path d="M55 50V30H170V60" stroke="#A2ACBD" stroke-width="3" fill="none"/><rect x="140" y="80" width="140" height="44" rx="6" fill="#4C86C6" opacity=".55"/><rect x="155" y="20" width="30" height="96" fill="none" stroke="#A2ACBD" stroke-width="2"/><rect x="157" y="22" width="26" height="40" fill="#E9F3FB"/></svg>`,
   challenges:[
     { id:"enz", title:"Enzyme concentration", text:"Record initial rates for five enzyme concentrations." },
     { id:"sub", title:"Substrate curve", text:"Record initial rates for six H₂O₂ concentrations (no inhibitor)." },
     { id:"km",  title:"Km", text:"Estimate Km from your substrate curve." },
+    { id:"iconc", title:"Inhibitor concentration", text:"Record initial rates for four concentrations of one inhibitor." },
     { id:"inh", title:"Inhibitors", text:"Decide which inhibitor is competitive." }
   ],
-  columns:[{key:"E",label:"Catalase / %",dp:1},{key:"S",label:"H₂O₂ / %",dp:2},{key:"T",label:"T / °C",dp:0},{key:"pH",label:"pH",dp:0},{key:"inh",label:"Inhibitor"},{key:"v30",label:"V at 30 s / cm³",dp:1},{key:"v60",label:"V at 60 s / cm³",dp:1},{key:"v120",label:"V at 120 s / cm³",dp:1},{key:"rate",label:"Initial rate / cm³ min⁻¹",dp:1}],
+  columns:[{key:"E",label:"Catalase / %",dp:1},{key:"S",label:"H₂O₂ / %",dp:2},{key:"T",label:"T / °C",dp:0},{key:"pH",label:"pH",dp:0},{key:"inh",label:"Inhibitor"},{key:"I",label:"Inhibitor / mmol dm⁻³",dp:1},{key:"v30",label:"V at 30 s / cm³",dp:1},{key:"v60",label:"V at 60 s / cm³",dp:1},{key:"v120",label:"V at 120 s / cm³",dp:1},{key:"rate",label:"Initial rate / cm³ min⁻¹",dp:1}],
   series:"inh",
-  graph:{ x:["S","E","T","pH"], y:["rate"], fit:"curve" },
+  graph:{ x:["S","E","T","pH","I"], y:["rate"], fit:"curve" },
   questions:[
+    { q:"Assess the risk of this practical as low, medium or high.",
+      a:"Low to medium. Hydrogen peroxide is an irritant at these concentrations and harmful to the eyes, and the foam can froth out of the tube. Wear eye protection, use low concentrations, and don’t fill the tube more than a third full." },
     { q:"Why is the initial rate used rather than the total volume collected?",
       a:"At the start, substrate concentration is at its known value. As the reaction continues, H₂O₂ is used up so the rate falls; the total volume depends on how much substrate there was, not on how fast the enzyme works." },
     { q:"Explain the shape of the graph of initial rate against substrate concentration.",
@@ -183,12 +188,12 @@ Lab.register({
   setup(ctx){
     const KM = Kit.round(.7 + Math.random()*.5, 2), VMAX = 26 + Math.random()*6, TOPT = 33 + Math.round(Math.random()*8), COMP = Math.random() < .5 ? "A" : "B";
     const SPEED = 6, VOL_PER_PCT = 17.6;
-    let E = 1, S = 1, T = 30, pH = 7, inh = "none", run = null;
+    let E = 1, S = 1, T = 30, pH = 7, inh = "none", I = 1, run = null;
     const fT = T => T <= TOPT ? Math.pow(2, (T - TOPT)/10) : Math.max(0, 1 - Math.pow((T - TOPT)/(60 - TOPT), 2));
     const fpH = p => Math.exp(-Math.pow((p - 7)/2, 2));
     function v(sRem){                                         // cm³ per s
       let km = KM, vm = VMAX*E*fT(T)*fpH(pH);
-      if(inh !== "none"){ if(inh === COMP) km *= 4; else vm *= .35; }
+      if(inh !== "none"){ if(inh === COMP) km *= 1 + I/.33; else vm /= 1 + I/.55; }
       return vm/60*sRem/(km + sRem);
     }
     ctx.stage.innerHTML = `<svg viewBox="0 0 960 500" class="kb" id="ca-svg"><defs>${Kit.DEFS}</defs>${Kit.bench(960, 470)}<g id="ca-scene"></g>
@@ -213,7 +218,7 @@ Lab.register({
       $("#ca-clock").textContent = run ? Math.floor(run.t) + " s" : "";
       $("#ca-log").innerHTML = (run ? run.log : []).map(([t, vv], i) => `<text x="14" y="${54 + i*26}" style="font:600 13px 'JetBrains Mono';fill:var(--txt)">${String(t).padStart(3)} s   ${vv.toFixed(1)} cm³</text>`).join("");
       $("#ca-status").textContent = !run ? "Set the conditions, then add the enzyme" : run.done ? "Run finished — record it" : `Collecting oxygen… ${Math.floor(run.t)} s`;
-      ctx.readout([["Catalase", E + " %"], ["H₂O₂", S + " %"], ["Temperature", T + " °C"], ["pH", String(pH)], ["Inhibitor", inh === "none" ? "none" : inh]]);
+      ctx.readout([["Catalase", E + " %"], ["H₂O₂", S + " %"], ["Temperature", T + " °C"], ["pH", String(pH)], ["Inhibitor", inh === "none" ? "none" : `${inh}, ${I} mmol dm⁻³`]]);
     }
     ctx.frame(dt => {
       if(run && !run.done){
@@ -228,18 +233,20 @@ Lab.register({
     locks.push(ctx.seg({ label:"Hydrogen peroxide concentration", value:1, options:[[.25,"0.25%"],[.5,"0.5"],[1,"1"],[1.5,"1.5"],[2,"2"],[3,"3"],[4,"4"]], onChange(x){ S = x; } }));
     locks.push(ctx.slider({ label:"Water bath", min:10, max:60, step:5, value:30, unit:"°C", onInput(x){ T = x; draw(); } }));
     locks.push(ctx.slider({ label:"pH buffer", min:3, max:11, step:1, value:7, onInput(x){ pH = x; } }));
-    locks.push(ctx.seg({ label:"Inhibitor (fixed concentration)", value:"none", options:[["none","None"],["A","Inhibitor A"],["B","Inhibitor B"]], onChange(x){ inh = x; } }));
+    locks.push(ctx.seg({ label:"Inhibitor", value:"none", options:[["none","None"],["A","Inhibitor A"],["B","Inhibitor B"]], onChange(x){ inh = x; } }));
+    locks.push(ctx.seg({ label:"Inhibitor concentration (mmol dm⁻³)", value:1, options:[[.25,"0.25"],[.5,"0.5"],[1,"1"],[2,"2"],[4,"4"]], onChange(x){ I = x; } }));
     ctx.buttons([{ label:"Add enzyme & start", primary:true, onClick(){
       if(run && !run.done) return;
       run = { t:0, V:0, log:[], done:false, noise:1 + .04*ctx.gauss() };
     } }, { label:"Record run", onClick(){
       if(!run || !run.done) return ctx.toast("Wait for the 30-second readings to finish");
       const at = s => { const r = run.log.find(l => l[0] === s); return r ? r[1] : null; };
-      ctx.record({ E, S, T, pH, inh: inh === "none" ? "none" : "Inhibitor " + inh, v30:at(30), v60:at(60), v120:at(120), rate:at(60) });
+      ctx.record({ E, S, T, pH, inh: inh === "none" ? "none" : "Inhibitor " + inh, I: inh === "none" ? 0 : I, v30:at(30), v60:at(60), v120:at(120), rate:at(60) });
       const rows = ctx.rows();
       const same = (r, k) => ["E","S","T","pH"].filter(x => x !== k).every(x => r[x] === rows[rows.length - 1][x]);
       if(new Set(rows.filter(r => r.inh === "none" && same(r, "E")).map(r => r.E)).size >= 5) ctx.complete("enz");
       if(new Set(rows.filter(r => r.inh === "none" && same(r, "S")).map(r => r.S)).size >= 6) ctx.complete("sub");
+      if(["Inhibitor A", "Inhibitor B"].some(n => new Set(rows.filter(r => r.inh === n && same(r, "I")).map(r => r.I)).size >= 4)) ctx.complete("iconc");
       run = null;
     } }]);
     ctx.html(`<p class="hint" style="font-size:.78rem;color:var(--txt3)">Time runs ×${SPEED}. Volumes are read every 30 s to the nearest 0.5 cm³. Initial rate = volume in the first 60 s.</p>`);
@@ -278,6 +285,8 @@ Lab.register({
   series:"set",
   graph:{ x:["time","T","run"], y:["g"], fit:"curve" },
   questions:[
+    { q:"What hazards are involved in making alginate beads, and how is the risk kept low?",
+      a:"Low risk. Calcium chloride solution is an irritant to the eyes; enzymes can cause allergic reactions if dust or splashes are breathed in or touch the skin. Wear eye protection and gloves, avoid creating aerosols when dripping alginate from the syringe, and wash hands afterwards." },
     { q:"Give two advantages of immobilising an enzyme.",
       a:"The enzyme can be re-used many times and does not contaminate the product (so no separation is needed). Immobilised enzymes are often more stable at higher temperatures and extremes of pH because the alginate holds the molecule’s shape." },
     { q:"Why might immobilised lactase give less glucose than free lactase in the same contact time?",
