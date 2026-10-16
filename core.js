@@ -28,7 +28,11 @@ const Lab = (function(){
   /* experiments set level:"igcse" (default), "as" or "a" */
   const LEVELS = { igcse:"IGCSE", as:"AS Level", a:"A Level" };
   const LEVEL_ORDER = ["igcse","as","a"];
-  const levelOf = d => d.level || "igcse";
+  const levelsOf = d => [].concat(d.level || "igcse");          // a lab may belong to several levels
+  const levelOf = d => levelsOf(d)[0];
+  const inLevel = (d, lv) => lv === "all" || levelsOf(d).includes(lv);
+  const levelChip = d => levelsOf(d).map(l => LEVELS[l]).join(" · ");
+  const codesOf = d => [...new Set(levelsOf(d).map(l => SUBJECTS[d.subject].codes[l]))].join(" / ");
   function codeLine(s, lv){
     const c = SUBJECTS[s].codes;
     if(lv !== "all") return "Cambridge " + LEVELS[lv] + " " + c[lv];
@@ -117,7 +121,7 @@ const Lab = (function(){
   }
   function visibleSims(){
     const q = query.trim().toLowerCase();
-    return sims.filter(d => (filter === "all" || d.subject === filter) && (level === "all" || levelOf(d) === level)
+    return sims.filter(d => (filter === "all" || d.subject === filter) && inLevel(d, level)
         && (!q || [d.title, d.topic, d.summary, SUBJECTS[d.subject].name].join(" ").toLowerCase().includes(q)))
       .sort((a, b) => (b.interactive ? 1 : 0) - (a.interactive ? 1 : 0)
         || ORDER.indexOf(a.subject) - ORDER.indexOf(b.subject)
@@ -128,7 +132,7 @@ const Lab = (function(){
     return `<a class="lab-card" data-s="${d.subject}" href="#/${d.subject}/${d.id}">
       <div class="lab-thumb">${d.thumb || `<span class="thumb-ico" aria-hidden="true">${d.icon || "🧪"}</span>`}</div>
       <div class="lab-body">
-        <div class="chips"><span class="chip subj">${esc(SUBJECTS[d.subject].name)}</span><span class="chip">${LEVELS[levelOf(d)]}</span>${d.interactive ? `<span class="chip hot">Hands-on</span>` : ""}</div>
+        <div class="chips"><span class="chip subj">${esc(SUBJECTS[d.subject].name)}</span><span class="chip">${levelChip(d)}</span>${d.interactive ? `<span class="chip hot">Hands-on</span>` : ""}</div>
         <h3>${esc(d.title)}</h3>
         <p>${esc(d.summary)}</p>
         <div class="lab-foot"><span>${esc(d.topic)}</span>${p ? `<span class="prog">${esc(p)}</span>` : ""}</div>
@@ -146,7 +150,7 @@ const Lab = (function(){
     level = load("vlab-level", "all"); if(level !== "all" && !LEVELS[level]) level = "all";
     document.documentElement.setAttribute("data-subject", filter);
     document.title = "Insight Labs — Virtual Science Lab";
-    const count = s => sims.filter(d => (s === "all" || d.subject === s) && (level === "all" || levelOf(d) === level)).length;
+    const count = s => sims.filter(d => (s === "all" || d.subject === s) && inLevel(d, level)).length;
     const tiles = ["all"].concat(ORDER).map(s => `<a class="subj-tile${filter === s ? " on" : ""}" data-s="${s}" href="#/${s === "all" ? "" : s}" aria-current="${filter === s}">
         <span class="subj-ico">${ICONS[s]}</span><span class="subj-name">${s === "all" ? "All labs" : esc(SUBJECTS[s].name)}</span><span class="subj-n">${count(s)}</span></a>`).join("");
     const levels = [["all","All levels"]].concat(LEVEL_ORDER.map(l => [l, LEVELS[l]]))
@@ -204,7 +208,7 @@ const Lab = (function(){
     $("#app").innerHTML = `
       <div class="exp-top">
         <a class="back-link" href="#/${def.subject}">← ${esc(subj.name)} labs</a>
-        <div class="chips"><span class="chip subj">${esc(subj.name)} ${esc(subj.codes[levelOf(def)])}</span><span class="chip">${LEVELS[levelOf(def)]}</span><span class="chip">${esc(def.topic)}</span>${def.interactive ? `<span class="chip hot">Hands-on</span>` : ""}</div>
+        <div class="chips"><span class="chip subj">${esc(subj.name)} ${esc(codesOf(def))}</span><span class="chip">${levelChip(def)}</span><span class="chip">${esc(def.topic)}</span>${def.interactive ? `<span class="chip hot">Hands-on</span>` : ""}</div>
         <h1>${esc(def.title)}</h1>
       </div>
       <div class="exp-grid${def.layout === "wide" ? " wide" : ""}">
