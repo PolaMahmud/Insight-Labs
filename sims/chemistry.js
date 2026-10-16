@@ -6,7 +6,7 @@
 
 /* ───────────── ACID–ALKALI TITRATION ───────────── */
 Lab.register({
-  id:"titration", subject:"chemistry", topic:"Acids, bases & salts", icon:"⚗️",
+  id:"titration", subject:"chemistry", level:["igcse","as"], topic:"Acids, bases & salts", icon:"⚗️",
   title:"Acid–alkali titration",
   summary:"Titrate 0.100 mol/dm³ NaOH into an unknown HCl, find concordant titres and work out the concentration.",
   aim:"Find the concentration of a hydrochloric acid solution by titration with 0.100 mol/dm³ sodium hydroxide.",
@@ -181,7 +181,7 @@ Lab.register({
 
 /* ───────────── RATES OF REACTION ───────────── */
 Lab.register({
-  id:"rates", subject:"chemistry", topic:"Chemical reactions · Rates", icon:"⏱️",
+  id:"rates", subject:"chemistry", level:["igcse","as"], topic:"Chemical reactions · Rates", icon:"⏱️",
   title:"Rate of reaction: magnesium + acid",
   summary:"Collect hydrogen in a gas syringe and see how concentration, temperature and surface area change the rate.",
   aim:"Investigate how concentration, temperature and surface area affect the rate of reaction between magnesium and hydrochloric acid.",

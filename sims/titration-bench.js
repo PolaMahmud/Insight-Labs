@@ -19,7 +19,7 @@
   const colourName = (ind, p) => ind === "phen" ? (p < 8.2 ? "colourless" : p < 9 ? "pale pink" : "pink") : (p < 3.1 ? "red" : p > 4.4 ? "yellow" : "orange");
 
   Lab.register({
-    id:"titration-bench", subject:"chemistry", topic:"Acids, bases & salts", interactive:true,
+    id:"titration-bench", subject:"chemistry", level:["igcse","as"], topic:"Acids, bases & salts", interactive:true,
     title:"Titration bench",
     summary:"Fill the burette, pipette the acid, add indicator, turn the tap by hand and swirl until the colour just changes. Read the meniscus yourself.",
     aim:"Find the concentration of a hydrochloric acid solution by titration with 0.100 mol/dm³ sodium hydroxide.",
