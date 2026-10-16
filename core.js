@@ -28,7 +28,11 @@ const Lab = (function(){
   /* experiments set level:"igcse" (default), "as" or "a" */
   const LEVELS = { igcse:"IGCSE", as:"AS Level", a:"A Level" };
   const LEVEL_ORDER = ["igcse","as","a"];
-  const levelOf = d => d.level || "igcse";
+  const levelsOf = d => [].concat(d.level || "igcse");          // a lab may belong to several levels
+  const levelOf = d => levelsOf(d)[0];
+  const inLevel = (d, lv) => lv === "all" || levelsOf(d).includes(lv);
+  const levelChip = d => levelsOf(d).map(l => LEVELS[l]).join(" · ");
+  const codesOf = d => [...new Set(levelsOf(d).map(l => SUBJECTS[d.subject].codes[l]))].join(" / ");
   function codeLine(s, lv){
     const c = SUBJECTS[s].codes;
     if(lv !== "all") return "Cambridge " + LEVELS[lv] + " " + c[lv];
@@ -70,16 +74,14 @@ const Lab = (function(){
     clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
   }
 
-  /* ── light / dark / auto ── */
+  /* ── light / dark ── */
   function setMode(mode){
     document.documentElement.setAttribute("data-mode", mode);
-    try{ localStorage.setItem("datalab-mode", mode); }catch(e){}
-    updateModeButtons(mode);
+    try{ localStorage.setItem("vlab-mode", mode); }catch(e){}
     if(current && current.redraw) current.redraw();
+    if(current && current.onMode) current.onMode();
   }
-  function updateModeButtons(mode){
-    ["light","auto","dark"].forEach(m => { const b = document.getElementById("btn-"+m); if(b) b.classList.toggle("active", m === mode); });
-  }
+  function toggleMode(){ setMode(document.documentElement.getAttribute("data-mode") === "dark" ? "light" : "dark"); }
 
   /* ══════════════ ROUTER ══════════════ */
   function register(def){ sims.push(def); byId[def.id] = def; }
@@ -92,6 +94,7 @@ const Lab = (function(){
 
   function route(){
     teardown();
+    document.body.classList.toggle("on-hub", !/^#\/?[^/]+\/[^/]+/.test(location.hash));
     $("#toast").classList.remove("show");
     const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
     if(parts.length >= 2 && byId[parts[1]] && byId[parts[1]].subject === parts[0]) renderExperiment(byId[parts[1]]);
@@ -103,88 +106,148 @@ const Lab = (function(){
   }
 
   /* ══════════════ HUB ══════════════ */
+  const ICONS = {
+    all:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>`,
+    physics:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.6" fill="currentColor"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>`,
+    chemistry:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2.2h12.4a1.5 1.5 0 0 0 1.3-2.2L14 9V3"/><path d="M7 15h10"/></svg>`,
+    biology:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21c8 0 14-6 14-16-8 0-14 4-14 12v4z"/><path d="M5 21C9 15 12 12 16 9"/></svg>`,
+    ict:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/></svg>`
+  };
+  let query = "";
+  function progressOf(d){
+    const n = load(rowsKey(d.id), []).length, ch = d.challenges ? load(chKey(d.id), []).length : 0;
+    if(d.challenges && ch) return `${ch}/${d.challenges.length} challenges`;
+    return n ? `${n} result${n === 1 ? "" : "s"}` : "";
+  }
+  function visibleSims(){
+    const q = query.trim().toLowerCase();
+    return sims.filter(d => (filter === "all" || d.subject === filter) && inLevel(d, level)
+        && (!q || [d.title, d.topic, d.summary, SUBJECTS[d.subject].name].join(" ").toLowerCase().includes(q)))
+      .sort((a, b) => (b.interactive ? 1 : 0) - (a.interactive ? 1 : 0)
+        || ORDER.indexOf(a.subject) - ORDER.indexOf(b.subject)
+        || LEVEL_ORDER.indexOf(levelOf(a)) - LEVEL_ORDER.indexOf(levelOf(b)));
+  }
+  function cardHtml(d){
+    const p = progressOf(d);
+    return `<a class="lab-card" data-s="${d.subject}" href="#/${d.subject}/${d.id}">
+      <div class="lab-thumb">${d.thumb || `<span class="thumb-ico" aria-hidden="true">${d.icon || "🧪"}</span>`}</div>
+      <div class="lab-body">
+        <div class="chips"><span class="chip subj">${esc(SUBJECTS[d.subject].name)}</span><span class="chip">${levelChip(d)}</span>${d.interactive ? `<span class="chip hot">Hands-on</span>` : ""}</div>
+        <h3>${esc(d.title)}</h3>
+        <p>${esc(d.summary)}</p>
+        <div class="lab-foot"><span>${esc(d.topic)}</span>${p ? `<span class="prog">${esc(p)}</span>` : ""}</div>
+      </div>
+    </a>`;
+  }
+  function renderCards(){
+    const list = visibleSims(), box = $("#cards");
+    if(!box) return;
+    box.innerHTML = list.length ? list.map(cardHtml).join("")
+      : `<p class="empty">No labs match${query ? ` “${esc(query)}”` : ""}${level !== "all" ? ` at ${LEVELS[level]}` : ""} yet.</p>`;
+    $("#result-count").textContent = list.length + " lab" + (list.length === 1 ? "" : "s");
+  }
   function renderHub(){
     level = load("vlab-level", "all"); if(level !== "all" && !LEVELS[level]) level = "all";
-    document.documentElement.setAttribute("data-theme", filter === "all" ? "ocean" : SUBJECTS[filter].theme);
-    document.title = "Virtual Lab — IGCSE, AS & A Level";
-    const app = $("#app");
-    const pills = [["all","All subjects"]].concat(ORDER.map(s => [s, SUBJECTS[s].name]))
-      .map(([k,n]) => `<a class="pill${filter===k?" active":""}" href="#/${k==="all"?"":k}" role="tab" aria-selected="${filter===k}">${esc(n)}</a>`).join("");
-    const lpills = [["all","All levels"]].concat(LEVEL_ORDER.map(l => [l, LEVELS[l]]))
-      .map(([k,n]) => `<button type="button" class="pill${level===k?" active":""}" data-level="${k}" role="tab" aria-selected="${level===k}">${esc(n)}</button>`).join("");
-    const sections = ORDER.filter(s => filter === "all" || filter === s).map(s => {
-      const list = sims.filter(d => d.subject === s && (level === "all" || levelOf(d) === level))
-        .sort((a, b) => LEVEL_ORDER.indexOf(levelOf(a)) - LEVEL_ORDER.indexOf(levelOf(b)));
-      const cards = list.map(d => {
-        const n = load(rowsKey(d.id), []).length;
-        return `<a class="card" data-s="${s}" href="#/${s}/${d.id}">
-          <span class="ico" aria-hidden="true">${d.icon || "🧪"}</span>
-          <span class="topic"><span class="lvl lvl-${levelOf(d)}">${LEVELS[levelOf(d)]}</span>${esc(d.topic)}</span>
-          <h3>${esc(d.title)}</h3>
-          <p>${esc(d.summary)}</p>
-          <span class="done">${n ? n + " result" + (n === 1 ? "" : "s") + " recorded" : "Not started"}</span>
-        </a>`;
-      }).join("");
-      return `<section class="subject" aria-label="${esc(SUBJECTS[s].name)}">
-        <div class="subject-head"><h2>${esc(SUBJECTS[s].name)}</h2><span class="code">${esc(codeLine(s, level))} · ${list.length} experiment${list.length === 1 ? "" : "s"}</span></div>
-        ${list.length ? `<div class="cards">${cards}</div>` : `<p class="empty" style="text-align:left;padding:.4rem .2rem">${esc(LEVELS[level])} ${esc(SUBJECTS[s].name)} practicals are coming soon.</p>`}
-      </section>`;
-    }).join("");
-    app.innerHTML = `
-      <section class="hero">
-        <div class="hero-badge">Cambridge IGCSE · AS &amp; A Level · Virtual Practicals</div>
-        <h1>The Virtual Lab</h1>
-        <p>${filter === "all"
-          ? "Run IGCSE, AS and A Level practicals in your browser. Change one variable, record a results table, plot the graph and draw your conclusion."
-          : esc(SUBJECTS[filter].blurb)}</p>
+    document.documentElement.setAttribute("data-subject", filter);
+    document.title = "Insight Labs — Virtual Science Lab";
+    const count = s => sims.filter(d => (s === "all" || d.subject === s) && inLevel(d, level)).length;
+    const tiles = ["all"].concat(ORDER).map(s => `<a class="subj-tile${filter === s ? " on" : ""}" data-s="${s}" href="#/${s === "all" ? "" : s}" aria-current="${filter === s}">
+        <span class="subj-ico">${ICONS[s]}</span><span class="subj-name">${s === "all" ? "All labs" : esc(SUBJECTS[s].name)}</span><span class="subj-n">${count(s)}</span></a>`).join("");
+    const levels = [["all","All levels"]].concat(LEVEL_ORDER.map(l => [l, LEVELS[l]]))
+      .map(([k,n]) => `<button type="button" class="${level === k ? "on" : ""}" data-level="${k}" aria-pressed="${level === k}">${esc(n)}</button>`).join("");
+    $("#app").innerHTML = `
+      <section class="hub-hero">
+        <div>
+          <span class="eyebrow">Insight Labs · Cambridge IGCSE · AS &amp; A Level</span>
+          <h1>Virtual Science Lab</h1>
+          <p>Build circuits, run titrations, test foods and analyse data — real practicals you control with your hands, not just sliders.</p>
+          <div class="hub-stats"><span><b>${sims.length}</b> labs</span><span><b>${sims.filter(d => d.interactive).length}</b> hands-on benches</span><span><b>4</b> subjects</span></div>
+        </div>
+        <div class="hub-art" aria-hidden="true">${HERO_ART}</div>
       </section>
-      <nav class="pillbar" role="tablist" aria-label="Level" style="margin-bottom:.6rem">${lpills}</nav>
-      <nav class="pillbar" role="tablist" aria-label="Subject">${pills}</nav>
-      ${sections}`;
-    app.querySelectorAll("[data-level]").forEach(b => b.onclick = () => { save("vlab-level", b.dataset.level); renderHub(); });
+      <nav class="subj-tiles" aria-label="Subject">${tiles}</nav>
+      <div class="filter-row">
+        <div class="segmented" role="group" aria-label="Level">${levels}</div>
+        <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input type="search" id="search" placeholder="Search labs…" value="${esc(query)}" aria-label="Search labs"></label>
+        <span class="count" id="result-count"></span>
+      </div>
+      <div class="card-grid" id="cards"></div>`;
+    $("#app").querySelectorAll("[data-level]").forEach(b => b.onclick = () => { save("vlab-level", b.dataset.level); renderHub(); });
+    $("#search").addEventListener("input", e => { query = e.target.value; renderCards(); });
+    renderCards();
   }
+  const HERO_ART = `<svg viewBox="0 0 360 240">
+    <defs><linearGradient id="ha1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A3D" stop-opacity=".95"/><stop offset="1" stop-color="#FF5C7A" stop-opacity=".9"/></linearGradient>
+      <linearGradient id="ha2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3DDC97"/><stop offset="1" stop-color="#2DD4BF"/></linearGradient>
+      <radialGradient id="ha3"><stop offset="0" stop-color="#FFE68A"/><stop offset="1" stop-color="#FFE68A" stop-opacity="0"/></radialGradient></defs>
+    <ellipse cx="180" cy="222" rx="170" ry="10" fill="currentColor" opacity=".06"/>
+    <g transform="translate(40 40)"><path d="M28 0h34M34 0v52L4 150a10 10 0 0 0 9 14h64a10 10 0 0 0 9-14L56 52V0" fill="none" stroke="currentColor" stroke-opacity=".55" stroke-width="3"/>
+      <path d="M17 112h56l14 38a10 10 0 0 1-9 14H13a10 10 0 0 1-9-14z" fill="url(#ha1)"/><circle cx="40" cy="128" r="4" fill="#fff" opacity=".6"><animate attributeName="cy" values="150;100" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0" dur="2.4s" repeatCount="indefinite"/></circle>
+      <circle cx="56" cy="140" r="3" fill="#fff" opacity=".6"><animate attributeName="cy" values="155;95" dur="3.1s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0" dur="3.1s" repeatCount="indefinite"/></circle></g>
+    <g transform="translate(170 30)"><circle cx="60" cy="60" r="56" fill="url(#ha3)" opacity=".55"/><circle cx="60" cy="60" r="20" fill="#FFE68A" stroke="currentColor" stroke-opacity=".5" stroke-width="3"/>
+      <path d="M50 52l20 16M70 52L50 68" stroke="#7A5A00" stroke-width="2.5"/><path d="M60 80v40M30 120h60" stroke="currentColor" stroke-opacity=".55" stroke-width="3" fill="none"/>
+      <path d="M0 120h30M90 120h40v-60h-50" stroke="#4DA3FF" stroke-width="3" fill="none"/><circle r="3.5" fill="#4DA3FF"><animateMotion dur="2.2s" repeatCount="indefinite" path="M0 120h30M90 120h40v-60h-50"/></circle></g>
+    <g transform="translate(250 130)"><path d="M10 80c40 0 70-30 70-80C40 0 10 20 10 60z" fill="url(#ha2)" opacity=".9"/><path d="M10 80C30 50 45 35 62 22" stroke="#0B3D2A" stroke-width="2.5" fill="none" opacity=".6"/></g>
+  </svg>`;
 
   /* ══════════════ EXPERIMENT PAGE ══════════════ */
+  const chKey = id => "vlab-ch::" + id;
   function renderExperiment(def){
     const subj = SUBJECTS[def.subject];
-    document.documentElement.setAttribute("data-theme", subj.theme);
-    document.title = def.title + " — Virtual Lab";
+    document.documentElement.setAttribute("data-subject", def.subject);
+    document.title = def.title + " — Insight Labs";
     const v = def.variables;
-    const varsHtml = v ? `<div class="vars">
-        ${v.iv ? `<div class="var iv"><b>Independent variable</b>${esc(v.iv)}</div>` : ""}
-        ${v.dv ? `<div class="var dv"><b>Dependent variable</b>${esc(v.dv)}</div>` : ""}
-        ${v.cv ? `<div class="var cv"><b>Control variables</b>${esc(v.cv.join(" · "))}</div>` : ""}
-      </div>` : "";
+    const varsHtml = v ? `<dl class="vars">
+        ${v.iv ? `<dt class="iv">Independent</dt><dd>${esc(v.iv)}</dd>` : ""}
+        ${v.dv ? `<dt class="dv">Dependent</dt><dd>${esc(v.dv)}</dd>` : ""}
+        ${v.cv ? `<dt class="cv">Control</dt><dd>${esc(v.cv.join(" · "))}</dd>` : ""}
+      </dl>` : "";
     const hasTable = !!def.columns, hasGraph = !!(def.columns && def.graph);
-    const app = $("#app");
-    app.innerHTML = `
-      <div class="exp-head">
-        <div class="crumbs"><a href="#/">Virtual Lab</a> / <a href="#/${def.subject}">${esc(subj.name)}</a> / ${esc(LEVELS[levelOf(def)])} ${esc(subj.codes[levelOf(def)])} / ${esc(def.topic)}</div>
+    const done = new Set(load(chKey(def.id), []));
+    $("#app").innerHTML = `
+      <div class="exp-top">
+        <a class="back-link" href="#/${def.subject}">← ${esc(subj.name)} labs</a>
+        <div class="chips"><span class="chip subj">${esc(subj.name)} ${esc(codesOf(def))}</span><span class="chip">${levelChip(def)}</span><span class="chip">${esc(def.topic)}</span>${def.interactive ? `<span class="chip hot">Hands-on</span>` : ""}</div>
         <h1>${esc(def.title)}</h1>
-        <p class="aim"><b>Aim:</b> ${esc(def.aim)}</p>
-        ${varsHtml}
       </div>
-      <div class="bench${def.layout === "wide" ? " wide" : ""}">
-        <section class="panel" aria-label="Controls"><div class="panel-head">${esc(def.controlsTitle || "Controls")}</div><div class="panel-body" id="ctl"></div></section>
-        <section class="panel" aria-label="Apparatus"><div class="panel-head">${esc(def.stageTitle || "Apparatus")}<span class="sp" id="stage-tools"></span></div>
-          <div class="stage${def.layout === "wide" ? " plain" : ""}" id="stage"></div><div class="readout" id="readout"></div></section>
-      </div>
-      ${hasTable ? `<div class="results${hasGraph ? "" : " solo"}">
-        <section class="panel" aria-label="Results table"><div class="panel-head">Results table<span class="sp">
-          <button class="btn small" type="button" id="csv-btn">Export CSV</button>
-          <button class="btn small" type="button" id="clear-btn">Clear</button></span></div>
-          <div class="tbl-wrap" id="tbl"></div></section>
-        ${hasGraph ? `<section class="panel" aria-label="Graph"><div class="panel-head">Graph<span class="sp graph-tools" id="graph-tools"></span></div>
-          <canvas class="graph-canvas" id="graph" role="img" aria-label="Graph of recorded results"></canvas>
-          <div class="fit-info" id="fit-info"></div></section>` : ""}
-      </div>` : ""}
-      ${def.questions && def.questions.length ? `<section class="panel qs" aria-label="Questions"><div class="panel-head">Check your understanding</div>
-        ${def.questions.map((q,i) => `<div class="q"><p><b>Q${i+1}.</b> ${q.q}</p><details><summary>Show answer</summary>${q.a}</details></div>`).join("")}
-      </section>` : ""}`;
+      <div class="exp-grid${def.layout === "wide" ? " wide" : ""}">
+        <aside class="exp-side">
+          <section class="card"><h4>Aim</h4><p class="aim">${esc(def.aim)}</p>${varsHtml}</section>
+          ${def.steps ? `<section class="card"><h4>Method <span class="count" id="step-count"></span></h4>
+            <ol class="checklist" id="steps">${def.steps.map(s => `<li data-id="${esc(s.id)}"><span class="tick" aria-hidden="true"></span><span>${s.text}</span></li>`).join("")}</ol></section>` : ""}
+          ${def.challenges ? `<section class="card"><h4>Challenges <span class="count" id="ch-count"></span></h4>
+            <ol class="checklist challenges" id="challenges">${def.challenges.map(c => `<li data-id="${esc(c.id)}" class="${done.has(c.id) ? "done" : ""}"><span class="tick" aria-hidden="true"></span><span><b>${esc(c.title)}</b>${c.text ? `<small>${c.text}</small>` : ""}</span></li>`).join("")}</ol>
+            <button class="btn small ghost" type="button" id="ch-reset">Reset challenges</button></section>` : ""}
+          <section class="card ctl-card"><h4>${esc(def.controlsTitle || "Controls")}</h4><div id="ctl"></div></section>
+        </aside>
+        <div class="exp-main">
+          <section class="stage-wrap" aria-label="Apparatus">
+            <div class="stage-bar"><span class="stage-title">${esc(def.stageTitle || "Bench")}</span><span class="stage-tools" id="stage-tools"></span></div>
+            <div class="stage${def.layout === "wide" ? " plain" : ""}" id="stage"></div>
+            <div class="readout" id="readout"></div>
+          </section>
+          ${hasTable ? `<div class="notebook${hasGraph ? "" : " solo"}">
+            <section class="card" aria-label="Results table"><h4>Results <span class="sp">
+              <button class="btn small ghost" type="button" id="csv-btn">Export CSV</button>
+              <button class="btn small ghost" type="button" id="clear-btn">Clear</button></span></h4>
+              <div class="tbl-wrap" id="tbl"></div></section>
+            ${hasGraph ? `<section class="card" aria-label="Graph"><h4>Graph <span class="sp graph-tools" id="graph-tools"></span></h4>
+              <canvas class="graph-canvas" id="graph" role="img" aria-label="Graph of recorded results"></canvas>
+              <div class="fit-info" id="fit-info"></div></section>` : ""}
+          </div>` : ""}
+          ${def.questions && def.questions.length ? `<section class="card qs" aria-label="Questions"><h4>Check your understanding</h4>
+            ${def.questions.map((q,i) => `<details class="q"><summary><b>Q${i+1}</b> ${q.q}</summary><div class="ans">${q.a}</div></details>`).join("")}
+          </section>` : ""}
+        </div>
+      </div>`;
 
-    current = { def, cleanups:[], rows: load(rowsKey(def.id), []), redraw:null };
+    current = { def, cleanups:[], rows: load(rowsKey(def.id), []), redraw:null, steps:new Set(), done };
     const cur = current;
     const ctx = makeCtx(def, cur);
+    updateChecklists(def, cur);
+    const chReset = $("#ch-reset");
+    if(chReset) chReset.onclick = () => { cur.done.clear(); save(chKey(def.id), []); updateChecklists(def, cur); };
 
     if(hasTable){
       $("#clear-btn").onclick = () => {
@@ -196,6 +259,19 @@ const Lab = (function(){
       refreshResults(def, cur);
     }
     try{ def.setup(ctx); }catch(e){ console.error(e); $("#stage").innerHTML = `<p class="empty">This experiment failed to load: ${esc(e.message)}</p>`; }
+  }
+  function updateChecklists(def, cur){
+    if(def.steps){
+      $("#steps").querySelectorAll("li").forEach(li => li.classList.toggle("done", cur.steps.has(li.dataset.id)));
+      const n = def.steps.filter(s => cur.steps.has(s.id)).length;
+      const nx = def.steps.find(s => !cur.steps.has(s.id));
+      $("#steps").querySelectorAll("li").forEach(li => li.classList.toggle("next", !!nx && li.dataset.id === nx.id));
+      $("#step-count").textContent = n + "/" + def.steps.length;
+    }
+    if(def.challenges){
+      $("#challenges").querySelectorAll("li").forEach(li => li.classList.toggle("done", cur.done.has(li.dataset.id)));
+      $("#ch-count").textContent = def.challenges.filter(c => cur.done.has(c.id)).length + "/" + def.challenges.length;
+    }
   }
 
   /* ── ctx: what an experiment can use ── */
@@ -276,6 +352,30 @@ const Lab = (function(){
         r.innerHTML = typeof items === "string" ? items
           : items.map(([l,v,c]) => `<span class="meter${c ? " " + c : ""}"><b>${esc(l)}</b>${esc(v)}</span>`).join("");
       },
+      /* method steps (this visit) and challenges (saved) */
+      step(id){ if(!def.steps || cur.steps.has(id)) return; cur.steps.add(id); updateChecklists(def, cur);
+        if(def.steps.every(s => cur.steps.has(s.id))) toast("Method complete ✓"); },
+      stepDone: id => cur.steps.has(id),
+      resetSteps(){ cur.steps.clear(); if(def.steps) updateChecklists(def, cur); },
+      complete(id){ if(!def.challenges || cur.done.has(id)) return; cur.done.add(id); save(chKey(def.id), [...cur.done]); updateChecklists(def, cur);
+        const c = def.challenges.find(c => c.id === id); toast("Challenge complete: " + (c ? c.title : id)); },
+      isComplete: id => cur.done.has(id),
+      /* pointer position inside an SVG, in its own viewBox units */
+      svgPoint(svg, e){ const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); },
+      /* drag helper: calls onStart/onMove/onEnd with SVG coordinates */
+      drag(svg, target, h){
+        target.style.cursor = "grab"; target.style.touchAction = "none";
+        target.addEventListener("pointerdown", e => {
+          if(e.button) return; e.preventDefault(); e.stopPropagation();
+          const p0 = ctx.svgPoint(svg, e); let last = p0;
+          target.setPointerCapture(e.pointerId); target.style.cursor = "grabbing";
+          if(h.onStart && h.onStart(p0, e) === false) return;
+          const mv = ev => { last = ctx.svgPoint(svg, ev); h.onMove && h.onMove(last, p0, ev); };
+          const up = ev => { target.removeEventListener("pointermove", mv); target.removeEventListener("pointerup", up); target.removeEventListener("pointercancel", up);
+            target.style.cursor = "grab"; h.onEnd && h.onEnd(last, p0, ev); };
+          target.addEventListener("pointermove", mv); target.addEventListener("pointerup", up); target.addEventListener("pointercancel", up);
+        });
+      },
       rows: () => cur.rows.slice(),
       linFit,
       record(row, quiet){
@@ -325,7 +425,7 @@ const Lab = (function(){
       .concat(rows.map(r => def.columns.map(c => q(r[c.key])).join(","))).join("\n");
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([csv], { type:"text/csv" }));
-    a.download = "virtual-lab-" + def.id + ".csv";
+    a.download = "insight-labs-" + def.id + ".csv";
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
@@ -515,10 +615,9 @@ const Lab = (function(){
 
   /* ══════════════ START ══════════════ */
   function start(){
-    updateModeButtons(document.documentElement.getAttribute("data-mode") || "auto");
     window.addEventListener("hashchange", route);
     route();
   }
 
-  return { register, start, setMode, SUBJECTS, LEVELS, linFit };
+  return { register, start, setMode, toggleMode, SUBJECTS, LEVELS, linFit };
 })();

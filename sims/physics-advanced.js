@@ -28,7 +28,7 @@ const halfRange = a => (Math.max(...a) - Math.min(...a))/2;
 
 /* ───────────── AS · RESISTIVITY ───────────── */
 Lab.register({
-  id:"resistivity", subject:"physics", level:"as", topic:"D.C. circuits · Resistivity", icon:"🧵",
+  id:"resistivity", subject:"physics", level:["igcse","as"], topic:"D.C. circuits · Resistivity", icon:"🧵",
   title:"Resistivity of a metal wire",
   summary:"Measure resistance against length with a multimeter and the diameter with a micrometer — including its zero error.",
   aim:"Determine the resistivity of the metal of a wire by measuring how its resistance R varies with length L.",
@@ -146,7 +146,7 @@ Lab.register({
 
 /* ───────────── AS · SIMPLE PENDULUM ───────────── */
 Lab.register({
-  id:"pendulum", subject:"physics", level:"as", topic:"Oscillations · Measurement", icon:"🕰️",
+  id:"pendulum", subject:"physics", level:["igcse","as"], topic:"Oscillations · Measurement", icon:"🕰️",
   title:"Simple pendulum: finding g",
   summary:"Time 20 oscillations twice for each length, plot T² against L with error bars and calculate g.",
   aim:"Determine the acceleration of free fall g using a simple pendulum, with an estimate of its uncertainty.",
