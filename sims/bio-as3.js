@@ -7,7 +7,7 @@
 
 /* ───────────── AGAR CUBES: SURFACE AREA TO VOLUME ───────────── */
 Lab.register({
-  id:"agarcubes", subject:"biology", level:["as"], topic:"Transport · Surface area to volume", interactive:true,
+  id:"agarcubes", subject:"biology", level:["igcse","as"], topic:"Transport · Surface area to volume", interactive:true,
   title:"Diffusion into agar cubes",
   summary:"Cut cubes of blue thymolphthalein agar, drop them into acid and time how long each takes to go colourless. Plot time against surface area : volume ratio.",
   aim:"Investigate the effect of surface area to volume ratio on the time taken for acid to diffuse to the centre of agar cubes.",
@@ -307,7 +307,7 @@ Lab.register({
 
 /* ───────────── POTOMETER ───────────── */
 Lab.register({
-  id:"potometer", subject:"biology", level:["as"], topic:"Transport in plants · Transpiration", interactive:true,
+  id:"potometer", subject:"biology", level:["igcse","as"], topic:"Transport in plants · Transpiration", interactive:true,
   title:"Potometer: rate of water uptake",
   summary:"Read an air bubble moving along a capillary tube as a leafy shoot takes up water. Change the air movement, humidity, light and temperature and compare rates.",
   aim:"Use a potometer to investigate the effect of environmental factors on the rate of water uptake by a leafy shoot.",

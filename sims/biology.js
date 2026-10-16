@@ -6,7 +6,7 @@
 
 /* ───────────── PHOTOSYNTHESIS ───────────── */
 Lab.register({
-  id:"photosynthesis", subject:"biology", topic:"Plant nutrition", icon:"🌿",
+  id:"photosynthesis", subject:"biology", level:["igcse","a"], topic:"Plant nutrition", icon:"🌿",
   title:"Rate of photosynthesis",
   summary:"Move a lamp towards pondweed and count oxygen bubbles. Find out what limits the rate.",
   aim:"Investigate the effect of light intensity on the rate of photosynthesis in pondweed, and identify limiting factors.",
