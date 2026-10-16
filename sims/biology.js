@@ -238,7 +238,7 @@ Lab.register({
     { q:"What happens if you forget to blot the cylinders dry?",
       a:"Surface solution is weighed as well, so final masses are too high — a systematic error that shifts all the results upwards." },
     { q:"(AS) Use water potential to explain the result at the x-intercept.",
-      a:"At this concentration the water potential of the solution equals the water potential of the potato tissue, so there is no net movement of water by osmosis and no change in mass. The tissue’s water potential equals the solute potential of that sucrose solution." },
+      a:"At this concentration the water potential of the solution equals the water potential of the potato tissue, so there is no net movement of water by osmosis and no change in mass. So the water potential of the potato tissue is the same as the water potential of that sucrose solution." },
     { q:"(AS) The balance reads to 0.01 g. What is the percentage uncertainty in a mass change of 0.12 g?",
       a:"Each mass is ±0.005 g, and the change is a difference of two readings, so ±0.01 g. 0.01 ÷ 0.12 × 100 ≈ ±8%. Using larger cylinders, or more of them per tube, would reduce it." }
   ],

@@ -9,11 +9,11 @@
 Lab.register({
   id:"agarcubes", subject:"biology", level:["as"], topic:"Transport · Surface area to volume", interactive:true,
   title:"Diffusion into agar cubes",
-  summary:"Cut cubes of pink phenolphthalein agar, drop them into acid and time how long each takes to go colourless. Plot time against surface area : volume ratio.",
+  summary:"Cut cubes of blue thymolphthalein agar, drop them into acid and time how long each takes to go colourless. Plot time against surface area : volume ratio.",
   aim:"Investigate the effect of surface area to volume ratio on the time taken for acid to diffuse to the centre of agar cubes.",
   variables:{ iv:"Side length of cube (cm) → surface area : volume ratio", dv:"Time for the cube to become completely colourless (s)", cv:["Same agar (same alkali + indicator)","Same acid concentration and volume","Same temperature"] },
   stageTitle:"Cubes in acid", controlsTitle:"Cut & time",
-  thumb:`<svg viewBox="0 0 300 140">${[[60,18],[120,26],[190,36]].map(([x, s], i) => `<rect x="${x}" y="${100 - s*1.6}" width="${s*1.6}" height="${s*1.6}" fill="${["#F9E9F0","#F2B6CF","#E2669A"][i]}" stroke="#B0476F"/>`).join("")}</svg>`,
+  thumb:`<svg viewBox="0 0 300 140">${[[60,18],[120,26],[190,36]].map(([x, s], i) => `<rect x="${x}" y="${100 - s*1.6}" width="${s*1.6}" height="${s*1.6}" fill="${["#E6EEFA","#9DB9E8","#2F6FD6"][i]}" stroke="#3B5E99"/>`).join("")}</svg>`,
   challenges:[
     { id:"five", title:"Five sizes", text:"Time cubes of five different sizes." },
     { id:"sav",  title:"SA : V", text:"Calculate the surface area : volume ratio of a 1.5 cm cube." },
@@ -22,6 +22,8 @@ Lab.register({
   columns:[{key:"s",label:"Side / cm",dp:1},{key:"SA",label:"Surface area / cm²",dp:2},{key:"V",label:"Volume / cm³",dp:3},{key:"r",label:"SA : V / cm⁻¹",dp:1},{key:"t",label:"Time to decolourise / s",dp:1}],
   graph:{ x:["r","s"], y:["t"], fit:"curve" },
   questions:[
+    { q:"Assess the risk: the agar contains sodium hydroxide and thymolphthalein, and the cubes go into hydrochloric acid.",
+      a:"Low to medium. Dilute sodium hydroxide and hydrochloric acid are irritants (corrosive if more concentrated), and thymolphthalein is dissolved in flammable ethanol. Wear eye protection, handle cubes with forceps, keep the indicator away from flames, and cut on a white tile with the blade moving away from you." },
     { q:"Calculate the surface area : volume ratio of a 2 cm cube.",
       a:"Surface area = 6 × 2² = 24 cm². Volume = 2³ = 8 cm³. SA : V = 24 ÷ 8 = 3 : 1 (3 cm⁻¹). For any cube, SA : V = 6 ÷ side." },
     { q:"Explain why large cubes take much longer to go colourless.",
@@ -29,7 +31,7 @@ Lab.register({
     { q:"Relate this to why large organisms need specialised exchange surfaces.",
       a:"As size increases, SA : V falls and diffusion distances increase, so diffusion across the body surface is too slow to supply the whole volume. Large organisms need exchange surfaces with a large area and short diffusion distance, and a transport system." },
     { q:"What is the main source of uncertainty in this experiment and how could it be reduced?",
-      a:"Judging the moment the last trace of pink disappears. Use a white tile and good lighting, have the same person judge each end point, or cut each cube in half at set times to look at the remaining pink core." },
+      a:"Judging the moment the last trace of blue disappears. Use a white tile and good lighting, have the same person judge each end point, or cut each cube in half at set times to look at the remaining blue core." },
     { q:"Suggest two further limitations and improvements.",
       a:"Cubes are cut by hand so sides are not exact — use a template or cutter and measure with a ruler or calipers. Temperature varies — use a water bath. Cubes rest on the beaker bottom so one face is blocked — suspend them in a mesh, or stir gently." }
   ],
@@ -47,12 +49,12 @@ Lab.register({
       let s = `<rect x="140" y="160" width="300" height="280" rx="10" fill="url(#k-glass)" stroke="var(--txt2)" stroke-width="1.6"/><rect x="143" y="210" width="294" height="227" rx="8" fill="#E7F0F8" opacity=".75"/>
         <text x="290" y="150" text-anchor="middle" class="k-lbl">0.1 mol dm⁻³ hydrochloric acid</text>`;
       const S = (cube ? cube.s : side)*80, x = 290 - S/2, y = cube ? 436 - S : 120 - S/2;
-      const f = cube ? Math.min(1, cube.t/cube.tEnd) : 0, core = Math.max(0, 1 - Math.sqrt(f));      // pink core shrinks
-      s += `<rect x="${x}" y="${y}" width="${S}" height="${S}" fill="#F7EEF2" stroke="#B0476F" stroke-width="1.3"/>`;
-      if(core > 0) s += `<rect x="${290 - S*core/2}" y="${y + S/2 - S*core/2}" width="${S*core}" height="${S*core}" rx="${S*core*.25}" fill="#E2669A" opacity="${(.55 + .45*core).toFixed(2)}"/>`;
+      const f = cube ? Math.min(1, cube.t/cube.tEnd) : 0, core = Math.max(0, 1 - Math.sqrt(f));      // blue core shrinks
+      s += `<rect x="${x}" y="${y}" width="${S}" height="${S}" fill="#EEF3FA" stroke="#3B5E99" stroke-width="1.3"/>`;
+      if(core > 0) s += `<rect x="${290 - S*core/2}" y="${y + S/2 - S*core/2}" width="${S*core}" height="${S*core}" rx="${S*core*.25}" fill="#2F6FD6" opacity="${(.55 + .45*core).toFixed(2)}"/>`;
       s += `<text x="${cube ? 520 : 290}" y="${cube ? 300 : 120 + S/2 + 22}" ${cube ? "" : `text-anchor="middle"`} class="k-tag">${(cube ? cube.s : side).toFixed(1)} cm cube${cube ? " (cut-away view)" : " — ready to drop in"}</text>`;
       $("#ag-scene").innerHTML = s;
-      $("#ag-status").textContent = !cube ? "Choose a size, cut the cube and drop it in — start the stopwatch together" : f >= 1 ? "Completely colourless — stop the stopwatch" : "Watch for the last trace of pink";
+      $("#ag-status").textContent = !cube ? "Choose a size, cut the cube and drop it in — start the stopwatch together" : f >= 1 ? "Completely colourless — stop the stopwatch" : "Watch for the last trace of blue";
       ctx.readout([["Cube", (cube ? cube.s : side).toFixed(1) + " cm"], ["Surface area", (6*side*side).toFixed(2) + " cm²"], ["Volume", Math.pow(side, 3).toFixed(3) + " cm³"]]);
     }
     ctx.frame(dt => { sw.tick(dt*SPEED); if(cube) cube.t += dt*SPEED; draw(); });
@@ -63,7 +65,7 @@ Lab.register({
     } }, { label:"Record time", onClick(){
       if(!cube) return; if(sw.running) return ctx.toast("Stop the stopwatch first");
       if(sw.t <= 0) return ctx.toast("You didn’t time it — remove it and try again");
-      if(cube.t < cube.tEnd*.97) return ctx.toast("There’s still some pink in the middle — keep going (restart the stopwatch)");
+      if(cube.t < cube.tEnd*.97) return ctx.toast("There’s still some blue in the middle — keep going (restart the stopwatch)");
       const s = cube.s;
       ctx.record({ s, SA:6*s*s, V:s*s*s, r:Kit.round(6/s, 1), t:Kit.round(sw.t, 1) });
       cube = null; sw.reset();
@@ -151,25 +153,27 @@ Lab.register({
 Lab.register({
   id:"plasmolysis", subject:"biology", level:["as"], topic:"Transport · Water potential", interactive:true,
   title:"Plasmolysis in red onion cells",
-  summary:"Mount red onion epidermis in sucrose solutions, click the plasmolysed cells you can see, plot % plasmolysed and find the solute potential of the cell sap at incipient plasmolysis.",
-  aim:"Estimate the solute potential of red onion epidermal cells by finding the sucrose concentration at which 50% of the cells are plasmolysed.",
+  summary:"Mount red onion epidermis in sucrose solutions, click the plasmolysed cells you can see, plot % plasmolysed and estimate the water potential of the cells at incipient plasmolysis.",
+  aim:"Estimate the water potential of red onion epidermal cells by finding the sucrose concentration at which 50% of the cells are plasmolysed.",
   variables:{ iv:"Concentration of sucrose solution (mol dm⁻³)", dv:"Percentage of cells plasmolysed", cv:["Same onion, same layer of epidermis","Same time in solution (15 min)","Count the same number of cells (whole field)"] },
   stageTitle:"Field of view ×100", controlsTitle:"Sucrose solution",
   thumb:`<svg viewBox="0 0 300 140">${[...Array(12)].map((_, i) => { const x = 30 + (i % 6)*42, y = 20 + Math.floor(i/6)*52; return `<rect x="${x}" y="${y}" width="40" height="50" fill="none" stroke="#9C8F6A"/><rect x="${x + (i % 3 ? 2 : 8)}" y="${y + (i % 3 ? 2 : 10)}" width="${i % 3 ? 36 : 22}" height="${i % 3 ? 46 : 28}" rx="${i % 3 ? 2 : 10}" fill="#B23A72" opacity=".8"/>`; }).join("")}</svg>`,
   challenges:[
     { id:"six",  title:"Six solutions", text:"Count plasmolysed cells in six sucrose concentrations." },
     { id:"acc",  title:"Sharp eyes", text:"Count a whole field exactly right." },
-    { id:"psi",  title:"Solute potential", text:"Find the solute potential of the cell sap." }
+    { id:"psi",  title:"Water potential", text:"Estimate the water potential of the onion cells." }
   ],
   columns:[{key:"c",label:"Sucrose / mol dm⁻³",dp:2},{key:"n",label:"Cells counted",dp:0},{key:"p",label:"Plasmolysed (your count)",dp:0},{key:"pct",label:"Plasmolysed / %",dp:0},{key:"true",label:"Actually plasmolysed",dp:0}],
   graph:{ x:["c"], y:["pct"], fit:"curve" },
   questions:[
+    { q:"How should the onion epidermis be mounted to see plasmolysis clearly?",
+      a:"Peel a single layer of epidermis from the inner surface of the onion scale leaf, lay it flat in a drop of the sucrose solution on a slide, lower a coverslip at an angle with a mounted needle to avoid air bubbles, and blot excess liquid. Red onion needs no stain because the cell sap is coloured." },
     { q:"What is incipient plasmolysis, and why is it taken as 50% of cells plasmolysed?",
-      a:"The point at which the protoplast is just starting to pull away from the cell wall, so pressure potential is zero and water potential = solute potential. Cells vary, so the concentration at which half of them are plasmolysed is used as the average cell’s incipient plasmolysis." },
+      a:"The point at which the protoplast is just starting to pull away from the cell wall, so the water potential of the cells equals the water potential of the solution. Cells vary, so the concentration at which half of them are plasmolysed is used as the average cell’s incipient plasmolysis." },
     { q:"Explain what happens to a cell in a solution of lower water potential than its cytoplasm.",
       a:"Water leaves the vacuole and cytoplasm by osmosis through the partially permeable cell surface membrane. The protoplast shrinks and pulls away from the cell wall; the gap fills with the external solution." },
     { q:"Why doesn’t a plant cell burst in pure water?",
-      a:"Water enters, the protoplast pushes against the cell wall and the wall exerts an inward pressure (pressure potential). When pressure potential balances solute potential, water potential is equal and there is no net movement. The cell is turgid." },
+      a:"Water enters by osmosis and the protoplast swells and pushes against the cell wall. The strong cellulose wall resists expansion, so the cell becomes turgid rather than bursting; water stops entering once the water potential inside equals that outside. An animal cell has no wall, so it would burst." },
     { q:"Give two limitations of counting plasmolysed cells, and improvements.",
       a:"Deciding whether a cell is ‘just’ plasmolysed is subjective — agree a rule (e.g. any visible gap at a corner). Only one field is counted — count several fields/strips and find the mean. Peels may be more than one cell thick — use a thin single layer." }
   ],
@@ -202,7 +206,7 @@ Lab.register({
       }).join("");
       $("#pl-side").innerHTML = `<text x="16" y="28" style="font:700 10px Inter;fill:#9CA3AF;letter-spacing:.06em">SUCROSE ${c.toFixed(2)} mol dm⁻³ · 15 min</text>
         <text x="16" y="66" style="font:600 15px Inter;fill:#E5E7EB">Plasmolysed (marked): ${marked.size}</text><text x="16" y="92" style="font:500 13px Inter;fill:#9CA3AF">Cells in field: ${cells.length}</text>
-        <text x="16" y="130" style="font:700 10px Inter;fill:#9CA3AF;letter-spacing:.06em">SOLUTE POTENTIAL OF SUCROSE</text>
+        <text x="16" y="130" style="font:700 10px Inter;fill:#9CA3AF;letter-spacing:.06em">WATER POTENTIAL OF SUCROSE SOLUTION</text>
         ${PSI.map(([k, v], i) => `<text x="16" y="${154 + i*22}" style="font:500 12px 'JetBrains Mono';fill:#E5E7EB">${k.toFixed(1)} mol dm⁻³</text><text x="320" y="${154 + i*22}" text-anchor="end" style="font:500 12px 'JetBrains Mono';fill:#7CFFB2">${v} kPa</text>`).join("")}`;
       $("#pl-status").textContent = checked ? "Checked — red rings are cells you got wrong" : "Click every cell where the protoplast has pulled away from the wall";
       ctx.readout([["Sucrose", c.toFixed(2) + " mol dm⁻³"], ["Marked", marked.size + " / " + cells.length]]);
@@ -218,10 +222,10 @@ Lab.register({
       if(new Set(ctx.rows().map(r => r.c)).size >= 6) ctx.complete("six");
       draw();
     } }, { label:"Mount a fresh strip", onClick(){ mount(); draw(); } }]);
-    Kit.answer(ctx, "Solute potential of the cell sap / kPa", "e.g. -1100", v => {
+    Kit.answer(ctx, "Water potential of the onion cells / kPa", "e.g. -1100", v => {
       if(new Set(ctx.rows().map(r => r.c)).size < 5) return [false, "Record at least five concentrations so you can find 50% plasmolysed."];
       const lo = PSI.filter(p => p[0] <= MEAN).pop(), hi = PSI.find(p => p[0] > MEAN), psi = lo[1] + (hi[1] - lo[1])*(MEAN - lo[0])/(hi[0] - lo[0]);
-      if(Math.abs(v - psi) <= 160){ ctx.complete("psi"); return [true, `Good — 50% plasmolysis is at about ${MEAN.toFixed(2)} mol dm⁻³, so ψs ≈ ${Math.round(psi)} kPa.`]; }
+      if(Math.abs(v - psi) <= 160){ ctx.complete("psi"); return [true, `Good — 50% plasmolysis is at about ${MEAN.toFixed(2)} mol dm⁻³, so the cells’ water potential ≈ ${Math.round(psi)} kPa.`]; }
       return [false, "Read the concentration at 50% plasmolysed from your curve, then convert it with the table (interpolate between rows). It should be negative."];
     });
     mount(); draw();
@@ -246,6 +250,8 @@ Lab.register({
   series:"iv",
   graph:{ x:["x"], y:["A"], fit:"curve" },
   questions:[
+    { q:"Assess the risk of this practical.",
+      a:"Medium. Cork borers and scalpels can cut; hot water baths up to 80 °C can scald; ethanol is highly flammable and harmful. Cut on a tile away from your hand, use tongs or a test-tube holder, and keep ethanol away from any flame." },
     { q:"Why does more pigment leak out above about 50 °C?",
       a:"The membrane proteins denature, leaving gaps in the membrane, and the phospholipids move more and the bilayer becomes more fluid. The tonoplast and cell surface membrane become more permeable, so betalain leaves the vacuole and the cells." },
     { q:"Why does ethanol increase leakage?",

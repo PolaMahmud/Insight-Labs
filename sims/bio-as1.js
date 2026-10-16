@@ -207,8 +207,8 @@ Lab.register({
           out.push(["hairs", `M${300 + rr*Math.cos(aa) - 3} ${250 + rr*Math.sin(aa) - 3}h6v6h-6Z`, "#F2F2F2", i || k > 1 ? 0 : 300 + rr*Math.cos(aa) - 40, i || k > 1 ? 0 : 250 + rr*Math.sin(aa) + 12]); }
       }
       return out; } },
-    vessels:{ name:"TS artery and vein", tissues:["artery: lumen","artery: tunica intima","artery: tunica media","artery: tunica externa","vein: lumen","vein: tunica media","vein: tunica externa"], regions(){
-      return [["artery: tunica externa", ring(180, 250, 98, 122), "#EAC4D2", 180, 112], ["artery: tunica media", ring(180, 250, 44, 98), "#C2607D", 180, 180],
+    vessels:{ name:"TS artery, vein and capillary", tissues:["artery: lumen","artery: tunica intima","artery: tunica media","artery: tunica externa","vein: lumen","vein: tunica media","vein: tunica externa","capillary"], regions(){
+      return [["capillary", ring(300, 430, 5, 10), "#9C5BA8", 300, 430], ["capillary lumen", circ(300, 430, 5), "#E0646A", 0, 0], ["artery: tunica externa", ring(180, 250, 98, 122), "#EAC4D2", 180, 112], ["artery: tunica media", ring(180, 250, 44, 98), "#C2607D", 180, 180],
         ["artery: tunica intima", ring(180, 250, 38, 44), "#7A2E4A", 180, 300], ["artery: lumen", circ(180, 250, 38), "#FBF4F7", 180, 254],
         ["vein: tunica externa", "M330 250c0-90 200-110 220-30c20 80-30 140-120 130c-80-8-100-50-100-100Z", "#EAC4D2", 440, 132],
         ["vein: tunica media", "M348 250c0-72 176-90 186-26c10 64-30 112-106 106c-64-6-80-40-80-80Z", "#D88AA4", 440, 370],
@@ -220,22 +220,59 @@ Lab.register({
       [[-.9, 128], [-2.4, 132], [.6, 126], [2.2, 130]].forEach(([a, r], i) => out.push(["glands", circ(300 + r*Math.cos(a), 250 + r*Math.sin(a), 11), "#B887C9", i ? 0 : 300 + r*Math.cos(a) + 40, i ? 0 : 250 + r*Math.sin(a)]));
       for(let i = 0; i < 10; i++){ const a = i*.63 + .2; out.push(["goblet cells", circ(300 + 97*Math.cos(a), 250 + 97*Math.sin(a), 3.6), "#F7F7F7", i ? 0 : 300 + 97*Math.cos(a) + 50, i ? 0 : 250 + 97*Math.sin(a) + 30]); }
       return out; } },
-    lung:{ name:"Lung tissue", tissues:["alveolus","bronchiole","smooth muscle","blood vessel"], regions(){
+    lung:{ name:"Lung tissue", tissues:["alveolus","squamous epithelium","capillary","bronchiole","smooth muscle","blood vessel"], regions(){
       const out = []; let s = 7;
       const rnd = () => { s = (s*9301 + 49297) % 233280; return s/233280; };
       for(let i = 0; i < 70; i++){ const x = 60 + rnd()*480, y = 60 + rnd()*380; if(Math.hypot(x - 230, y - 240) < 95 || Math.hypot(x - 430, y - 160) < 50) continue;
         out.push(["alveolus", circ(x, y, 18 + rnd()*12), "#FBF4F7", out.length ? 0 : x, out.length ? 0 : y]); }
-      out.unshift(["alveolar walls", "M40 40H560V460H40Z", "#E1A9BE", 0, 0]);
+      const alv = out.slice();
+      out.unshift(["squamous epithelium", "M40 40H560V460H40Z", "#E1A9BE", 520, 455]);
+      for(let i = 0, n = 0; i < 400 && n < 16; i++){ const x = 50 + rnd()*500, y = 50 + rnd()*400;
+        if(Math.hypot(x - 230, y - 240) < 90 || Math.hypot(x - 430, y - 160) < 44) continue;
+        if(alv.some(a => { const m = a[1].match(/^M([\d.]+) ([\d.]+)a([\d.]+)/); return m && Math.hypot(x - (+m[1] + +m[3]), y - +m[2]) < +m[3] + 4; })) continue;
+        out.push(["capillary", circ(x, y, 4), "#D2343E", n ? 0 : x, n ? 0 : y]); n++; }
       out.push(["smooth muscle", ring(230, 240, 62, 82), "#C2607D", 230, 145], ["bronchiole", ring(230, 240, 46, 62), "#9C5BA8", 230, 240]);
       out.push(["bronchiole lumen", circ(230, 240, 46), "#FBF4F7", 0, 0]);
       out.push(["blood vessel", ring(430, 160, 26, 36), "#C2607D", 430, 160], ["blood vessel", circ(430, 160, 26), "#E0646A", 0, 0]);
+      return out; } },
+    bronchus:{ name:"TS bronchus wall", tissues:["lumen","ciliated epithelium","goblet cells","glands","cartilage","smooth muscle"], regions(){
+      const out = [["lumen", circ(300, 250, 90), "#FBF4F7", 300, 250], ["submucosa", ring(300, 250, 108, 172), "#F2D6E2", 0, 0]];
+      out.push(["smooth muscle", ring(300, 250, 106, 117), "#C2607D", 300, 128]);
+      out.splice(1, 0, ["ciliated epithelium", ring(300, 250, 90, 103), "#9C5BA8", 222, 190]);
+      [[-.4, 1], [.9, 1.1], [2.1, .9], [3.3, 1.2], [4.6, .8], [5.6, 1]].forEach(([a, w], i) => out.push(["cartilage", wedge(300, 250, 132, 166, a, a + .5*w), "#A9C3E0", i ? 0 : 300 + 150*Math.cos(a + .25), i ? 0 : 250 + 150*Math.sin(a + .25)]));
+      [[.3, 124], [1.6, 124], [2.8, 124], [4.1, 124], [5.2, 124]].forEach(([a, r], i) => out.push(["glands", circ(300 + r*Math.cos(a + .3), 250 + r*Math.sin(a + .3), 6), "#B887C9", i ? 0 : 300 + r*Math.cos(a + .3) + 34, i ? 0 : 250 + r*Math.sin(a + .3) + 12]));
+      for(let i = 0; i < 9; i++){ const a = i*.7 + .1; out.push(["goblet cells", circ(300 + 97*Math.cos(a), 250 + 95*Math.sin(a), 3.4), "#F7F7F7", i ? 0 : 300 + 97*Math.cos(a) + 48, i ? 0 : 250 + 95*Math.sin(a) + 20]); }
+      return out; } },
+    xylem:{ name:"LS xylem and phloem", tissues:["xylem vessel element","lignin thickening","sieve tube element","sieve plate","companion cell"], regions(){
+      const out = [["parenchyma", "M40 40H560V460H40Z", "#EDE3C8", 0, 0]];
+      out.push(["xylem vessel element", "M90 40H200V460H90Z", "#FBF4EA", 145, 250]);
+      for(let y = 50; y < 460; y += 22) out.push(["lignin thickening", `M90 ${y}H200V${y + 6}H90Z`, "#C2416B", y === 116 ? 230 : 0, y === 116 ? y - 4 : 0]);
+      out.push(["xylem vessel element", "M220 40H300V460H220Z", "#FBF4EA", 0, 0]);
+      out.push(["lignin thickening", "M220 40H228V460H220Z", "#C2416B", 0, 0], ["lignin thickening", "M292 40H300V460H292Z", "#C2416B", 0, 0]);
+      [[340, 40, 170], [340, 210, 150], [340, 360, 100]].forEach(([x, y, h], i) => out.push(["sieve tube element", `M${x} ${y}H${x + 90}V${y + h}H${x}Z`, "#E9F1DA", i ? 0 : x + 45, i ? 0 : y + 70]));
+      [210, 360].forEach((y, i) => out.push(["sieve plate", `M340 ${y - 4}H430V${y + 4}H340Z`, "#6E8B4E", i ? 0 : 385, i ? 0 : y - 10]));
+      [[440, 60, 120], [440, 210, 130], [440, 360, 90]].forEach(([x, y, h], i) => out.push(["companion cell", `M${x} ${y}H${x + 36}V${y + h}H${x}Z`, "#B9C98F", i ? 0 : x + 18, i ? 0 : y + 60]));
+      [[458, 110], [458, 270], [458, 400]].forEach(([x, y]) => out.push(["companion cell", circ(x, y, 9), "#6B7F3E", 0, 0]));
+      return out; } },
+    blood:{ name:"Blood smear", tissues:["red blood cell","neutrophil","lymphocyte","monocyte"], regions(){
+      const out = [["plasma", "M40 40H560V460H40Z", "#FBF1EE", 0, 0]]; let s = 11;
+      const rnd = () => { s = (s*9301 + 49297) % 233280; return s/233280; };
+      const W = [[150, 160, "neutrophil"], [420, 330, "lymphocyte"], [400, 130, "monocyte"], [200, 370, "neutrophil"]];
+      for(let i = 0; i < 90; i++){ const x = 60 + rnd()*480, y = 60 + rnd()*380; if(W.some(w => Math.hypot(x - w[0], y - w[1]) < 44)) continue;
+        out.push(["red blood cell", circ(x, y, 15), "#E8A3A0", 0, 0], ["red blood cell", circ(x, y, 6), "#F2C4C1", 0, 0]); }
+      const r0 = out.find(r => r[0] === "red blood cell"), m0 = r0[1].match(/^M([\d.]+) ([\d.]+)/); r0[3] = +m0[1] + 15; r0[4] = +m0[2] - 20;
+      W.forEach(([x, y, t], i) => {
+        if(t === "neutrophil"){ out.push([t, circ(x, y, 24), "#EAD8EE", i ? 0 : x, i ? 0 : y - 30]); [[-9, -6], [2, -10], [10, 2], [-2, 9]].forEach(([dx, dy]) => out.push([t, circ(x + dx, y + dy, 6.5), "#6B2A80", 0, 0])); }
+        if(t === "lymphocyte"){ out.push([t, circ(x, y, 18), "#D6E2F5", x, y - 24], [t, circ(x, y, 15), "#4B2A8A", 0, 0]); }
+        if(t === "monocyte"){ out.push([t, circ(x, y, 28), "#E3DCEF", x, y - 34], [t, `M${x - 16} ${y - 4}c0-14 30-18 32-2c2 12-10 8-14 14c-6 8-18 4-18-12Z`, "#6B4AA0", 0, 0]); }
+      });
       return out; } }
   };
 
   Lab.register({
     id:"planslides", subject:"biology", level:["as"], topic:"Microscopy · Plan diagrams", interactive:true,
     title:"Slides & plan diagrams",
-    summary:"Find the tissues in sections of stems, roots, leaves, a xerophyte leaf, an artery and vein, the trachea and lung, then check the rules for a Paper 3 plan diagram.",
+    summary:"Find the tissues in sections of stems, roots, leaves, a xerophyte leaf, xylem and phloem, blood vessels, blood cells, the trachea, bronchus and lung, then check the rules for a Paper 3 plan diagram.",
     aim:"Identify tissues in transverse sections of plant organs, blood vessels and the gas exchange system, as you would before drawing a plan diagram.",
     variables:{ iv:"Slide", dv:"Tissues correctly identified", cv:["Low-power objective for plans","Plan diagram: outlines of tissue regions only, no cells"] },
     stageTitle:"Low-power view", controlsTitle:"Slide box",
@@ -246,7 +283,9 @@ Lab.register({
       { id:"leaf", title:"Leaf", text:"Find every tissue in the leaf." },
       { id:"marram", title:"Xerophyte", text:"Find the adaptations in the marram grass leaf." },
       { id:"vessels", title:"Artery & vein", text:"Find every layer in both vessels." },
-      { id:"gas", title:"Gas exchange", text:"Finish the trachea and the lung." },
+      { id:"gas", title:"Gas exchange", text:"Finish the trachea, bronchus and lung." },
+      { id:"xylem", title:"Xylem & phloem", text:"Find the cells in the LS of xylem and phloem." },
+      { id:"blood", title:"Blood cells", text:"Find each type of blood cell in the smear." },
       { id:"rules", title:"Plan diagram rules", text:"Spot every mistake in the student plan diagram." }
     ],
     columns:[{key:"slide",label:"Slide"},{key:"asked",label:"Asked to find"},{key:"clicked",label:"You clicked"},{key:"ok",label:"Correct?"}],
@@ -261,6 +300,12 @@ Lab.register({
         a:"Thick waxy cuticle (less evaporation through the surface); rolled leaf with hinge cells (traps humid air next to the stomata); sunken stomata and hairs (trap moist air, so the water potential gradient is smaller and less water vapour diffuses out)." },
       { q:"How does the wall of an artery differ from that of a vein, and why?",
         a:"The artery has a thick tunica media of smooth muscle and elastic fibres and a narrow lumen: it withstands and evens out high, pulsing pressure. The vein has a thin tunica media and a wide lumen because blood pressure is low; it has valves to prevent backflow." },
+      { q:"How do you tell the four blood cells apart in a smear?",
+        a:"Red blood cells: small, biconcave (pale centre), no nucleus. Neutrophil: a nucleus with several (2–5) lobes and granular cytoplasm. Lymphocyte: small, with a large round nucleus that almost fills the cell and a thin rim of cytoplasm. Monocyte: the largest, with a kidney- or bean-shaped nucleus." },
+      { q:"When you draw cells (not a plan), how should cell walls be shown?",
+        a:"Draw each cell wall with two lines to show its thickness, and use three lines where two plant cells touch (the shared middle lamella between the two walls). Draw only what you can see, with the correct shapes and relative sizes, and no shading." },
+      { q:"How do xylem vessel elements differ from phloem sieve tube elements in a longitudinal section?",
+        a:"Xylem vessel elements are wide, dead, empty tubes with no end walls and lignin thickening (rings, spirals or pitted walls). Sieve tube elements are living, have sieve plates across their end walls, thin cellulose walls and a companion cell beside each one." },
       { q:"Why is the cartilage in the trachea C-shaped?",
         a:"It holds the trachea open so it doesn’t collapse when air pressure falls during inspiration, while the gap at the back lets the oesophagus expand when food is swallowed." }
     ],
@@ -296,8 +341,8 @@ Lab.register({
         const t = p.dataset.t, ok = t === target;
         ctx.record({ slide:SLIDES[slide].name, asked:target, clicked:t, ok: ok ? "✓" : "✗" }, true);
         if(ok){ found[slide].add(t); ctx.toast("✓ " + t); nextTarget();
-          if(!target){ const ch = { stem:"stem", root:"root", leaf:"leaf", marram:"marram", vessels:"vessels" }[slide]; if(ch) ctx.complete(ch);
-            if(found.trachea.size === SLIDES.trachea.tissues.length && found.lung.size === SLIDES.lung.tissues.length) ctx.complete("gas"); } }
+          if(!target){ const ch = { stem:"stem", root:"root", leaf:"leaf", marram:"marram", vessels:"vessels", xylem:"xylem", blood:"blood" }[slide]; if(ch) ctx.complete(ch);
+            if(["trachea", "bronchus", "lung"].every(k => found[k].size === SLIDES[k].tissues.length)) ctx.complete("gas"); } }
         else { wrong++; ctx.toast(`That’s the ${t}. Look for the ${target}.`); }
         draw();
       });
