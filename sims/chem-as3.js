@@ -47,10 +47,10 @@
   const CAT = {
     "Al³⁺":{ naoh:["white ppt.","white ppt., soluble in excess",W,"dis"], nh3:["white ppt.","white ppt., insoluble in excess",W] },
     "NH₄⁺":{ naoh:["no ppt.","no ppt.",null], nh3:["no ppt.","no ppt.",null], warm:true },
-    "Ba²⁺":{ naoh:["faint white ppt. (usually seen unless the reagents are pure)","faint white ppt.",W,"faint"], nh3:["no ppt.","no ppt.",null] },
-    "Ca²⁺":{ naoh:["white ppt. (with high [Ca²⁺])","white ppt., insoluble in excess",W], nh3:["no ppt.","no ppt.",null] },
+    "Ba²⁺":{ naoh:["faint white ppt. (observed unless [Ba²⁺] is very low)","faint white ppt.",W,"faint"], nh3:["no ppt.","no ppt.",null] },
+    "Ca²⁺":{ naoh:["white ppt. (unless [Ca²⁺] is very low)","white ppt., insoluble in excess",W], nh3:["no ppt.","no ppt.",null] },
     "Cr³⁺":{ sol:[100,150,110], naoh:["grey-green ppt.","grey-green ppt. dissolves in excess, giving a dark green solution",[115,140,115],"green"], nh3:["grey-green ppt.","grey-green ppt., insoluble in excess",[115,140,115]] },
-    "Cu²⁺":{ sol:[80,150,230], naoh:["pale blue ppt.","pale blue ppt., insoluble in excess",[120,175,235]], nh3:["blue ppt.","blue ppt. dissolves in excess, giving a dark blue solution",[90,155,230],"dblue"] },
+    "Cu²⁺":{ sol:[80,150,230], naoh:["pale blue ppt.","pale blue ppt., insoluble in excess",[120,175,235]], nh3:["pale blue ppt.","pale blue ppt. soluble in excess, giving a dark blue solution",[120,175,235],"dblue"] },
     "Fe²⁺":{ sol:[200,230,195], naoh:["green ppt., turning brown on contact with air","green ppt., insoluble in excess; turns brown at the surface",[95,135,85]], nh3:["green ppt., turning brown on contact with air","green ppt., insoluble in excess",[95,135,85]] },
     "Fe³⁺":{ sol:[220,175,80], naoh:["red-brown ppt.","red-brown ppt., insoluble in excess",[160,70,30]], nh3:["red-brown ppt.","red-brown ppt., insoluble in excess",[160,70,30]] },
     "Mg²⁺":{ naoh:["white ppt.","white ppt., insoluble in excess",W], nh3:["white ppt.","white ppt., insoluble in excess",W] },
@@ -58,10 +58,10 @@
     "Zn²⁺":{ naoh:["white ppt.","white ppt., soluble in excess",W,"dis"], nh3:["white ppt.","white ppt., soluble in excess",W,"dis"] },
     "Na⁺":{ naoh:["no ppt.","no ppt.",null], nh3:["no ppt.","no ppt.",null] }
   };
-  const ANIONS = ["CO₃²⁻","Cl⁻","Br⁻","I⁻","NO₃⁻","NO₂⁻","SO₄²⁻","SO₃²⁻"];
+  const ANIONS = ["CO₃²⁻","Cl⁻","Br⁻","I⁻","NO₃⁻","NO₂⁻","SO₄²⁻","SO₃²⁻","S₂O₃²⁻"];
   const SALTS = [["Al³⁺","SO₄²⁻"],["Al³⁺","NO₃⁻"],["NH₄⁺","Cl⁻"],["NH₄⁺","CO₃²⁻"],["NH₄⁺","NO₃⁻"],["NH₄⁺","SO₄²⁻"],["Ba²⁺","Cl⁻"],["Ba²⁺","NO₂⁻"],["Ba²⁺","Br⁻"],
     ["Ca²⁺","Cl⁻"],["Ca²⁺","NO₃⁻"],["Cr³⁺","SO₄²⁻"],["Cr³⁺","Cl⁻"],["Cu²⁺","SO₄²⁻"],["Cu²⁺","NO₃⁻"],["Fe²⁺","SO₄²⁻"],["Fe³⁺","Cl⁻"],["Fe³⁺","NO₃⁻"],
-    ["Mg²⁺","SO₄²⁻"],["Mg²⁺","Br⁻"],["Mn²⁺","SO₄²⁻"],["Mn²⁺","Cl⁻"],["Zn²⁺","SO₄²⁻"],["Zn²⁺","I⁻"],["Na⁺","CO₃²⁻"],["Na⁺","SO₃²⁻"],["Na⁺","NO₂⁻"],["Na⁺","I⁻"],["Na⁺","Br⁻"]];
+    ["Mg²⁺","SO₄²⁻"],["Mg²⁺","Br⁻"],["Mn²⁺","SO₄²⁻"],["Mn²⁺","Cl⁻"],["Zn²⁺","SO₄²⁻"],["Zn²⁺","I⁻"],["Na⁺","CO₃²⁻"],["Na⁺","SO₃²⁻"],["Na⁺","NO₂⁻"],["Na⁺","I⁻"],["Na⁺","Br⁻"],["Na⁺","S₂O₃²⁻"],["NH₄⁺","S₂O₃²⁻"]];
   const GASES = {
     NH3:{ red:"turns blue", blue:"no change", lime:"no change", lit:"no pop; splint goes out", glow:"no change", mno4:"stays purple" },
     CO2:{ red:"no change", blue:"turns red", lime:"white ppt. (milky)", lit:"splint goes out", glow:"no change", mno4:"stays purple" },
@@ -75,7 +75,7 @@
   Lab.register({
     id:"as-qualitative", subject:"chemistry", level:["as"], topic:"Qualitative analysis · Ions & gases", interactive:true,
     title:"Qualitative analysis: ions and gases",
-    summary:"Every cation, anion and gas test in the 9701 qualitative analysis notes, including Mg²⁺, Mn²⁺, Ba²⁺, Cr³⁺, nitrite and sulfite. Identify unknown salts and gases.",
+    summary:"Every cation, anion, gas and element test in the 9701 (2025–2027) qualitative analysis notes, including Mn²⁺, Cr³⁺, nitrite, sulfite, thiosulfate, high [Ca²⁺] for sulfate and starch for iodine, plus heating a solid in a hard-glass tube. Chlorine and sulfur dioxide are included as extras.",
     aim:"Carry out the tests in the Cambridge 9701 qualitative analysis notes, record observations in the expected wording, and identify the ions in an unknown salt and an unknown gas.",
     variables:null,
     stageTitle:"Test tubes", controlsTitle:"Tests",
@@ -85,7 +85,9 @@
       { id:"tm",    title:"Air oxidation", text:"Identify a salt of Fe²⁺ or Mn²⁺ from the ppt. turning brown." },
       { id:"hal",   title:"Halides", text:"Use aqueous ammonia to tell Cl⁻, Br⁻ and I⁻ apart." },
       { id:"gas3",  title:"Three gases", text:"Identify three unknown gases." },
-      { id:"no2",   title:"Nitrite or nitrate?", text:"Identify a nitrite using dilute acid." }
+      { id:"no2",   title:"Nitrite or nitrate?", text:"Identify a nitrite: both give NH₃ with Al foil, but only nitrite decolourises acidified KMnO₄." },
+      { id:"s2o3",  title:"Thiosulfate", text:"Identify a thiosulfate from the slow off-white / pale yellow ppt. with acid." },
+      { id:"i2",    title:"Iodine with starch", text:"Oxidise an iodide with acidified KMnO₄, then show the iodine with starch." }
     ],
     columns:[{key:"n",label:"Unknown"},{key:"test",label:"Test"},{key:"obs",label:"Observation"}],
     questions:[
@@ -97,13 +99,20 @@
         a:"Warming NH₄⁺ with NaOH(aq) gives ammonia by itself. Warm with NaOH(aq) first until no more NH₃ is given off, then add the foil." },
       { q:"How do sulfate and sulfite differ with Ba²⁺(aq)?",
         a:"Both give a white ppt. BaSO₄ is insoluble in excess dilute strong acid; BaSO₃ dissolves. Sulfite also gives SO₂ on warming with dilute acid, which turns acidified KMnO₄(aq) colourless." },
-      { q:"How does a nitrite behave with dilute acid?",
-        a:"It gives nitrogen monoxide, NO (colourless), which reacts with air to form pale brown NO₂ at the mouth of the tube." },
+      { q:"How do you tell a nitrite from a nitrate?",
+        a:"Both give NH₃ when warmed with NaOH(aq) and aluminium foil. Only nitrite decolourises acidified aqueous KMnO₄. (With dilute acid a nitrite also gives colourless NO, which turns pale brown in air.)" },
+      { q:"How do you test for sulfate without a barium salt, and what does thiosulfate do with acid?",
+        a:"Sulfate gives a white ppt. with a high concentration of Ca²⁺(aq). Thiosulfate gives an off-white / pale yellow ppt. of sulfur slowly with H⁺." },
+      { q:"After adding acidified KMnO₄(aq) to FA 3 the solution turns brown. How do you confirm iodine?",
+        a:"Add starch solution: iodine gives a blue-black colour. This shows FA 3 contained iodide, which was oxidised to I₂." },
+      { q:"Why heat a solid in a hard-glass test-tube, and what safety step does the syllabus mention?",
+        a:"Hard glass withstands strong heating. Hold the tube in a test-tube holder, point it away from people, and heat gently at first. Look for condensation (water of crystallisation), gases (test them) and colour changes." },
       { q:"Why do you write ‘ppt.’ and describe colour, and say ‘no change’ rather than leaving a blank?",
         a:"Examiners need a full observation: colour, what forms (ppt., solution, gas) and whether it dissolves in excess. ‘No change’ or ‘no ppt.’ is itself an observation and earns credit." }
     ],
     setup(ctx){
-      let mode = "salt", unknown, num = 0, gas, gnum = 0, afterAg = false, afterBa = false, salts = 0, gasesOk = 0;
+      let mode = "salt", unknown, num = 0, gas, gnum = 0, afterAg = false, afterBa = false, afterMn = false, salts = 0, gasesOk = 0;
+      const HYD = ["Al³⁺","Cr³⁺","Cu²⁺","Fe²⁺","Fe³⁺","Mg²⁺","Mn²⁺","Zn²⁺","Ca²⁺"];
       const st = tubeStage(ctx, "qa-svg");
       const solOf = () => CAT[unknown[0]].sol || null;
       function result(k){
@@ -120,16 +129,18 @@
             if(an === "CO₃²⁻"){ out.bubbles = true; out.obs = "effervescence; gas gives a white ppt. with limewater (CO₂)"; }
             else if(an === "NO₂⁻"){ out.bubbles = true; out.fumes = [190,120,60]; out.obs = "colourless gas given off, turning pale brown in air (NO → NO₂)"; }
             else if(an === "SO₃²⁻"){ out.bubbles = true; out.obs = "on warming, gas given off that turns acidified KMnO₄(aq) from purple to colourless (SO₂)"; }
+            else if(an === "S₂O₃²⁻"){ out.ppt = [245,235,170]; out.suspend = true; out.pptAmount = .7; out.obs = "off-white / pale yellow ppt. forms slowly (sulfur)"; }
             else out.obs = "no effervescence, no change";
             break;
           case "ag": afterAg = true;
-            if(an === "Cl⁻"){ out.ppt = W; out.obs = "white ppt."; } else if(an === "Br⁻"){ out.ppt = [240,228,185]; out.obs = "cream ppt."; } else if(an === "I⁻"){ out.ppt = [245,222,90]; out.obs = "yellow ppt."; } else out.obs = "no ppt.";
+            if(an === "Cl⁻"){ out.ppt = W; out.obs = "white ppt."; } else if(an === "Br⁻"){ out.ppt = [240,228,185]; out.obs = "cream / off-white ppt."; } else if(an === "I⁻"){ out.ppt = [245,222,90]; out.obs = "pale yellow ppt."; }
+            else if(an === "S₂O₃²⁻"){ out.ppt = [245,235,170]; out.suspend = true; out.pptAmount = .5; out.obs = "slowly turns cloudy off-white / pale yellow (the nitric acid makes sulfur); no silver halide ppt."; } else out.obs = "no ppt.";
             break;
           case "agnh3":
             if(!afterAg){ out.obs = "Do the AgNO₃ test first, then add NH₃(aq) to the ppt."; break; }
             if(an === "Cl⁻"){ out.sol = null; out.obs = "white ppt. dissolves in NH₃(aq), giving a colourless solution"; }
-            else if(an === "Br⁻"){ out.ppt = [240,228,185]; out.pptAmount = .45; out.obs = "cream ppt. is partially soluble in NH₃(aq)"; }
-            else if(an === "I⁻"){ out.ppt = [245,222,90]; out.obs = "yellow ppt. is insoluble in NH₃(aq)"; }
+            else if(an === "Br⁻"){ out.ppt = [240,228,185]; out.pptAmount = .45; out.obs = "cream / off-white ppt. is partially soluble in NH₃(aq)"; }
+            else if(an === "I⁻"){ out.ppt = [245,222,90]; out.obs = "pale yellow ppt. is insoluble in NH₃(aq)"; }
             else out.obs = "no ppt. to test";
             break;
           case "ba": afterBa = true;
@@ -142,34 +153,53 @@
             else if(an === "CO₃²⁻"){ out.bubbles = true; out.obs = "white ppt. dissolves with effervescence"; }
             else out.obs = "no ppt. to test";
             break;
+          case "ca":
+            if(an === "SO₄²⁻" || an === "SO₃²⁻" || an === "CO₃²⁻"){ out.ppt = W; out.obs = "white ppt."; } else out.obs = "no ppt.";
+            break;
           case "al":
             out.obs = an === "NO₃⁻" || an === "NO₂⁻" || cat === "NH₄⁺" ? "on warming, gas given off that turns damp red litmus blue (NH₃)" : "no ammonia given off";
             if(c.naoh[2]){ out.ppt = c.naoh[2]; out.obs = c.naoh[1] + "; " + out.obs; }
             break;
           case "mno4":
-            if(an === "SO₃²⁻" || an === "NO₂⁻" || cat === "Fe²⁺"){ out.sol = null; out.obs = "purple KMnO₄(aq) is decolourised"; }
+            afterMn = true;
+            if(an === "SO₃²⁻" || an === "NO₂⁻" || an === "S₂O₃²⁻" || cat === "Fe²⁺"){ out.sol = cat === "Fe²⁺" ? [225,200,110] : null; out.obs = "acidified KMnO₄(aq) is decolourised (purple → colourless)" + (cat === "Fe²⁺" ? "; solution turns pale yellow (Fe³⁺)" : ""); }
             else if(an === "I⁻"){ out.sol = [150,75,20]; out.obs = "purple colour goes; solution turns brown (I₂ formed)"; }
             else { out.sol = [150,40,160]; out.obs = "stays purple"; }
             break;
+          case "starch":
+            if(afterMn && an === "I⁻"){ out.sol = [20,25,75]; out.solA = .92; out.obs = "blue-black colour (I₂ present)"; }
+            else if(afterMn){ out.sol = [150,40,160]; out.obs = "no blue-black colour (no I₂)"; }
+            else out.obs = "no blue-black colour (no I₂). Try adding acidified KMnO₄(aq) first, then starch.";
+            break;
+          case "heat": out.sol = null; out.fill = .1; {
+            const hyd = HYD.includes(cat) && an !== "CO₃²⁻";
+            if(cat === "NH₄⁺") out.obs = { "Cl⁻":"white solid sublimes and re-forms on the cooler part of the tube", "NO₃⁻":"solid melts, then gives off a colourless gas, leaving no residue", "CO₃²⁻":"solid disappears; gases turn damp red litmus blue (NH₃) and limewater milky (CO₂)", "S₂O₃²⁻":"gives off NH₃ (damp red litmus turns blue); yellow sulfur residue" }[an] || "gives off NH₃ (damp red litmus turns blue)";
+            else if(an === "NO₃⁻") out.obs = `${hyd ? "condensation at the top of the tube; " : ""}brown gas given off (NO₂) and a glowing splint relights (O₂)${cat === "Cu²⁺" ? "; black residue (CuO)" : cat === "Fe³⁺" ? "; red-brown residue (Fe₂O₃)" : ""}`;
+            else if(cat === "Cu²⁺" && an === "SO₄²⁻") out.obs = "blue crystals turn white; condensation (water) at the top of the tube";
+            else if(hyd) out.obs = "condensation (water of crystallisation) forms at the top of the tube";
+            else if(an === "S₂O₃²⁻") out.obs = "crystals melt in their own water of crystallisation; condensation at the top of the tube";
+            else out.obs = "no change";
+            if(out.obs.startsWith("condensation") || out.obs.includes("condensation")) out.fumes = [225,232,240];
+            break; }
         }
         return out;
       }
       const TESTS = [["naoh1","NaOH(aq), a few drops"],["naoh2","NaOH(aq), in excess"],["warm","Warm with NaOH(aq); damp red litmus"],["nh31","NH₃(aq), a few drops"],["nh32","NH₃(aq), in excess"],
-        ["acid","Dilute HCl (warm); test any gas"],["ag","Dilute HNO₃ then AgNO₃(aq)"],["agnh3","…then NH₃(aq) to the silver ppt."],["ba","Ba(NO₃)₂(aq) or BaCl₂(aq)"],["baacid","…then excess dilute HCl"],
-        ["al","NaOH(aq) + Al foil, warm; damp red litmus"],["mno4","Acidified KMnO₄(aq), a few drops"]];
+        ["acid","Dilute HCl (warm); test any gas"],["ag","Dilute HNO₃ then AgNO₃(aq)"],["agnh3","…then NH₃(aq) to the silver ppt."],["ba","Ba(NO₃)₂(aq) or BaCl₂(aq)"],["baacid","…then excess dilute HCl"],["ca","Ca²⁺(aq), high concentration"],
+        ["al","NaOH(aq) + Al foil, warm; damp red litmus"],["mno4","Acidified KMnO₄(aq), a few drops"],["starch","…then starch solution"],["heat","Heat the solid in a hard-glass test-tube"]];
       const GTESTS = [["red","Damp red litmus"],["blue","Damp blue litmus"],["lime","Bubble through limewater"],["lit","Lighted splint"],["glow","Glowing splint"],["mno4","Acidified KMnO₄(aq) paper"]];
       const saltBox = ctx.html(`<div></div>`), gasBox = ctx.html(`<div></div>`);
       ctx.controls.insertBefore(ctx.seg({ label:"Unknown", value:mode, options:[["salt","Salt solution"],["gas","Gas sample"]], onChange(v){ mode = v; sync(); } }).node, saltBox);
       testGrid(ctx, "Tests on the solution", TESTS, (k, name) => {
         const r = result(k);
-        st.show([{ sol:r.sol, ppt:r.ppt, pptAmount:r.pptAmount, bubbles:r.bubbles, fumes:r.fumes, label:"FA " + num }], `Unknown salt FA ${num}`, r.obs);
+        st.show([{ sol:r.sol, solA:r.solA, fill:r.fill, ppt:r.ppt, pptAmount:r.pptAmount, suspend:r.suspend, bubbles:r.bubbles, fumes:r.fumes, label:"FA " + num }], `Unknown salt FA ${num}`, r.obs);
         ctx.readout([["Test", name], ["Observation", r.obs]]);
         ctx.record({ n:"FA " + num, test:name, obs:r.obs }, true);
       });
       const saltParts = [...ctx.controls.children].slice(-2); saltParts.forEach(n => saltBox.appendChild(n));
       idBox(ctx, "Identify the salt", [["Cation", Object.keys(CAT)], ["Anion", ANIONS]], ([c, a]) => {
         const ok = c === unknown[0] && a === unknown[1];
-        if(ok){ salts++; if(salts >= 3) ctx.complete("salt3"); if(c === "Fe²⁺" || c === "Mn²⁺") ctx.complete("tm"); if(["Cl⁻","Br⁻","I⁻"].includes(a) && ctx.rows().some(r => r.n === "FA " + num && r.test.startsWith("…then NH₃"))) ctx.complete("hal"); if(a === "NO₂⁻") ctx.complete("no2"); }
+        if(ok){ salts++; if(salts >= 3) ctx.complete("salt3"); if(c === "Fe²⁺" || c === "Mn²⁺") ctx.complete("tm"); if(["Cl⁻","Br⁻","I⁻"].includes(a) && ctx.rows().some(r => r.n === "FA " + num && r.test.startsWith("…then NH₃"))) ctx.complete("hal"); if(a === "NO₂⁻") ctx.complete("no2"); if(a === "S₂O₃²⁻") ctx.complete("s2o3"); if(a === "I⁻" && ctx.rows().some(r => r.n === "FA " + num && r.test.startsWith("…then starch") && r.obs.startsWith("blue-black"))) ctx.complete("i2"); }
         return ok ? [true, `Correct — FA ${num} contains ${unknown[0]} and ${unknown[1]}.`] : [false, `Cation ${c === unknown[0] ? "✓" : "✗"} · anion ${a === unknown[1] ? "✓" : "✗"}. Compare your observations with the notes.`];
       }, newSalt);
       saltBox.appendChild(ctx.controls.lastElementChild);
@@ -185,7 +215,7 @@
         return ok ? [true, `Correct — G${gnum} is ${GAS_NAMES[gas]}.`] : [false, "Not that one. Which single test is unique to each gas?"];
       }, newGas);
       gasBox.appendChild(ctx.controls.lastElementChild);
-      function newSalt(){ let n; do{ n = SALTS[Math.floor(Math.random()*SALTS.length)]; }while(unknown && n === unknown); unknown = n; num++; afterAg = afterBa = false;
+      function newSalt(){ let n; do{ n = SALTS[Math.floor(Math.random()*SALTS.length)]; }while(unknown && n === unknown); unknown = n; num++; afterAg = afterBa = afterMn = false;
         st.show([{ sol:solOf(), label:"FA " + num }], `Unknown salt FA ${num}`, `FA ${num} is a ${solOf() ? "coloured" : "colourless"} solution. Choose a test.`); }
       function newGas(){ const ks = Object.keys(GASES); let g; do{ g = ks[Math.floor(Math.random()*ks.length)]; }while(g === gas); gas = g; gnum++;
         st.show([{ sol:null, fill:.02, label:"gas G" + gnum }], `Unknown gas G${gnum}`, "A colourless gas in a stoppered tube. Choose a test."); }
@@ -201,33 +231,46 @@
     "hexane":                 { cls:"alkane" },
     "ethanol":                { cls:"primary alcohol", cr:1, iod:1, na:1, pcl5:1 },
     "propan-1-ol":            { cls:"primary alcohol", cr:1, na:1, pcl5:1 },
+    "butan-1-ol":             { cls:"primary alcohol", cr:1, na:1, pcl5:1 },
+    "2-methylpropan-1-ol":    { cls:"primary alcohol", cr:1, na:1, pcl5:1 },
     "propan-2-ol":            { cls:"secondary alcohol", cr:1, iod:1, na:1, pcl5:1 },
+    "butan-2-ol":             { cls:"secondary alcohol", cr:1, iod:1, na:1, pcl5:1 },
     "2-methylpropan-2-ol":    { cls:"tertiary alcohol", na:1, pcl5:1 },
     "ethanal":                { cls:"aldehyde", cr:1, dnph:1, tol:1, feh:1, iod:1 },
     "propanal":               { cls:"aldehyde", cr:1, dnph:1, tol:1, feh:1 },
+    "glucose (aqueous)":      { cls:"aldehyde (sugar)", cr:1, tol:1, feh:1 },
     "propanone":              { cls:"ketone", dnph:1, iod:1 },
     "pentan-3-one":           { cls:"ketone", dnph:1 },
     "ethanoic acid":          { cls:"carboxylic acid", co3:1, na:1, pcl5:1 },
+    "methanoic acid":         { cls:"carboxylic acid", co3:1, na:1, pcl5:1, cr:1, tol:1, feh:1 },
+    "ethanedioic acid (aqueous)":{ cls:"dicarboxylic acid", co3:1, mno4:1 },
+    "ethyl ethanoate":        { cls:"ester" },
     "1-chlorobutane":         { cls:"halogenoalkane", hal:"Cl", t:420 },
     "1-bromobutane":          { cls:"halogenoalkane", hal:"Br", t:140 },
     "1-iodobutane":           { cls:"halogenoalkane", hal:"I", t:35 },
     "2-bromo-2-methylpropane":{ cls:"halogenoalkane", hal:"Br", t:6 }
   };
+  /* what you see on shaking 1 cm³ with 3 cm³ of water (default: mixes completely) */
+  const WAT = { "cyclohexene":"top", "hexane":"top", "butan-1-ol":"part", "2-methylpropan-1-ol":"part", "pentan-3-one":"part", "ethyl ethanoate":"ester",
+    "1-chlorobutane":"bottom", "1-bromobutane":"bottom", "1-iodobutane":"bottom", "2-bromo-2-methylpropane":"bottom" };
   const OT = [
-    ["br","Bromine water, shake"],["mno4","Acidified KMnO₄(aq), cold"],["cr","Acidified K₂Cr₂O₇(aq), warm"],["dnph","2,4-DNPH reagent"],["tol","Tollens’ reagent, warm"],
+    ["wat","Shake with water; smell cautiously"],    ["br","Bromine water, shake"],["mno4","Acidified KMnO₄(aq), warm"],["cr","Acidified K₂Cr₂O₇(aq), warm"],["dnph","2,4-DNPH reagent"],["tol","Tollens’ reagent, warm"],
     ["feh","Fehling’s solution, warm"],["iod","Alkaline I₂(aq), warm"],["co3","Na₂CO₃(aq)"],["na","Sodium metal (dry sample)"],["pcl5","PCl₅ (fume cupboard)"],
     ["hyd","Warm with NaOH(aq), acidify (HNO₃), add AgNO₃(aq)"],["agrate","AgNO₃ in ethanol at 50 °C — time the ppt."]
   ];
   function orgResult(c, k){
     const o = ORG[c], r = {};
     switch(k){
+      case "wat": { const w = WAT[c];
+        r.obs = w === "top" ? "does not mix: a colourless layer floats on top" : w === "bottom" ? "does not mix: a dense colourless layer sinks to the bottom" : w === "part" ? "partly mixes; two layers remain" : w === "ester" ? "partly mixes; two layers remain; sweet, fruity smell" : "mixes completely with water";
+        if(w === "top" || w === "part" || w === "ester") r.layer = [250,240,200]; if(w === "bottom"){ r.sol = [250,240,200]; r.solA = .5; r.fill = .3; } break; }
       case "br": if(o.br){ r.sol = null; r.obs = "orange bromine water is decolourised"; } else { r.sol = [235,150,40]; r.obs = "stays orange"; } break;
-      case "mno4": if(o.mno4){ r.sol = null; r.obs = "purple solution turns colourless"; } else { r.sol = [150,40,160]; r.obs = "stays purple"; } break;
+      case "mno4": if(o.mno4 || o.br || o.cr){ r.sol = null; r.obs = "purple solution turns colourless (compound oxidised)"; } else { r.sol = [150,40,160]; r.obs = "stays purple"; } break;
       case "cr": if(o.cr){ r.sol = [50,140,80]; r.obs = "orange solution turns green"; } else { r.sol = [235,130,30]; r.obs = "stays orange"; } break;
       case "dnph": if(o.dnph){ r.sol = [245,190,60]; r.ppt = [235,120,30]; r.obs = "orange ppt."; } else { r.sol = [245,190,60]; r.obs = "no ppt.; solution stays yellow-orange"; } break;
-      case "tol": if(o.tol){ r.mirror = 1; r.obs = "silver mirror forms on the inside of the tube"; } else r.obs = "no silver mirror; stays colourless"; break;
-      case "feh": if(o.feh){ r.sol = [60,110,220]; r.ppt = [190,60,30]; r.obs = "blue solution gives an orange-red (brick-red) ppt."; } else { r.sol = [60,110,220]; r.obs = "stays blue; no ppt."; } break;
-      case "iod": if(o.iod){ r.ppt = [250,225,80]; r.obs = "pale yellow ppt. (CHI₃) with an antiseptic smell"; } else { r.sol = [235,190,110]; r.obs = "no ppt."; } break;
+      case "tol": if(o.tol){ r.mirror = 1; r.ppt = [60,60,60]; r.pptAmount = .4; r.obs = "silver mirror / black ppt. forms"; } else r.obs = "no silver mirror; stays colourless"; break;
+      case "feh": if(o.feh){ r.sol = [60,110,220]; r.ppt = [190,60,30]; r.obs = "blue solution gives an orange / red ppt."; } else { r.sol = [60,110,220]; r.obs = "stays blue; no ppt."; } break;
+      case "iod": if(o.iod){ r.ppt = [250,225,80]; r.obs = "yellow ppt. (CHI₃) with an antiseptic smell"; } else { r.sol = [235,190,110]; r.obs = "no ppt."; } break;
       case "co3": if(o.co3){ r.bubbles = 1; r.obs = "effervescence; gas turns limewater milky (CO₂)"; } else r.obs = "no effervescence"; break;
       case "na": if(o.na){ r.bubbles = 1; r.obs = "effervescence; gas pops with a lighted splint (H₂)"; } else r.obs = "no reaction"; break;
       case "pcl5": if(o.pcl5){ r.fumes = [235,235,235]; r.obs = "steamy white fumes (HCl) that turn damp blue litmus red"; } else r.obs = "no steamy fumes"; break;
@@ -240,7 +283,7 @@
   Lab.register({
     id:"as-organic", subject:"chemistry", level:["as"], topic:"Organic chemistry · Functional-group tests", interactive:true,
     title:"Organic functional-group tests",
-    summary:"Bromine water, acidified dichromate, 2,4-DNPH, Tollens’, Fehling’s, alkaline iodine, Na₂CO₃, sodium, PCl₅ and silver nitrate. Identify unknown organic liquids and compare hydrolysis rates.",
+    summary:"The four tests the 9701 syllabus requires (Fehling’s, Tollens’, alkaline iodine and acidified KMnO₄ for anything oxidisable) plus bromine water, dichromate, 2,4-DNPH, Na₂CO₃, sodium, PCl₅ and silver nitrate. Covers the listed alcohols, propanal, propanone, glucose, methanoic and ethanedioic acids, ethyl ethanoate and the halogenobutanes.",
     aim:"Use the AS tests for alkenes, alcohols, aldehydes, ketones, carboxylic acids and halogenoalkanes to identify unknown organic compounds.",
     variables:null,
     stageTitle:"Test tubes", controlsTitle:"Tests",
@@ -265,6 +308,10 @@
         a:"The C–I bond is the weakest (lowest bond energy), so it breaks most easily. Bond strength matters more than bond polarity here." },
       { q:"Why is 2-bromo-2-methylpropane hydrolysed much faster than 1-bromobutane?",
         a:"It is tertiary and reacts by the SN1 mechanism via a stable tertiary carbocation." },
+      { q:"Which of the unknowns decolourise acidified KMnO₄, and what does that show?",
+        a:"Anything that can be oxidised: alkenes, primary and secondary alcohols, aldehydes (including glucose), methanoic acid and ethanedioic acid (on warming). Tertiary alcohols, ketones, ethanoic acid, esters and alkanes leave it purple." },
+      { q:"Why do methanoic acid and glucose give positive Fehling’s and Tollens’ tests?",
+        a:"Methanoic acid, HCOOH, contains an H–C=O group and is oxidised to CO₂ and water. Glucose has an aldehyde group, which is why the syllabus allows it as a substitute for an aldehyde." },
       { q:"Why should a water bath (not a Bunsen) be used to warm organic liquids?",
         a:"Most are volatile and flammable. A water bath from a kettle avoids naked flames." }
     ],

@@ -1,29 +1,53 @@
 "use strict";
 /* ══════════════════════════════════════════════════════════════════
    CHEMISTRY · AS LEVEL (9701 Paper 3) — part 1
-   Titrations (KMnO₄ redox · iodine–thiosulfate · back titration) ·
+   Titrations (weak acid–alkali with indicator choice · KMnO₄ with Fe²⁺,
+   H₂O₂ and ethanedioate · iodine–thiosulfate · back titration) ·
    Thermometry (neutralisation · displacement with extrapolation ·
    Hess's law · thermometric titration)
 ══════════════════════════════════════════════════════════════════ */
 
 /* ───────────── AS TITRATIONS ───────────── */
 (function(){
+  const KMNO4 = { bur:"FA 1 is 0.0200 mol dm⁻³ KMnO₄", burCol:"rgba(120,25,130,.85)", cB:.0200, ind:null, redox:true };
+  /* indicators listed in the 9701 syllabus (p. 67) */
+  const IND = {
+    tp:{ name:"thymolphthalein", lo:9.3, hi:10.5, a:[232,238,246,.25], b:[40,80,200,.8], an:"colourless", mid:"pale blue", bn:"blue" },
+    tb:{ name:"thymol blue", lo:8.0, hi:9.6, a:[240,210,60,.75], b:[50,90,200,.8], an:"yellow", mid:"green", bn:"blue" },
+    mo:{ name:"methyl orange", lo:2.9, hi:4.6, a:[220,45,45,.75], b:[245,205,40,.8], an:"red", mid:"orange", bn:"yellow" },
+    bb:{ name:"bromophenol blue", lo:3.0, hi:4.5, a:[240,210,60,.75], b:[60,70,190,.8], an:"yellow", mid:"green", bn:"blue" }
+  };
   const TM = {
-    mno4:{ short:"KMnO₄ / Fe²⁺", name:"Redox: KMnO₄ into Fe²⁺",
-      bur:"FA 1 is 0.0200 mol dm⁻³ KMnO₄", burCol:"rgba(120,25,130,.85)", cB:.0200,
-      flask:"FA 2 is aqueous iron(II) ammonium sulfate", reagent:"Add 20 cm³ dilute H₂SO₄", ind:null,
+    weak:{ short:"Weak acid / NaOH", name:"Acid–alkali: ethanoic acid and NaOH",
+      bur:"FA 3 is 0.100 mol dm⁻³ NaOH", burCol:"rgba(200,215,235,.45)", cB:.100,
+      flask:"FA 2: 25.0 cm³ of FA 1 (ethanoic acid) made up to 250 cm³ in a volumetric flask", reagent:null, ind:"Add the chosen indicator", dilute:true,
+      gen:() => Kit.round(.85 + Math.random()*.3, 3), Veq:c => c/10*25/.100,
+      ans:"Concentration of ethanoic acid in FA 1 / mol dm⁻³", from:t => 10*.100*t/25, ph:"e.g. 0.985",
+      how:"n(NaOH) = 0.100 × titre ÷ 1000 = n(CH₃COOH) in 25.0 cm³ of FA 2. c(FA 2) = n ÷ 0.0250; FA 1 is 10 times more concentrated (250 ÷ 25.0)." },
+    mno4:Object.assign({ short:"KMnO₄ / Fe²⁺", name:"Redox: KMnO₄ into Fe²⁺",
+      flask:"FA 4 is aqueous iron(II) ammonium sulfate", reagent:"Add 20 cm³ dilute H₂SO₄",
       gen:() => Kit.round(.085 + Math.random()*.035, 4), Veq:c => c*25/(5*.0200),
-      ans:"Concentration of Fe²⁺ in FA 2 / mol dm⁻³", from:t => 5*.0200*t/25, ph:"e.g. 0.0960",
-      how:"n(MnO₄⁻) = 0.0200 × titre ÷ 1000. MnO₄⁻ + 5Fe²⁺ + 8H⁺ → Mn²⁺ + 5Fe³⁺ + 4H₂O, so n(Fe²⁺) = 5 × n(MnO₄⁻) in 25.0 cm³." },
+      ans:"Concentration of Fe²⁺ in FA 4 / mol dm⁻³", from:t => 5*.0200*t/25, ph:"e.g. 0.0960",
+      how:"n(MnO₄⁻) = 0.0200 × titre ÷ 1000. MnO₄⁻ + 5Fe²⁺ + 8H⁺ → Mn²⁺ + 5Fe³⁺ + 4H₂O, so n(Fe²⁺) = 5 × n(MnO₄⁻) in 25.0 cm³." }, KMNO4),
+    h2o2:Object.assign({ short:"KMnO₄ / H₂O₂", name:"Redox: KMnO₄ into hydrogen peroxide",
+      flask:"FA 5 is dilute aqueous hydrogen peroxide", reagent:"Add 20 cm³ dilute H₂SO₄",
+      gen:() => Kit.round(.044 + Math.random()*.014, 4), Veq:c => c*25*2/5/.0200,
+      ans:"Concentration of H₂O₂ in FA 5 / mol dm⁻³", from:t => .0200*t/1000*5/2/.025, ph:"e.g. 0.0500",
+      how:"2MnO₄⁻ + 5H₂O₂ + 6H⁺ → 2Mn²⁺ + 5O₂ + 8H₂O, so n(H₂O₂) = 5/2 × n(MnO₄⁻) in 25.0 cm³." }, KMNO4),
+    c2o4:Object.assign({ short:"KMnO₄ / C₂O₄²⁻", name:"Redox: KMnO₄ into ethanedioate (warm)",
+      flask:"FA 6 is aqueous sodium ethanedioate, Na₂C₂O₄", reagent:"Add 20 cm³ dilute H₂SO₄ and warm to about 60 °C", warm:true,
+      gen:() => Kit.round(.044 + Math.random()*.014, 4), Veq:c => c*25*2/5/.0200,
+      ans:"Concentration of C₂O₄²⁻ in FA 6 / mol dm⁻³", from:t => .0200*t/1000*5/2/.025, ph:"e.g. 0.0500",
+      how:"2MnO₄⁻ + 5C₂O₄²⁻ + 16H⁺ → 2Mn²⁺ + 10CO₂ + 8H₂O, so n(C₂O₄²⁻) = 5/2 × n(MnO₄⁻) in 25.0 cm³." }, KMNO4),
     io3:{ short:"I₂ / S₂O₃²⁻", name:"Iodine–thiosulfate",
-      bur:"FA 3 is 0.100 mol dm⁻³ Na₂S₂O₃", burCol:"rgba(200,215,235,.45)", cB:.100,
-      flask:"FA 4 is aqueous potassium iodate(V), KIO₃", reagent:"Add excess KI(aq) and dilute H₂SO₄", ind:"Add starch indicator",
+      bur:"FA 7 is 0.100 mol dm⁻³ Na₂S₂O₃", burCol:"rgba(200,215,235,.45)", cB:.100,
+      flask:"FA 8 is aqueous potassium iodate(V), KIO₃", reagent:"Add excess KI(aq) and dilute H₂SO₄", ind:"Add starch indicator",
       gen:() => Kit.round(.0130 + Math.random()*.0045, 5), Veq:c => 6*c*25/.100,
-      ans:"Concentration of IO₃⁻ in FA 4 / mol dm⁻³", from:t => .100*t/1000/6/.025, ph:"e.g. 0.0150",
+      ans:"Concentration of IO₃⁻ in FA 8 / mol dm⁻³", from:t => .100*t/1000/6/.025, ph:"e.g. 0.0150",
       how:"IO₃⁻ + 5I⁻ + 6H⁺ → 3I₂ + 3H₂O and I₂ + 2S₂O₃²⁻ → 2I⁻ + S₄O₆²⁻, so n(IO₃⁻) = n(S₂O₃²⁻) ÷ 6." },
     back:{ short:"Back titration", name:"Back titration: purity of CaCO₃",
-      bur:"FA 5 is 0.100 mol dm⁻³ NaOH", burCol:"rgba(200,215,235,.45)", cB:.100,
-      flask:"FA 6: limestone dissolved in 50.0 cm³ of 1.00 mol dm⁻³ HCl, made up to 250 cm³", reagent:null, ind:"Add methyl orange",
+      bur:"FA 9 is 0.100 mol dm⁻³ NaOH", burCol:"rgba(200,215,235,.45)", cB:.100,
+      flask:"FA 10: limestone dissolved in 50.0 cm³ of 1.00 mol dm⁻³ HCl, made up to 250 cm³", reagent:null, ind:"Add methyl orange",
       gen:() => ({ m:Kit.round(1.80 + Math.random()*.4, 2), P:Kit.round(80 + Math.random()*15, 1) }),
       Veq:u => (.0500 - 2*u.m*u.P/100/100.1)/10/.100*1000,
       ans:"Percentage by mass of CaCO₃ in the limestone", ph:"e.g. 88.5",
@@ -32,9 +56,9 @@
   const short = k => TM[k].short;
 
   Lab.register({
-    id:"as-titrations", subject:"chemistry", level:["as"], topic:"Titrations · Redox & back titration", interactive:true,
-    title:"Redox and back titrations",
-    summary:"Paper 3 titrations: potassium manganate(VII) with iron(II), iodine–thiosulfate with starch, and a back titration to find the purity of limestone. Read the burette yourself.",
+    id:"as-titrations", subject:"chemistry", level:["as"], topic:"Titrations · Acid–alkali, redox & back titration", interactive:true,
+    title:"Redox, weak acid and back titrations",
+    summary:"Every Paper 3 titration in the 9701 syllabus: a weak acid with NaOH and a choice of the listed indicators, KMnO₄ with iron(II), hydrogen peroxide or ethanedioate, iodine–thiosulfate with starch, and a back titration. Read the burette yourself.",
     aim:"Carry out a rough and accurate titrations to concordance, calculate a concentration or a percentage purity, and estimate the uncertainty in the titre.",
     variables:{ iv:"Volume of titrant added from the burette (cm³)", dv:"Colour change at the end point", cv:["25.0 cm³ of the flask solution by pipette","Same indicator (or none for KMnO₄)","Swirl after each addition; add drop by drop near the end point"] },
     stageTitle:"Titration bench", controlsTitle:"Titration",
@@ -46,7 +70,8 @@
       { id:"calc",   title:"Calculate", text:"Work out the concentration or purity from your mean titre." },
       { id:"unc",    title:"Uncertainty", text:"Calculate the percentage uncertainty in one accurate titre." },
       { id:"starch", title:"Starch at the right time", text:"In the iodine titration, add starch only when the solution is pale yellow." },
-      { id:"all",    title:"All three", text:"Reach concordance in all three titrations." }
+      { id:"indic",  title:"Choose the indicator", text:"Titrate the weak acid with an indicator from each pH range and compare the titres." },
+      { id:"all",    title:"Three kinds", text:"Reach concordance in three different titrations." }
     ],
     columns:[{key:"mode",label:"Titration"},{key:"kind",label:"Rough / accurate"},{key:"start",label:"Initial / cm³",dp:2},{key:"end",label:"Final / cm³",dp:2},{key:"titre",label:"Titre / cm³",dp:2}],
     questions:[
@@ -60,6 +85,14 @@
         a:"Two readings are used, so the titre is ±0.10 cm³. Percentage uncertainty = 0.10 ÷ 24.20 × 100 = 0.41%." },
       { q:"FA 2 was made by diluting 25.0 cm³ of a stock solution to 250 cm³ in a volumetric flask. How do you find the stock concentration?",
         a:"Multiply the FA 2 concentration by the dilution factor, 250 ÷ 25.0 = 10. Make up to the mark with distilled water and invert the flask several times to mix." },
+      { q:"Which of the syllabus indicators should be used for ethanoic acid with sodium hydroxide, and why not methyl orange?",
+        a:"Thymolphthalein (pH 9.3–10.5) or thymol blue (8.0–9.6). The equivalence point of a weak acid with a strong alkali is about pH 8.7 and the pH changes sharply between about 7 and 11. Methyl orange and bromophenol blue change at pH 3–4.6, while the buffer region is still rising slowly, so the colour change is gradual and far too early." },
+      { q:"Why is the ethanedioate solution warmed to about 60 °C before titrating with KMnO₄?",
+        a:"The reaction is very slow at room temperature (it is catalysed by the Mn²⁺ formed). Warming makes each drop decolourise quickly, so the first permanent pink shows the true end point." },
+      { q:"How do you know when the hydrogen peroxide titration is complete?",
+        a:"Small bubbles of oxygen form while MnO₄⁻ is being reduced. The end point is the first permanent pale pink colour." },
+      { q:"Distinguish a systematic error from a random error in titration.",
+        a:"Systematic: affects every reading the same way, e.g. a burette that is wrongly calibrated, or reading the top of the meniscus throughout. Random: varies from run to run, e.g. judging the exact colour change. Concordant repeats reduce the effect of random errors only." },
       { q:"Why is a back titration used for limestone rather than titrating the solid directly?",
         a:"CaCO₃ is insoluble and reacts slowly, so there is no sharp end point. Dissolving it in a known excess of acid and titrating the acid left over gives an accurate result." },
       { q:"Suggest one improvement to reduce the percentage uncertainty in the titre.",
@@ -68,18 +101,32 @@
     setup(ctx){
       const BX = 250, Y0 = 50, PX = 6, FL = ChemKit.FLASK(BX, 500, 1);
       const unk = {}; Object.keys(TM).forEach(k => unk[k] = TM[k].gen());
-      let mode = "mno4", r = null, flowing = false, plume = 0, warnedMn = false, initRead = null;
+      let mode = "weak", indK = "tp", madeUp = false, r = null, flowing = false, plume = 0, warnedMn = false, initRead = null;
       let F = null;                               // flask contents
       const drops = [];
       const M = () => TM[mode], Veq = () => M().Veq(unk[mode]);
-      const freshFlask = () => ({ pip:false, reagent:false, ind:false, starchAt:null, added:0 });
+      const freshFlask = () => ({ pip:false, reagent:false, ind:false, indK:null, starchAt:null, added:0 });
+      const label = k => TM[k].short + (k === "weak" ? ` (${IND[indK].name})` : "");
+      function weakPH(added){
+        const c = unk.weak/10, nA = c*.025, nB = .100*added/1000, V = (25 + added)/1000, pKa = 4.757;
+        const hyd = 14 - .5*(9.243 - Math.log10(nA/V));
+        if(nB < 1e-9) return .5*(pKa - Math.log10(c));
+        if(nB < nA) return Math.min(hyd, pKa + Math.log10(nB/(nA - nB)));
+        return Math.max(hyd, nB > nA ? 14 + Math.log10((nB - nA)/V) : 0);
+      }
       F = freshFlask();
       const extra = () => mode === "io3" && F.starchAt !== null && F.starchAt < .75 ? .25 : 0;
 
       function flaskColour(){
         if(!F.pip) return null;
         const V = Veq() + extra(), d = F.added - V, f = F.added/V;
-        if(mode === "mno4"){
+        if(mode === "weak"){
+          if(!F.ind) return ["rgba(210,225,240,.28)", "colourless"];
+          const I = IND[F.indK], p = weakPH(F.added), f = (p - I.lo)/(I.hi - I.lo);
+          const c = f <= 0 ? I.a : f >= 1 ? I.b : ChemKit.mix(I.a, I.b, f).concat([I.a[3] + (I.b[3] - I.a[3])*f]);
+          return [`rgba(${c[0]},${c[1]},${c[2]},${c[3] === undefined ? .8 : c[3]})`, f <= 0 ? I.an : f >= 1 ? I.bn : I.mid];
+        }
+        if(M().redox){
           if(!F.reagent && F.added > .3) return ["rgba(140,95,45,.55)", "brown (MnO₂)"];
           if(d <= 0) { const c = ChemKit.mix([210,235,210],[238,232,195], f); return [`rgba(${c},.35)`, "very pale green-yellow"]; }
           return [`rgba(225,105,190,${Math.min(.85, .2 + d*1.6)})`, d < .2 ? "pale pink (permanent)" : "pink-purple"];
@@ -105,7 +152,7 @@
 
       function draw(){
         const [col, cname] = flaskColour() || [null, "—"];
-        const vol = F.pip ? 25 + (F.reagent ? (mode === "mno4" ? 20 : 10) : 0) + F.added : 0, lvl = 488 - vol*.42;
+        const vol = F.pip ? 25 + (F.reagent ? (M().redox ? 20 : 10) : 0) + F.added : 0, lvl = 488 - vol*.42;
         let s = `<rect x="110" y="488" width="160" height="12" rx="3" fill="url(#k-metal)"/><rect x="130" y="30" width="9" height="460" rx="3" fill="url(#k-metal)"/><rect x="130" y="150" width="${BX - 140}" height="8" rx="3" fill="url(#k-metal)"/>
           <rect x="${BX - 70}" y="492" width="140" height="8" fill="#F4F4F2" stroke="#C9CCD3"/>`;
         if(r !== null && r < 50) s += `<rect x="${BX - 9}" y="${Y0 + r*PX}" width="18" height="${352 - Y0 - r*PX}" fill="${M().burCol}" clip-path="url(#at-bur)"/>`;
@@ -113,14 +160,15 @@
           <path d="M${BX - 4} 352 L${BX - 2} 392 H${BX + 2} L${BX + 4} 352" fill="url(#k-glass)" stroke="var(--txt2)" stroke-width="1.3"/>
           <rect x="${BX - 14}" y="356" width="28" height="10" rx="4" fill="${flowing ? "var(--accent)" : "#3B4A63"}"/>`;
         s += drops.map(d => `<ellipse cx="${BX}" cy="${d.y}" rx="2.4" ry="3.4" fill="${M().burCol}"/>`).join("");
-        if(col) s += `<g clip-path="url(#at-fl)"><rect x="${BX - 70}" y="${lvl}" width="140" height="${500 - lvl}" fill="${col}"/>${plume > 0 && mode === "mno4" ? `<ellipse cx="${BX}" cy="${lvl + 6}" rx="${14 + 10*(1 - plume)}" ry="6" fill="rgba(120,25,130,${.7*plume})"/>` : ""}</g>`;
+        if(col) s += `<g clip-path="url(#at-fl)"><rect x="${BX - 70}" y="${lvl}" width="140" height="${500 - lvl}" fill="${col}"/>${plume > 0 && M().redox ? `<ellipse cx="${BX}" cy="${lvl + 6}" rx="${14 + 10*(1 - plume)}" ry="6" fill="rgba(120,25,130,${.7*plume})"/>` : ""}</g>`;
         s += `<path d="${FL}" fill="url(#k-glass)" stroke="var(--txt2)" stroke-width="1.5"/>`;
         s += `<text x="${BX + 80}" y="${Y0 + 10}" class="k-tag">burette: ${ctx.esc(M().bur)}</text>`;
         s += `<g transform="translate(640 300)"><rect width="300" height="170" rx="12" fill="var(--bg-card)" stroke="var(--brd2)"/>
           <text x="14" y="24" class="k-tag">${ctx.esc(M().name)}</text>
           ${ChemKit.lines(M().flask, 46, 14, 48, 16)}
           ${mode === "back" ? `<text x="14" y="84" class="k-lbl">mass of limestone used = ${unk.back.m.toFixed(2)} g</text>` : ""}
-          <text x="14" y="108" class="k-lbl">flask: ${F.pip ? "25.0 cm³ pipetted" : "empty"}${F.reagent ? " + reagent" : ""}${F.ind ? (mode === "io3" ? " + starch" : " + indicator") : ""}</text>
+          ${mode === "weak" ? `<text x="14" y="88" class="k-lbl">volumetric flask: ${madeUp ? "FA 2 made up to the mark ✓" : "not made up yet"}</text>` : ""}
+          <text x="14" y="108" class="k-lbl">flask: ${F.pip ? "25.0 cm³ pipetted" : "empty"}${F.reagent ? " + reagent" : ""}${F.ind ? (mode === "io3" ? " + starch" : mode === "weak" ? " + " + IND[F.indK].name : " + indicator") : ""}</text>
           <text x="14" y="130" class="k-lbl">colour: ${cname}</text>
           <text x="14" y="154" class="k-lbl">initial reading entered: ${initRead === null ? "—" : initRead.toFixed(2) + " cm³"}</text></g>`;
         $("#at-scene").innerHTML = s;
@@ -139,7 +187,7 @@
         if(initRead === null){ ctx.toast("Enter the initial burette reading before you start"); return false; }
         if(r + v > 50.6){ ctx.toast("The burette is empty — refill it"); return false; }
         r += v; F.added = Kit.round(F.added + v, 4); plume = 1; drops.push({ y:392, vy:0 });
-        if(mode === "mno4" && !F.reagent && F.added > .3 && !warnedMn){ warnedMn = true; ctx.toast("Brown precipitate! No acid was added — MnO₂ forms"); }
+        if(M().redox && !F.reagent && F.added > .3 && !warnedMn){ warnedMn = true; ctx.toast("Brown precipitate! No acid was added — MnO₂ forms"); }
         return true;
       }
       ctx.frame(dt => {
@@ -149,10 +197,12 @@
         draw();
       });
 
-      ctx.seg({ label:"Titration", value:mode, options:Object.keys(TM).map(k => [k, TM[k].short]), onChange(v){ mode = v; F = freshFlask(); r = null; initRead = null; rb1.clear(); rb2.clear(); calc.clear(); draw(); } });
+      ctx.select({ label:"Titration", value:mode, options:Object.keys(TM).map(k => [k, TM[k].name]), onChange(v){ mode = v; F = freshFlask(); r = null; initRead = null; rb1.clear(); rb2.clear(); calc.clear(); relabel(); showConc(); draw(); } });
+      const indSel = ctx.select({ label:"Indicator (weak acid titration)", value:indK, options:Object.keys(IND).map(k => [k, `${IND[k].name} (pH ${IND[k].lo}–${IND[k].hi})`]), onChange(v){ indK = v; showConc(); } });
+      const makeBtn = ctx.buttons([{ label:"Make up FA 2: 25.0 cm³ FA 1 → 250 cm³", block:true, onClick(){ madeUp = true; ctx.toast("Pipetted 25.0 cm³ of FA 1 into the volumetric flask, made up to the mark and inverted to mix"); draw(); } }]);
       ctx.buttons([
         { label:"Fill burette", onClick(){ r = Kit.round(.1 + Math.random()*1.6, 3); initRead = null; rb1.clear(); draw(); } },
-        { label:"Pipette 25.0 cm³", onClick(){ if(F.pip) return ctx.toast("The flask already has 25.0 cm³ in it"); F = freshFlask(); F.pip = true; draw(); } }
+        { label:"Pipette 25.0 cm³", onClick(){ if(M().dilute && !madeUp) return ctx.toast("Make up FA 2 in the volumetric flask first"); if(F.pip) return ctx.toast("The flask already has 25.0 cm³ in it"); F = freshFlask(); F.pip = true; draw(); } }
       ]);
       const reagentBtns = ctx.buttons([
         { label:"Add reagent", onClick(){ if(!F.pip) return ctx.toast("Pipette the solution first"); if(!M().reagent) return ctx.toast("No extra reagent is needed here"); F.reagent = true; draw(); } },
@@ -160,7 +210,7 @@
           if(!F.pip) return ctx.toast("Pipette the solution first");
           if(!M().ind) return ctx.toast("KMnO₄ is self-indicating — no indicator needed");
           if(F.ind) return;
-          F.ind = true;
+          F.ind = true; F.indK = indK;
           if(mode === "io3"){ F.starchAt = F.added/Veq(); const g = 1 - F.starchAt;
             if(F.reagent && g > .03 && g < .25) ctx.complete("starch"); else if(F.reagent && g >= .25) ctx.toast("Starch added early — the blue-black colour will be slow to clear"); }
           draw(); } }
@@ -175,8 +225,8 @@
 
       const rb1 = Kit.reading(ctx, "Initial burette reading / cm³ (2 d.p.)", "e.g. 0.85", () => r === null || F.added > 0 ? null : r, .05, v => { initRead = v; draw(); });
       const rb2 = Kit.reading(ctx, "Final burette reading / cm³ (2 d.p.)", "e.g. 24.30", () => initRead === null || F.added <= 0 ? null : r, .05, v => {
-        const mine = ctx.rows().filter(x => x.mode === short(mode)), kind = mine.length ? "accurate" : "rough";
-        ctx.record({ mode:short(mode), kind, start:initRead, end:v, titre:Kit.round(v - initRead, 2) });
+        const mine = ctx.rows().filter(x => x.mode === label(mode)), kind = mine.length ? "accurate" : "rough";
+        ctx.record({ mode:label(mode), kind, start:initRead, end:v, titre:Kit.round(v - initRead, 2) });
         if(kind === "rough") ctx.complete("rough");
         rb1.clear(); rb2.clear(); initRead = null; F = freshFlask();
         if(r > 40) ctx.toast("Titre recorded — refill the burette before the next run");
@@ -184,7 +234,7 @@
       });
 
       function concordant(k){
-        const t = ctx.rows().filter(x => x.mode === short(k) && x.kind === "accurate").map(x => x.titre).sort((a, b) => a - b);
+        const t = ctx.rows().filter(x => x.mode === label(k) && x.kind === "accurate").map(x => x.titre).sort((a, b) => a - b);
         let best = [];
         for(let i = 0; i < t.length; i++){ const set = t.filter(v => v >= t[i] && v - t[i] <= .10 + 1e-9); if(set.length > best.length) best = set; }
         return best.length >= 2 ? best : [];
@@ -194,7 +244,9 @@
         const c = concordant(mode);
         concBox.querySelector("#at-conc").innerHTML = c.length ? `Concordant titres: ${c.map(v => v.toFixed(2)).join(", ")} → mean <b>${Kit.mean(c).toFixed(2)} cm³</b>` : "Accurate titres within 0.10 cm³ of each other are concordant; average only those.";
         if(c.length) ctx.complete("conc");
-        if(Object.keys(TM).every(k => concordant(k).length)) ctx.complete("all");
+        if(Object.keys(TM).filter(k => concordant(k).length).length >= 3) ctx.complete("all");
+        const wk = new Set(ctx.rows().filter(x => x.mode.startsWith(short("weak"))).map(x => /methyl orange|bromophenol/.test(x.mode) ? "acid" : "alk"));
+        if(wk.size === 2) ctx.complete("indic");
       }
       const calc = Kit.answer(ctx, "Your answer from the mean titre", "see the question", v => {
         const c = concordant(mode); if(!c.length) return [false, "Get two concordant accurate titres first."];
@@ -203,8 +255,9 @@
         if(mode === "back"){ const left = .100*t/1000*10, n = (.0500 - left)/2; want = n*100.1/unk.back.m*100; }
         else want = M().from(t);
         if(Math.abs(v - want)/want <= .015){
-          ctx.complete("calc");
           const truth = mode === "back" ? unk.back.P : unk[mode];
+          if(mode === "weak" && (indK === "mo" || indK === "bb")) return [false, `Your arithmetic is right (${ctx.sig(want, 3)} mol dm⁻³), but ${IND[indK].name} changes colour at pH 3–4.6, long before the equivalence point of a weak acid. Repeat with an indicator that changes in the alkaline range.`];
+          ctx.complete("calc");
           return [true, `Correct from your titre (${t.toFixed(2)} cm³): ${ctx.sig(want, 3)}${mode === "back" ? "%" : " mol dm⁻³"}. Hidden value: ${truth}${mode === "back" ? "%" : ""}.`];
         }
         return [false, M().how];
@@ -216,8 +269,7 @@
         if(Math.abs(v - p) <= .02*p + .01){ ctx.complete("unc"); return [true, `Correct: ±0.10 cm³ (two readings of ±0.05) ÷ ${a.titre.toFixed(2)} × 100 = ${p.toFixed(2)}%.`]; }
         return [false, "Each reading is ±0.05 cm³ and a titre uses two readings."];
       });
-      const relabel = () => { ansLbl.textContent = M().ans; calc.input.placeholder = M().ph; syncHints(); };
-      ctx.controls.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => { relabel(); showConc(); }));
+      function relabel(){ ansLbl.textContent = M().ans; calc.input.placeholder = M().ph; syncHints(); indSel.node.style.display = makeBtn.node.style.display = mode === "weak" ? "" : "none"; }
       reagentBtns.node.style.marginTop = "4px";
       relabel(); showConc(); draw();
     }

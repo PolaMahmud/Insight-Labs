@@ -173,7 +173,8 @@
 (function(){
   const GS = {
     mg:   { name:"Magnesium ribbon + excess HCl", gas:"H₂", M:24.3, lo:.04, hi:.12, tau:14, sol:0 },
-    xco3: { name:"FA 11 (XCO₃) + excess HCl", gas:"CO₂", lo:.15, hi:.45, tau:7, sol:.03 }
+    xco3: { name:"FA 11 (XCO₃) + excess HCl", gas:"CO₂", lo:.15, hi:.45, tau:7, sol:.03 },
+    mix:  { name:"FA 17 (Na₂CO₃/NaCl mixture) + excess HCl", gas:"CO₂", lo:.20, hi:.60, tau:6, sol:.03 }
   };
   const XS = [["Mg", 84.3], ["Ca", 100.1], ["Sr", 147.6]];
 
@@ -192,8 +193,8 @@
   Lab.register({
     id:"as-gasvolume", subject:"chemistry", level:["as"], topic:"Stoichiometry · Molar gas volume", interactive:true,
     title:"Gas collection: Ar and Mr from gas volumes",
-    summary:"React weighed samples with excess acid and collect the gas in a gas syringe or over water. Plot volume against mass to find Ar of magnesium or Mr of an unknown carbonate.",
-    aim:"Use the volume of gas produced at room temperature and pressure (24.0 dm³ mol⁻¹) to find the relative atomic mass of magnesium and the identity of a Group 2 carbonate.",
+    summary:"React weighed samples with excess acid and collect the gas in a gas syringe or over water. Plot volume against mass to find Ar of magnesium, Mr of an unknown carbonate, or the percentage of sodium carbonate in a mixture.",
+    aim:"Use the volume of gas produced at room temperature and pressure (24.0 dm³ mol⁻¹) to find the relative atomic mass of magnesium, the identity of a Group 2 carbonate and the composition of a carbonate mixture.",
     variables:{ iv:"Mass of solid (g)", dv:"Volume of gas collected (cm³)", cv:["Acid in excess","Same temperature and pressure","Wait until no more gas is given off"] },
     stageTitle:"Gas collection", controlsTitle:"Procedure",
     thumb:`<svg viewBox="0 0 300 140"><path d="M60 50 v20 l-25 50 h60 l-25 -50 v-20z" fill="none" stroke="#A2ACBD" stroke-width="2"/><path d="M70 50 V30 H150" stroke="#A2ACBD" stroke-width="3" fill="none"/><rect x="150" y="22" width="110" height="18" rx="4" fill="none" stroke="#A2ACBD" stroke-width="2"/><rect x="152" y="24" width="60" height="14" fill="#9EC9F0" opacity=".6"/></svg>`,
@@ -201,6 +202,7 @@
       { id:"five", title:"Five masses", text:"Record the gas volume for five different masses of one solid." },
       { id:"ar",   title:"Ar of magnesium", text:"Use the gradient of V against m to find Ar(Mg)." },
       { id:"mr",   title:"Identify X", text:"Find the Mr of FA 11 and identify the Group 2 metal." },
+      { id:"pct",  title:"Composition of a mixture", text:"Find the percentage by mass of Na₂CO₃ in FA 17." },
       { id:"unc",  title:"Uncertainty", text:"Calculate the percentage uncertainty in one gas volume." },
       { id:"loss", title:"Lost gas", text:"Compare dropping the solid in with tipping it from a small tube inside the sealed flask." }
     ],
@@ -219,10 +221,15 @@
       { q:"Why must you wait before taking the final reading?",
         a:"The reaction must be complete, and the exothermic reaction warms the gas, so it expands. Let it return to room temperature." },
       { q:"A 100 cm³ gas syringe is graduated every 1 cm³. What is the percentage uncertainty in 64.0 cm³?",
-        a:"Half a division: ±0.5 cm³. 0.5 ÷ 64.0 × 100 = 0.78%." }
+        a:"Half a division: ±0.5 cm³. 0.5 ÷ 64.0 × 100 = 0.78%." },
+      { q:"FA 17 is a mixture of Na₂CO₃ and NaCl. How do you get the percentage of Na₂CO₃ from the gradient of V against m?",
+        a:"Only Na₂CO₃ gives CO₂: n(CO₂) = n(Na₂CO₃). Mass of Na₂CO₃ in 1 g = gradient ÷ 24 000 × 106.0. Percentage = that × 100." },
+      { q:"Is losing gas before the bung goes in a random or a systematic error? What about CO₂ dissolving in the water?",
+        a:"Both are systematic: every volume is too small, so the gradient and Ar or Mr are biased the same way each time. Random errors (reading the scale, small mass errors) scatter points either side of the line and are reduced by repeats." }
     ],
     setup(ctx){
       const Mg = 24.3 + (Math.random() - .5)*.2, X = XS[Math.floor(Math.random()*XS.length)];
+      const P = Kit.round(45 + Math.random()*30, 1);   // % Na₂CO₃ in FA 17
       let sk = "mg", how = "syringe", start = "drop", running = false, t = 0, Vfin = 0, Vnow = 0, m = null, boat = null;
       const R = { syringe:{ max:100, minor:1, major:10, half:.5, name:"gas syringe (100 cm³)" }, cyl:{ max:250, minor:2, major:20, half:1, name:"measuring cylinder over water (250 cm³)" } };
       ctx.stage.innerHTML = `<svg viewBox="0 0 960 500" class="kb" id="gv-svg"><defs>${Kit.DEFS}</defs>${Kit.bench(960, 460)}<g id="gv-scene"></g><text x="24" y="30" class="k-status" id="gv-status"></text></svg>`;
@@ -246,14 +253,14 @@
           for(let v = 0; v <= 250; v += 10) s += `<line x1="544" y1="${94 + v*1.4}" x2="${v % 50 ? 538 : 532}" y2="${94 + v*1.4}" stroke="var(--txt2)"/>${v % 50 ? "" : `<text x="550" y="${98 + v*1.4}" class="k-num">${v}</text>`}`;
           s += ChemKit.lens({ id:"gv-l", cx:720, cy:200, r:90, S:12, value:Math.min(Vnow, 250), minor:2, major:10, half:10, down:true, liquid:"rgba(140,190,240,.5)", label:"magnifier on the water level" });
         }
-        s += `<g transform="translate(700 330)"><rect width="230" height="110" rx="12" fill="var(--bg-card)" stroke="var(--brd2)"/>
-          <text x="12" y="22" class="k-tag">${GS[sk].name}</text><text x="12" y="46" class="k-lbl">boat + solid: ${boat ? boat.full.toFixed(2) + " g" : "—"}</text>
+        s += `<g transform="translate(700 348)"><rect width="240" height="104" rx="12" fill="var(--bg-card)" stroke="var(--brd2)"/>
+          <text x="12" y="22" class="k-tag">${GS[sk].name.replace(" + excess HCl", " + HCl")}</text><text x="12" y="46" class="k-lbl">boat + solid: ${boat ? boat.full.toFixed(2) + " g" : "—"}</text>
           <text x="12" y="66" class="k-lbl">boat after tipping: ${boat && t > 0 ? boat.empty.toFixed(2) + " g" : "—"}</text><text x="12" y="90" class="k-lbl">time: ${Math.floor(t)} s</text></g>`;
         $("#gv-scene").innerHTML = s;
         $("#gv-status").textContent = !m ? "Weigh a sample of the solid" : t === 0 ? "Add the solid to the acid and seal the flask" : running ? "Gas being given off…" : "Reaction over — read the volume";
         ctx.readout([["Solid", GS[sk].name], ["Mass", m ? m.toFixed(2) + " g" : "—"], ["Collecting in", R[how].name]]);
       }
-      function moles(mm){ return sk === "mg" ? mm/Mg : mm/X[1]; }
+      function moles(mm){ return sk === "mg" ? mm/Mg : sk === "mix" ? mm*P/100/106.0 : mm/X[1]; }
       ctx.frame(dt => {
         if(running){ t += dt*6; Vnow = Vfin*(1 - Math.exp(-t/GS[sk].tau)) - (start === "drop" ? Math.min(Vfin*.04, 3) : 0)*Math.min(1, t/2);
           if(how === "syringe" && Vnow > 100){ Vnow = 100; running = false; ctx.toast("The plunger reached the end — gas escaped. Use a smaller mass."); }
@@ -261,7 +268,7 @@
         draw();
       });
       const reset = () => { running = false; t = 0; Vnow = 0; m = null; boat = null; rb.clear(); draw(); };
-      ctx.seg({ label:"Reaction", value:sk, options:[["mg","Mg ribbon"],["xco3","FA 11 carbonate"]], onChange(v){ sk = v; reset(); } });
+      ctx.seg({ label:"Reaction", value:sk, options:[["mg","Mg ribbon"],["xco3","FA 11 carbonate"],["mix","FA 17 mixture"]], onChange(v){ sk = v; reset(); } });
       ctx.seg({ label:"Collect gas in", value:how, options:[["syringe","Gas syringe"],["cyl","Cylinder over water"]], onChange(v){ how = v; reset(); } });
       ctx.seg({ label:"Starting the reaction", value:start, options:[["drop","Drop in, then bung"],["tube","Tip from small tube"]], onChange(v){ start = v; reset(); } });
       const ms = ctx.slider({ label:"Mass to weigh out (approx.)", min:GS.mg.lo, max:GS.mg.hi, step:.01, value:.08, unit:"g" });
@@ -292,6 +299,12 @@
         if(Math.abs(v - Mr)/Mr <= .04){ ctx.complete("mr"); return [true, `Correct: Mr ≈ ${Mr.toFixed(0)}, so Ar(X) ≈ ${(Mr - 60).toFixed(0)}. Hidden: ${X[0]}CO₃ (Mr ${X[1]}).`]; }
         return [false, "n(CO₂) = n(XCO₃). Mr = 24 000 ÷ gradient. Then Ar(X) = Mr − 60."];
       });
+      Kit.answer(ctx, "Percentage by mass of Na₂CO₃ in FA 17", "e.g. 60", v => {
+        const q = fitOf("FA 17 (Na₂CO₃/NaCl mixture)"); if(!q) return [false, "Record at least three masses of FA 17."];
+        const pc = q.f.m/24000*106.0*100;
+        if(Math.abs(v - pc) <= .04*pc){ ctx.complete("pct"); return [true, `Correct: gradient ${q.f.m.toFixed(0)} cm³ g⁻¹ → ${ctx.sig(q.f.m/24000, 3)} mol of Na₂CO₃ per gram × 106.0 × 100 = ${pc.toFixed(1)}%. Hidden value: ${P}%.`]; }
+        return [false, "Only Na₂CO₃ gives CO₂. Mass of Na₂CO₃ per gram of FA 17 = gradient ÷ 24 000 × 106.0."];
+      });
       Kit.answer(ctx, "Percentage uncertainty in your last volume / %", "e.g. 0.8", v => {
         const r = ctx.rows().pop(); if(!r) return [false, "Record a volume first."];
         const half = r.how.startsWith("syringe") ? .5 : 1, p = ChemKit.pct(half, r.V);
@@ -303,22 +316,31 @@
   });
 })();
 
-/* ───────────── THIOSULFATE CLOCK REACTION ───────────── */
+/* ───────────── CLOCK REACTIONS: THIOSULFATE + ACID · IODINE CLOCK ───────────── */
+(function(){
+const RX = {
+  thio:{ name:"Thiosulfate + acid", key:"Disappearing cross", k:24, vLbl:"FA 12", vSol:"FA 12 (0.150 mol dm⁻³ Na₂S₂O₃)", fixed:["FA 13 (2.00 mol dm⁻³ HCl): 10.0 cm³"],
+    act:"Add 10.0 cm³ acid", start:"Start your stop-clock as you add the acid,", stop:"stop it when you can no longer see the cross.", watch:"Watching the cross from above…", done:"Cross gone — record your time" },
+  iod:{ name:"Iodine clock", key:"Iodine clock", k:30, vLbl:"FA 14", vSol:"FA 14 (0.0400 mol dm⁻³ K₂S₂O₈)", fixed:["FA 15 (0.200 mol dm⁻³ KI): 10.0 cm³","FA 16 (0.0100 mol dm⁻³ Na₂S₂O₃): 5.0 cm³","starch: 1 cm³"],
+    act:"Add 10.0 cm³ KI(aq)", start:"Start your stop-clock as you add the iodide,", stop:"stop it when the blue-black colour appears.", watch:"Watching for the blue-black colour…", done:"Blue-black — record your time" }
+};
 Lab.register({
   id:"as-clock", subject:"chemistry", level:["as"], topic:"Reaction kinetics · Rates", interactive:true,
-  title:"Disappearing cross: thiosulfate and acid",
-  summary:"Dilute sodium thiosulfate, add acid, start your stop-clock and stop it when the cross disappears. Plot 1000/t against volume of thiosulfate, then repeat at higher temperatures.",
-  aim:"Investigate how the concentration of sodium thiosulfate and the temperature affect the rate of its reaction with hydrochloric acid.",
-  variables:{ iv:"Volume of FA 12 (thiosulfate) or temperature", dv:"Time for the cross to disappear, t (s)", cv:["Total volume 50 cm³ (thiosulfate + water)","10.0 cm³ of FA 13 (HCl)","Same cross, same beaker, same observer"] },
+  title:"Clock reactions: disappearing cross and iodine clock",
+  summary:"Two Paper 3 rate experiments: thiosulfate with acid (time until the cross disappears) and the peroxydisulfate–iodide clock (time until the starch turns blue-black). Plot 1000/t against volume, then repeat at higher temperatures.",
+  aim:"Investigate how concentration and temperature affect the rate of a reaction by timing a clock reaction, and deduce the order with respect to the reagent you vary.",
+  variables:{ iv:"Volume of the varied solution (FA 12 or FA 14) or temperature", dv:"Time for the cross to disappear or the blue-black colour to appear, t (s)", cv:["Total volume kept the same by adding water","Same volumes of the other reagents","Same beaker, same observer"] },
   stageTitle:"View from above the beaker", controlsTitle:"Run",
   thumb:`<svg viewBox="0 0 300 140"><ellipse cx="150" cy="70" rx="56" ry="56" fill="#EDE6B8" fill-opacity=".8" stroke="#A2ACBD" stroke-width="2"/><path d="M125 45 l50 50 M175 45 l-50 50" stroke="#111" stroke-width="7" opacity=".35"/></svg>`,
   challenges:[
     { id:"five",  title:"Five concentrations", text:"Time five different volumes of thiosulfate at room temperature." },
     { id:"order", title:"Order of reaction", text:"Use your graph to deduce the order with respect to thiosulfate." },
+    { id:"iodine", title:"Iodine clock", text:"Time five volumes of peroxydisulfate at room temperature and deduce its order." },
     { id:"temp",  title:"Temperature", text:"Time one mixture at three or more temperatures." },
     { id:"unc",   title:"Uncertainty", text:"Calculate the percentage uncertainty in your shortest time." }
   ],
-  columns:[{key:"Vt",label:"FA 12 / cm³",dp:1},{key:"Vw",label:"Water / cm³",dp:1},{key:"T",label:"T / °C",dp:0},{key:"t",label:"t / s",dp:0},{key:"r",label:"1000/t / s⁻¹",dp:1}],
+  columns:[{key:"rx",label:"Reaction"},{key:"Vt",label:"Varied solution / cm³",dp:1},{key:"Vw",label:"Water / cm³",dp:1},{key:"T",label:"T / °C",dp:0},{key:"t",label:"t / s",dp:0},{key:"r",label:"1000/t / s⁻¹",dp:1}],
+  series:"rx",
   graph:{ x:["Vt","T"], y:["r","t"], fit:"linear" },
   questions:[
     { q:"Write the equation and explain why the cross disappears.",
@@ -332,52 +354,62 @@ Lab.register({
     { q:"Give two limitations and an improvement.",
       a:"Judging when the cross disappears is subjective; temperature falls during warm runs; the stop-clock is started by hand. Use a light sensor/colorimeter, keep the beaker in a water bath and record the temperature at the start and end." },
     { q:"Why must the experiment be done in a well-ventilated room?",
-      a:"Sulfur dioxide gas is produced; it is toxic and an irritant to anyone with asthma." }
+      a:"Sulfur dioxide gas is produced; it is toxic and an irritant to anyone with asthma." },
+    { q:"In the iodine clock, what is the thiosulfate for, and why does the blue-black colour appear suddenly?",
+      a:"S₂O₈²⁻ + 2I⁻ → 2SO₄²⁻ + I₂. The small fixed amount of thiosulfate turns the iodine straight back into iodide (I₂ + 2S₂O₃²⁻ → 2I⁻ + S₄O₆²⁻). When it is all used up, free iodine builds up and forms the blue-black complex with starch. Every run makes the same amount of iodine by then, so rate ∝ 1/t." },
+    { q:"Is starting the stop-clock late a random or a systematic error?",
+      a:"If you always start it slightly late, every time is too short: a systematic error that repeats cannot remove. Judging the end point differently from run to run is a random error; repeating runs and averaging reduces it." }
   ],
   setup(ctx){
-    let Vt = 50, T = 20, running = false, t = 0, tc = 0, ended = false;
+    let rx = "thio", Vt = 50, T = 20, running = false, t = 0, tc = 0, ended = false;
     const sw = Kit.stopwatch("ck-sw", 700, 330);
     ctx.stage.innerHTML = `<svg viewBox="0 0 960 500" class="kb" id="ck-svg"><defs>${Kit.DEFS}</defs><g id="ck-scene"></g>${sw.svg}<text x="24" y="30" class="k-status" id="ck-status"></text></svg>`;
     Kit.style(ctx);
     const svg = ctx.stage.querySelector("#ck-svg"), $ = s => svg.querySelector(s);
     sw.bind(svg);
     function draw(){
-      const turb = running || ended ? Math.pow(t/tc, 2) : 0, vis = Math.max(0, 1 - turb);
+      const R = RX[rx], go = running || ended;
+      const turb = go ? (rx === "thio" ? Math.pow(t/tc, 2) : t >= tc ? Math.min(1, (t - tc)/.4) : 0) : 0, vis = Math.max(0, 1 - turb);
+      const fill = rx === "thio" ? `rgba(238,226,150,${Math.min(.97, .1 + .9*Math.min(1, turb))})` : `rgba(${Math.round(225 - 205*turb)},${Math.round(232 - 207*turb)},${Math.round(240 - 165*turb)},${.15 + .82*turb})`;
       let s = `<rect x="140" y="60" width="400" height="400" rx="8" fill="#FBFBF7" stroke="var(--brd2)"/><path d="M250 170 L430 350 M430 170 L250 350" stroke="#111" stroke-width="18" stroke-linecap="round" opacity="${.9*vis + .02}"/>
-        <circle cx="340" cy="260" r="170" fill="rgba(238,226,150,${Math.min(.97, .1 + .9*Math.min(1, turb))})" stroke="#9AA3B2" stroke-width="4"/>
+        <circle cx="340" cy="260" r="170" fill="${fill}" stroke="#9AA3B2" stroke-width="4"/>
         <circle cx="340" cy="260" r="170" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="10" stroke-dasharray="80 900"/>`;
-      s += `<g transform="translate(600 70)"><rect width="320" height="200" rx="12" fill="var(--bg-card)" stroke="var(--brd2)"/><text x="14" y="26" class="k-tag">Mixture</text>
-        <text x="14" y="52" class="k-lbl">FA 12 (0.150 mol dm⁻³ Na₂S₂O₃): ${Vt.toFixed(1)} cm³</text><text x="14" y="74" class="k-lbl">distilled water: ${(50 - Vt).toFixed(1)} cm³</text>
-        <text x="14" y="96" class="k-lbl">FA 13 (2.00 mol dm⁻³ HCl): 10.0 cm³</text><text x="14" y="122" class="k-lbl">water bath: ${T} °C</text>
-        <text x="14" y="160" class="k-lbl">Start your stop-clock as you add the acid,</text><text x="14" y="178" class="k-lbl">stop it when you can no longer see the cross.</text></g>`;
+      const L = [`${R.vSol}: ${Vt.toFixed(1)} cm³`, `distilled water: ${(50 - Vt).toFixed(1)} cm³`].concat(R.fixed, [`water bath: ${T} °C`]);
+      s += `<g transform="translate(590 60)"><rect width="340" height="${86 + L.length*22}" rx="12" fill="var(--bg-card)" stroke="var(--brd2)"/><text x="14" y="26" class="k-tag">${R.name}</text>
+        ${L.map((l, i) => `<text x="14" y="${52 + i*22}" class="k-lbl">${l}</text>`).join("")}
+        <text x="14" y="${62 + L.length*22}" class="k-lbl">${R.start}</text><text x="14" y="${80 + L.length*22}" class="k-lbl">${R.stop}</text></g>`;
       $("#ck-scene").innerHTML = s;
-      $("#ck-status").textContent = !running && !ended ? "Set the volumes, then add the acid" : running ? "Watching the cross from above…" : "Cross gone — record your time";
-      ctx.readout([["FA 12", Vt + " cm³"], ["Water", (50 - Vt) + " cm³"], ["Temperature", T + " °C"]]);
+      $("#ck-status").textContent = !running && !ended ? "Set the volumes, then a" + R.act.slice(1) : running && !(rx === "iod" && t >= tc) ? R.watch : R.done;
+      ctx.readout([["Reaction", R.key], [R.vLbl, Vt + " cm³"], ["Water", (50 - Vt) + " cm³"], ["Temperature", T + " °C"]]);
     }
     ctx.frame(dt => { sw.tick(dt); if(running){ t += dt; if(t > tc*1.6){ running = false; ended = true; } draw(); } });
-    const lock = d => { vs.disable(d); ts.disable(d); };
-    const vs = ctx.seg({ label:"Volume of FA 12 (rest water, total 50 cm³)", value:50, options:[[10,"10"],[20,"20"],[25,"25"],[30,"30"],[40,"40"],[50,"50"]], onChange(v){ Vt = v; draw(); } });
+    const lock = d => { vs.disable(d); ts.disable(d); rs.disable(d); };
+    const rs = ctx.seg({ label:"Reaction", value:rx, options:[["thio","Disappearing cross"],["iod","Iodine clock"]], onChange(v){ rx = v; actBtn.textContent = RX[rx].act; draw(); } });
+    const vs = ctx.seg({ label:"Volume of varied solution (rest water, total 50 cm³)", value:50, options:[[10,"10"],[20,"20"],[25,"25"],[30,"30"],[40,"40"],[50,"50"]], onChange(v){ Vt = v; draw(); } });
     const ts = ctx.seg({ label:"Temperature", value:20, options:[[20,"Room (20 °C)"],[30,"30 °C"],[40,"40 °C"],[50,"50 °C"]], onChange(v){ T = v; draw(); } });
-    ctx.buttons([{ label:"Add 10.0 cm³ acid", primary:true, onClick(){
+    const [actBtn] = ctx.buttons([{ label:"Add 10.0 cm³ acid", primary:true, onClick(){
         if(running) return; t = 0; ended = false;
-        tc = 24*(50/Vt)*Math.pow(2, -(T - 20)/10)*(1 + .03*ctx.gauss());
+        tc = RX[rx].k*(50/Vt)*Math.pow(2, -(T - 20)/10)*(1 + .03*ctx.gauss());
         running = true; lock(true); draw(); } },
       { label:"Rinse beaker", onClick(){ running = false; ended = false; t = 0; lock(false); sw.reset(); draw(); } }]);
     ctx.buttons([{ label:"Record my stop-clock time", block:true, onClick(){
       if(!running && !ended) return ctx.toast("Run the reaction first");
       if(sw.running || sw.t <= 0) return ctx.toast("Stop your stop-clock when the cross disappears");
       const tt = Math.round(sw.t);
-      if(Math.abs(sw.t - tc) > Math.max(3, .2*tc)) ctx.toast(`Hmm — the cross disappeared at about ${Math.round(tc)} s. Recording your time anyway.`);
-      ctx.record({ Vt, Vw:50 - Vt, T, t:tt, r:Kit.round(1000/tt, 1) });
-      const rows = ctx.rows();
-      if(new Set(rows.filter(r => r.T === 20).map(r => r.Vt)).size >= 5) ctx.complete("five");
-      const byV = {}; rows.forEach(r => (byV[r.Vt] = byV[r.Vt] || new Set()).add(r.T)); if(Object.values(byV).some(s => s.size >= 3)) ctx.complete("temp");
+      if(Math.abs(sw.t - tc) > Math.max(3, .2*tc)) ctx.toast(`Hmm — the end point was at about ${Math.round(tc)} s. Recording your time anyway.`);
+      ctx.record({ rx:RX[rx].key, Vt, Vw:50 - Vt, T, t:tt, r:Kit.round(1000/tt, 1) });
+      const rows = ctx.rows(), five = k => new Set(rows.filter(r => r.rx === RX[k].key && r.T === 20).map(r => r.Vt)).size >= 5;
+      if(five("thio")) ctx.complete("five");
+      const byV = {}; rows.forEach(r => (byV[r.rx + r.Vt] = byV[r.rx + r.Vt] || new Set()).add(r.T)); if(Object.values(byV).some(s => s.size >= 3)) ctx.complete("temp");
       running = false; ended = false; t = 0; lock(false); sw.reset(); draw();
     } }]);
-    Kit.answer(ctx, "Order of reaction with respect to thiosulfate", "0, 1 or 2", v => {
-      if(new Set(ctx.rows().filter(r => r.T === 20).map(r => r.Vt)).size < 4) return [false, "Time at least four volumes at room temperature, then plot 1000/t against volume."];
-      if(v === 1){ ctx.complete("order"); return [true, "Correct: 1000/t against volume is a straight line through the origin, so rate ∝ [S₂O₃²⁻] — first order."]; }
-      return [false, "Look at the shape of 1000/t against volume of FA 12. A straight line through the origin means rate ∝ concentration."];
+    Kit.answer(ctx, "Order of reaction with respect to the varied reagent (the selected reaction)", "0, 1 or 2", v => {
+      const k = RX[rx].key, n = new Set(ctx.rows().filter(r => r.rx === k && r.T === 20).map(r => r.Vt)).size;
+      if(n < 4) return [false, `Time at least four volumes in the ${k.toLowerCase()} at room temperature, then plot 1000/t against volume.`];
+      if(v === 1){
+        if(rx === "thio") ctx.complete("order"); else if(n >= 5) ctx.complete("iodine");
+        return [true, `Correct: 1000/t against volume is a straight line through the origin, so rate ∝ [${rx === "thio" ? "S₂O₃²⁻" : "S₂O₈²⁻"}]: first order.${rx === "iod" && n < 5 ? " Time a fifth volume to complete the challenge." : ""}`]; }
+      return [false, "Look at the shape of 1000/t against volume. A straight line through the origin means rate ∝ concentration."];
     });
     Kit.answer(ctx, "Percentage uncertainty in your shortest time / %", "e.g. 4", v => {
       const ts = ctx.rows().map(r => r.t); if(!ts.length) return [false, "Record a time first."];
@@ -388,3 +420,4 @@ Lab.register({
     draw();
   }
 });
+})();
