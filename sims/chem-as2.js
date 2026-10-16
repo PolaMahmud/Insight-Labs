@@ -15,7 +15,7 @@
     xco3: { name:"FA 10 · Group 2 carbonate XCO₃", Mr:84.3, kind:"carbonate", col:[240,240,236], colEnd:[248,248,244] }
   };
   Lab.register({
-    id:"as-heating", subject:"chemistry", level:["as"], topic:"Stoichiometry · Gravimetric analysis", interactive:true,
+    id:"as-heating", subject:"chemistry", level:["as","a"], topic:"Stoichiometry · Gravimetric analysis", interactive:true,
     title:"Heating to constant mass",
     summary:"Weigh a crucible, heat a hydrated salt or a carbonate, cool, reweigh and repeat to constant mass. Find x in a hydrate or the Mr of a carbonate.",
     aim:"Use mass changes on heating to find the number of moles of water of crystallisation in a hydrated salt, or the relative formula mass of a carbonate.",
@@ -191,7 +191,7 @@
   }
 
   Lab.register({
-    id:"as-gasvolume", subject:"chemistry", level:["as"], topic:"Stoichiometry · Molar gas volume", interactive:true,
+    id:"as-gasvolume", subject:"chemistry", level:["as","a"], topic:"Stoichiometry · Molar gas volume", interactive:true,
     title:"Gas collection: Ar and Mr from gas volumes",
     summary:"React weighed samples with excess acid and collect the gas in a gas syringe or over water. Plot volume against mass to find Ar of magnesium, Mr of an unknown carbonate, or the percentage of sodium carbonate in a mixture.",
     aim:"Use the volume of gas produced at room temperature and pressure (24.0 dm³ mol⁻¹) to find the relative atomic mass of magnesium, the identity of a Group 2 carbonate and the composition of a carbonate mixture.",
@@ -325,7 +325,7 @@ const RX = {
     act:"Add 10.0 cm³ KI(aq)", start:"Start your stop-clock as you add the iodide,", stop:"stop it when the blue-black colour appears.", watch:"Watching for the blue-black colour…", done:"Blue-black — record your time" }
 };
 Lab.register({
-  id:"as-clock", subject:"chemistry", level:["as"], topic:"Reaction kinetics · Rates", interactive:true,
+  id:"as-clock", subject:"chemistry", level:["as","a"], topic:"Reaction kinetics · Rates", interactive:true,
   title:"Clock reactions: disappearing cross and iodine clock",
   summary:"Two Paper 3 rate experiments: thiosulfate with acid (time until the cross disappears) and the peroxydisulfate–iodide clock (time until the starch turns blue-black). Plot 1000/t against volume, then repeat at higher temperatures.",
   aim:"Investigate how concentration and temperature affect the rate of a reaction by timing a clock reaction, and deduce the order with respect to the reagent you vary.",

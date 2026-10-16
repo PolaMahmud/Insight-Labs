@@ -73,7 +73,7 @@
   const GAS_NAMES = { NH3:"ammonia", CO2:"carbon dioxide", Cl2:"chlorine", H2:"hydrogen", O2:"oxygen", SO2:"sulfur dioxide" };
 
   Lab.register({
-    id:"as-qualitative", subject:"chemistry", level:["as"], topic:"Qualitative analysis · Ions & gases", interactive:true,
+    id:"as-qualitative", subject:"chemistry", level:["as","a"], topic:"Qualitative analysis · Ions & gases", interactive:true,
     title:"Qualitative analysis: ions and gases",
     summary:"Every cation, anion, gas and element test in the 9701 (2025–2027) qualitative analysis notes, including Mn²⁺, Cr³⁺, nitrite, sulfite, thiosulfate, high [Ca²⁺] for sulfate and starch for iodine, plus heating a solid in a hard-glass tube. Chlorine and sulfur dioxide are included as extras.",
     aim:"Carry out the tests in the Cambridge 9701 qualitative analysis notes, record observations in the expected wording, and identify the ions in an unknown salt and an unknown gas.",
@@ -281,7 +281,7 @@
     return r;
   }
   Lab.register({
-    id:"as-organic", subject:"chemistry", level:["as"], topic:"Organic chemistry · Functional-group tests", interactive:true,
+    id:"as-organic", subject:"chemistry", level:["as","a"], topic:"Organic chemistry · Functional-group tests", interactive:true,
     title:"Organic functional-group tests",
     summary:"The four tests the 9701 syllabus requires (Fehling’s, Tollens’, alkaline iodine and acidified KMnO₄ for anything oxidisable) plus bromine water, dichromate, 2,4-DNPH, Na₂CO₃, sodium, PCl₅ and silver nitrate. Covers the listed alcohols, propanal, propanone, glucose, methanoic and ethanedioic acids, ethyl ethanoate and the halogenobutanes.",
     aim:"Use the AS tests for alkenes, alcohols, aldehydes, ketones, carboxylic acids and halogenoalkanes to identify unknown organic compounds.",
@@ -364,7 +364,7 @@
         return c === 0 ? { bubbles:1, sol:[245,245,245], solA:.75, obs:"steady effervescence; tube warms; solution turns cloudy white (Ca(OH)₂)" } : { obs:"not done — calcium reacts readily with cold water" }; } }
   };
   Lab.register({
-    id:"as-groups", subject:"chemistry", level:["as"], topic:"Inorganic · Group 2 & Group 17", interactive:true,
+    id:"as-groups", subject:"chemistry", level:["as","a"], topic:"Inorganic · Group 2 & Group 17", interactive:true,
     title:"Group 2 and Group 17 reactions",
     summary:"Halogen displacement with a cyclohexane layer, halides with concentrated sulfuric acid, silver halides in ammonia, Group 2 solubility trends, carbonate thermal stability and metals with water.",
     aim:"Observe the reactions in the AS Group 2 and Group 17 topics and explain the trends down each group.",
@@ -433,7 +433,7 @@
       acts:[["Heat","left","The forward reaction is exothermic; heating favours the endothermic backward reaction — browner."],["Cool in ice","right","Cooling favours the exothermic forward reaction — paler."],["Push the plunger in","right","Higher pressure favours the side with fewer gas molecules (N₂O₄). It darkens at first as everything is compressed, then pales."]] }
   };
   Lab.register({
-    id:"as-equilibrium", subject:"chemistry", level:["as"], topic:"Equilibria · Le Chatelier & acids", interactive:true,
+    id:"as-equilibrium", subject:"chemistry", level:["as","a"], topic:"Equilibria · Le Chatelier & acids", interactive:true,
     title:"Equilibrium shifts and acid strength",
     summary:"Predict, then watch: chromate–dichromate, cobalt chloride, iron thiocyanate and NO₂/N₂O₄. Compare a strong and a weak acid with a pH probe and magnesium.",
     aim:"Use Le Chatelier's principle to predict how changes in concentration, temperature and pressure move an equilibrium, and distinguish strong and weak acids by experiment.",
