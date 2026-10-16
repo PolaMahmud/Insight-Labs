@@ -47,6 +47,8 @@ h1,h2,h3,h4{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-.01em
 /* ═══════ NAV ═══════ */
 .nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;padding:12px 24px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--brd);}
 .brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:var(--txt);text-decoration:none;}
+.brand-txt{display:flex;flex-direction:column;line-height:1.1;}
+.brand-txt small{font-family:'Inter',sans-serif;font-size:.68rem;font-weight:500;color:var(--txt3);letter-spacing:.02em;}
 .logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:var(--accent);background:var(--accent-lt);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 35%,transparent);}
 .logo svg{width:20px;height:20px;}
 .mode-btn{margin-left:auto;width:38px;height:38px;border-radius:10px;border:1px solid var(--brd);background:var(--bg-card);display:grid;place-items:center;cursor:pointer;color:var(--txt2);}

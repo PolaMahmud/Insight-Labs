@@ -1,243 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="ocean" data-mode="auto">
+<html lang="en" data-mode="dark" data-subject="all">
 <!--
-╔══════════════════════════════════════════════════════════╗
-║  DATA LAB · KS3 Data Analysis                            ║
-║                                                          ║
-║  THEME: edit data-theme above. Options:                  ║
-║    forest · ocean · sunset · lavender · slate · rose     ║
-║  MODE: light / dark / auto toggle, top-right (saved).    ║
-║                                                          ║
-║  CURRICULUM lives in the CURRICULUM, DATASETS and        ║
-║  TOPICS objects in the script — edit those to expand.    ║
-╚══════════════════════════════════════════════════════════╝
+  INSIGHT LABS · Virtual Science Lab · Cambridge IGCSE, AS & A Level
+  core.js     router, hub, notebook (results table + graph), helpers
+  sims/*.js   experiments; each one calls Lab.register({...})
 -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Data Lab — KS3 Data Analysis</title>
-<meta name="description" content="An interactive KS3 Data Analysis workspace: six weeks of cleaning, summarising and visualising real datasets, with mastery-based progress.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<title>Insight Labs — Virtual Science Lab</title>
+<meta name="description" content="Hands-on virtual practicals for Cambridge IGCSE, AS and A Level Physics, Chemistry, Biology and ICT: build circuits, run titrations, test foods, record results and plot graphs.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=DM+Serif+Display&display=swap" rel="stylesheet">
-<!-- Pyodide: runs real Python (pandas + matplotlib) in the browser -->
-<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
-<!-- Pre-paint mode so there's no flash (matches the study-site convention) -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <script>
 (function(){
-  var m = localStorage.getItem('datalab-mode');
-  if (m === 'light' || m === 'dark') document.documentElement.setAttribute('data-mode', m);
+  try{ var m = localStorage.getItem('vlab-mode'); if (m === 'light' || m === 'dark') document.documentElement.setAttribute('data-mode', m); }catch(e){}
 })();
 </script>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="lab.css">
 </head>
-<body>
+<body class="on-hub">
 
-<!-- LOGIN GATE -->
-<div class="login-overlay" id="login-overlay" role="dialog" aria-modal="true" aria-label="Log in to the Data Lab">
-  <div class="login-card">
-    <div class="login-logo">Insight Labs</div>
-    <h2>The Data Lab</h2>
-    <p class="sub">Enter your PIN to save your progress under your name — or attend as a guest.</p>
-    <label for="login-pin">Your PIN</label>
-    <input class="login-pin" id="login-pin" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="••••••" aria-label="PIN">
-    <p class="login-err" id="login-err" role="alert"></p>
-    <button class="login-btn" id="login-btn" type="button">Log in</button>
-    <button class="login-guest" id="login-guest" type="button">Attend as a guest</button>
-  </div>
-</div>
-
-<!-- USER CHIP -->
-<div class="user-chip" id="user-chip">
-  <span class="who" id="user-name">Guest</span>
-  <span class="admin-badge" id="user-admin-badge" style="display:none">Admin</span>
-  <span class="role" id="user-role">guest</span>
-  <button type="button" id="admin-btn" style="display:none">Roster</button>
-  <button type="button" id="logout-btn">Log out</button>
-</div>
-
-<!-- ADMIN ROSTER -->
-<div class="login-overlay" id="roster-overlay" role="dialog" aria-modal="true" aria-label="Student roster" style="background:rgba(0,0,0,.5)">
-  <div class="login-card" style="max-width:540px;text-align:left">
-    <div class="login-logo">Admin · Roster</div>
-    <h2 style="text-align:left">Students &amp; PINs</h2>
-    <p class="sub" style="text-align:left;margin-bottom:.4rem">Mastery is tracked per PIN on this device.</p>
-    <div id="roster-body"></div>
-    <button class="login-guest" type="button" id="roster-close" style="margin-top:1.2rem">Close</button>
-  </div>
-</div>
-
-<!-- MODE TOGGLE (sun / monitor / moon) -->
-<nav class="mode-toggle" role="group" aria-label="Appearance">
-<button onclick="setMode('light')" id="btn-light" title="Light mode" aria-label="Light mode">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-</button>
-<button onclick="setMode('auto')" id="btn-auto" title="System default" aria-label="System default">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-</button>
-<button onclick="setMode('dark')" id="btn-dark" title="Dark mode" aria-label="Dark mode">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-</button>
-</nav>
-
-<!-- DEVELOPER MODE TOGGLE -->
-<button class="dev-toggle" id="dev-toggle" type="button" onclick="toggleDev()" title="Show only the Code Box and Output Terminal">&lt;/&gt; Dev mode</button>
-
-<!-- HERO -->
-<header class="hero" role="banner">
-<div class="hero-badge">KS3 · Data Analysis</div>
-<h1>The Data Lab</h1>
-<p>Six weeks from raw, messy data to honest charts. Choose a week, a lesson, and your mastery tier to open the workspace.</p>
-<p style="margin-top:.6rem"><a href="virtual-lab/index.html">Open the IGCSE Virtual Lab →</a></p>
+<header class="nav">
+  <a class="brand" href="#/">
+    <span class="logo" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M12 4h8M13.5 4v8L6 25.5A2.5 2.5 0 0 0 8.2 29h15.6a2.5 2.5 0 0 0 2.2-3.5L18.5 12V4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.5 21h13l2 4.5H7.5z" fill="currentColor"/></svg></span>
+    <span class="brand-txt">Insight Labs<small>Virtual Science Lab</small></span>
+  </a>
+  <button class="mode-btn" type="button" id="mode-btn" onclick="Lab.toggleMode()" aria-label="Switch light or dark mode" title="Light / dark">
+    <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  </button>
 </header>
 
-<main class="container" role="main">
+<main class="wrap" id="app" role="main"></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <!-- LEVEL 1 · WEEKS -->
-  <div class="level">
-    <p class="level-label">Week</p>
-    <div class="pillbar weeks scroll" id="weeks" role="tablist" aria-label="Week"></div>
-  </div>
-  <!-- LEVEL 2 · LESSONS -->
-  <div class="level">
-    <p class="level-label">Lesson</p>
-    <div class="pillbar lessons" id="lessons" role="tablist" aria-label="Lesson"></div>
-  </div>
-  <!-- LEVEL 3 · MASTERY TIER -->
-  <div class="level">
-    <p class="level-label">Mastery Tier</p>
-    <div class="pillbar tiers" id="tiers" role="tablist" aria-label="Mastery tier"></div>
-  </div>
-
-  <!-- MASTERY PROGRESS BAR -->
-  <section class="mastery" aria-label="Mastery progress">
-    <div class="mastery-top">
-      <span class="m-title" id="m-title"></span>
-      <span class="m-pct" id="m-pct">0%</span>
-      <span class="m-badge" id="m-badge">Keep going</span>
-    </div>
-    <div class="seg-track" id="seg-track" role="slider" aria-label="Task progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0"></div>
-    <div class="mastery-controls">
-      <button class="btn primary" id="step-btn">✓ Complete a step (+5%)</button>
-      <button class="btn ghost" id="reset-btn">Reset</button>
-      <span class="m-hint" id="m-hint">Reach 80% to unlock the next tier.</span>
-    </div>
-  </section>
-
-  <!-- CONTEXT -->
-  <div class="context">
-    <div class="crumb" id="crumb"></div>
-    <span class="chip" id="ds-chip"></span>
-  </div>
-
-  <!-- CAPSTONE DATASET CHOOSER (W6 L2 only) -->
-  <div class="capstone-pick" id="capstone-pick" style="display:none">
-    <span class="cap-label">Capstone dataset:</span>
-  </div>
-
-  <!-- TASK -->
-  <div class="task" id="task"></div>
-
-  <!-- AUTOMATIC CHECKS (graded lessons only) -->
-  <section class="checks" id="checks" style="display:none" aria-label="Automatic checks"></section>
-
-  <!-- 4-PANEL WORKSPACE -->
-  <div class="workspace">
-    <section class="panel" aria-label="The Data Engine">
-      <div class="panel-head"><span class="panel-ico d1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></span><h3>The Data Engine</h3><span class="meta" id="de-meta"></span><button class="panel-btn" type="button" title="Toggle fullscreen" aria-label="Toggle fullscreen" onclick="toggleFull(this)">⛶</button></div>
-      <div class="panel-body" id="data-engine"></div>
-    </section>
-
-    <section class="panel dark" aria-label="The Code Box">
-      <div class="panel-head"><span class="panel-ico d2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span><h3>The Code Box</h3><span class="meta">analysis.py</span><button class="panel-btn" type="button" title="Toggle fullscreen" aria-label="Toggle fullscreen" onclick="toggleFull(this)">⛶</button></div>
-      <div class="editor-wrap">
-        <pre class="code code-hl" id="code-hl" aria-hidden="true"></pre>
-        <textarea class="code-edit" id="code-box" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea>
-      </div>
-      <div class="run-bar">
-        <button class="run-btn" id="run-btn" type="button">▶ Run</button>
-        <button class="reset-code" id="reset-code" type="button" title="Restore the starter code">reset code</button>
-        <span class="run-status" id="run-status">loading python…</span>
-      </div>
-    </section>
-
-    <section class="panel dark" aria-label="Output Terminal">
-      <div class="panel-head"><span class="panel-ico d3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></span><h3>Output Terminal</h3><span class="meta">python3</span><button class="panel-btn" type="button" title="Toggle fullscreen" aria-label="Toggle fullscreen" onclick="toggleFull(this)">⛶</button></div>
-      <div class="panel-body"><pre class="term" id="terminal"></pre></div>
-    </section>
-
-    <section class="panel" aria-label="Chart Sandbox">
-      <div class="panel-head"><span class="panel-ico d4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><h3>Chart Sandbox</h3><span class="meta" id="cs-meta"></span><button class="panel-btn" type="button" title="Toggle fullscreen" aria-label="Toggle fullscreen" onclick="toggleFull(this)">⛶</button></div>
-      <div class="panel-body sandbox" id="sandbox">
-        <span class="lock-note">🔒 Dials &amp; sliders unlock in the Capstone Hackathon</span>
-        <div class="controls" id="controls" data-locked="true">
-          <div class="ctl"><label for="c-type">Chart</label>
-            <select id="c-type"><option>Bar</option><option>Line</option><option>Scatter</option><option>Histogram</option></select></div>
-          <div class="ctl viz-only"><label for="c-x">X-axis</label>
-            <select id="c-x"></select></div>
-          <div class="ctl viz-only"><label for="c-y">Y-axis</label>
-            <select id="c-y"></select></div>
-          <div class="ctl viz-only"><label for="c-bin">Bin size · <span class="v" id="bin-v">0.5</span></label>
-            <input type="range" id="c-bin" min="0.25" max="3" step="0.25" value="0.5"></div>
-          <div class="ctl"><label for="c-bars">Bars · <span class="v" id="bars-v">7</span></label>
-            <input type="range" id="c-bars" min="3" max="12" value="7"></div>
-          <div class="ctl"><label for="c-color">Colour</label>
-            <input type="color" id="c-color" value="#1565A8"></div>
-          <div class="dialwrap"><label class="ctl" style="font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;color:var(--txt3);font-weight:600">Opacity</label>
-            <svg class="knob" id="k-opacity" viewBox="0 0 46 46" role="slider" tabindex="0" aria-label="Opacity dial" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80"><circle class="track" cx="23" cy="23" r="17" stroke-dasharray="80 200" transform="rotate(135 23 23)"/><circle class="hub" cx="23" cy="23" r="10"/><line class="ind" x1="23" y1="23" x2="23" y2="9"/></svg>
-            <span class="v" id="op-v">80%</span></div>
-          <div class="dialwrap"><label class="ctl" style="font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;color:var(--txt3);font-weight:600">Jitter</label>
-            <svg class="knob" id="k-jitter" viewBox="0 0 46 46" role="slider" tabindex="0" aria-label="Jitter dial" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20"><circle class="track" cx="23" cy="23" r="17" stroke-dasharray="80 200" transform="rotate(135 23 23)"/><circle class="hub" cx="23" cy="23" r="10"/><line class="ind" x1="23" y1="23" x2="23" y2="9"/></svg>
-            <span class="v" id="ji-v">20%</span></div>
-          <label class="toggle"><input type="checkbox" id="c-grid"><span class="sw"></span>Gridlines</label>
-        </div>
-        <div class="viz-warn" id="viz-warn" style="display:none"></div>
-        <div class="stage"><svg id="chart" viewBox="0 0 320 150" preserveAspectRatio="none" aria-label="Preview chart"></svg></div>
-      </div>
-    </section>
-  </div>
-</main>
-
-<!-- CERTIFICATE MODAL -->
-<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="cert-h">
-  <div class="cert-shell">
-    <div class="gen" id="cert-gen"><div class="spinner"></div>Generating lab report…</div>
-    <div id="cert-wrap" style="display:none">
-      <div id="certificate">
-        <div class="cert-crest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5L17 22l-5-3-5 3 1.5-8.5"/></svg></div>
-        <div class="cert-eyebrow">Data Lab · Lab Report</div>
-        <h2 id="cert-h">Certificate of Data Mastery</h2>
-        <div class="cert-sub">This certifies that</div>
-        <div class="cert-name" id="cert-name-wrap"><input id="cert-name" type="text" value="Student Name" aria-label="Student name"></div>
-        <div class="cert-line">has successfully completed the data transformation challenge:</div>
-        <div class="cert-grid">
-          <div><div class="k">Week &amp; Lesson</div><div class="val" id="cert-week"></div></div>
-          <div><div class="k">Topic</div><div class="val" id="cert-topic"></div></div>
-          <div><div class="k">Dataset</div><div class="val" id="cert-ds" style="font-family:monospace"></div></div>
-          <div><div class="k">Mastery score</div><div class="val" id="cert-score"></div></div>
-        </div>
-        <div class="cert-skills">
-          <div class="k">Skills demonstrated</div>
-          <ul id="cert-skills"></ul>
-        </div>
-        <div class="cert-foot">
-          <div class="sign"><div class="ln">Facilitator signature</div></div>
-          <div class="sign"><div class="ln" id="cert-date"></div></div>
-          <div class="cert-seal">Master<br>Tier</div>
-        </div>
-      </div>
-      <div class="cert-actions">
-        <button class="btn ghost" id="cert-close">Close</button>
-        <button class="btn primary" id="cert-print">🖨 Print lab report</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<footer>Data Lab · KS3 Data Analysis. The Code Box and Terminal show illustrative pandas — run the real scripts in your notebook. Progress and preferences are saved in this browser.</footer>
-
-<script src="datasets.js"></script>
-<script src="app.js"></script>
+<script src="core.js"></script>
+<script src="sims/circuit-builder.js"></script>
+<script src="sims/titration-bench.js"></script>
+<script src="sims/food-tests.js"></script>
+<script src="sims/physics.js"></script>
+<script src="sims/physics-advanced.js"></script>
+<script src="sims/chemistry.js"></script>
+<script src="sims/biology.js"></script>
+<script src="sims/ict.js"></script>
+<script>Lab.start();</script>
 </body>
 </html>

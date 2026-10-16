@@ -145,7 +145,7 @@ const Lab = (function(){
   function renderHub(){
     level = load("vlab-level", "all"); if(level !== "all" && !LEVELS[level]) level = "all";
     document.documentElement.setAttribute("data-subject", filter);
-    document.title = "Virtual Science Lab — IGCSE, AS & A Level";
+    document.title = "Insight Labs — Virtual Science Lab";
     const count = s => sims.filter(d => (s === "all" || d.subject === s) && (level === "all" || levelOf(d) === level)).length;
     const tiles = ["all"].concat(ORDER).map(s => `<a class="subj-tile${filter === s ? " on" : ""}" data-s="${s}" href="#/${s === "all" ? "" : s}" aria-current="${filter === s}">
         <span class="subj-ico">${ICONS[s]}</span><span class="subj-name">${s === "all" ? "All labs" : esc(SUBJECTS[s].name)}</span><span class="subj-n">${count(s)}</span></a>`).join("");
@@ -154,7 +154,7 @@ const Lab = (function(){
     $("#app").innerHTML = `
       <section class="hub-hero">
         <div>
-          <span class="eyebrow">Cambridge IGCSE · AS &amp; A Level</span>
+          <span class="eyebrow">Insight Labs · Cambridge IGCSE · AS &amp; A Level</span>
           <h1>Virtual Science Lab</h1>
           <p>Build circuits, run titrations, test foods and analyse data — real practicals you control with your hands, not just sliders.</p>
           <div class="hub-stats"><span><b>${sims.length}</b> labs</span><span><b>${sims.filter(d => d.interactive).length}</b> hands-on benches</span><span><b>4</b> subjects</span></div>
@@ -192,7 +192,7 @@ const Lab = (function(){
   function renderExperiment(def){
     const subj = SUBJECTS[def.subject];
     document.documentElement.setAttribute("data-subject", def.subject);
-    document.title = def.title + " — Virtual Science Lab";
+    document.title = def.title + " — Insight Labs";
     const v = def.variables;
     const varsHtml = v ? `<dl class="vars">
         ${v.iv ? `<dt class="iv">Independent</dt><dd>${esc(v.iv)}</dd>` : ""}
@@ -421,7 +421,7 @@ const Lab = (function(){
       .concat(rows.map(r => def.columns.map(c => q(r[c.key])).join(","))).join("\n");
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([csv], { type:"text/csv" }));
-    a.download = "virtual-lab-" + def.id + ".csv";
+    a.download = "insight-labs-" + def.id + ".csv";
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
